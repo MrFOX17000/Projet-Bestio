@@ -13,4 +13,4 @@ But : créer un "Wiki des animaux" avec fiches + forum de discussion.
 git clone https://github.com/MrFOX17000/Projet-Bestio.git
 cd Projet-Bestio
 ```
-miaou
+
