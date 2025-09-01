@@ -1,8 +1,8 @@
 /* theme */
 :root {
-    --primary: #FCF0F0;
+    --primary: #9b59b6;
     --primary-light: #dff9fb;
-    --accent: #9b59b6;
+    --accent: #fcf0f0;
     --warning: #e74c3c;
     --success: #43ac6f;
     --font-family: "Instrumental Sans", sans-serif;
@@ -14,7 +14,7 @@
     --color-dark: #444;
     --color-primary: white;
     --gray: #636466;
-    --gray-dark: #70424A;
+    --gray-dark: #70424a;
     --max-width: 1200px;
     --footer-background: #rgba(219, 189, 181, 0.6);
     --font-size-small: 14px;
