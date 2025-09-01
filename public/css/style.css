@@ -1,6 +1,6 @@
 /* theme */
 :root {
-    --primary: #9b59b6;
+    --primary: #FCF0F0;
     --primary-light: #dff9fb;
     --accent: #fcf0f0;
     --warning: #e74c3c;
@@ -12,11 +12,11 @@
     --border: 1px solid var(--gray-light);
     --color: #636466;
     --color-dark: #444;
-    --color-primary: white;
+    --color-primary: 70424A;
     --gray: #636466;
     --gray-dark: #70424a;
     --max-width: 1200px;
-    --footer-background: #rgba(219, 189, 181, 0.6);
+    --footer-background: #70424A;
     --font-size-small: 14px;
     --font-size-regular: 16px;
     --font-weight-regular: 400;
@@ -83,7 +83,7 @@ h5 {
 }
 
 a {
-    color: inherit;
+    color: var(--primary);
     text-decoration: none;
 }
 
@@ -268,7 +268,7 @@ small {
 
 .btn-primary-stroke {
     border: 1px solid var(--primary);
-    color: var(--primary);
+    color: var(--grey-dark);
     background-color: white;
     font-weight: 600;
 }
@@ -391,6 +391,7 @@ small {
 
 header {
     box-shadow: var(--box-shadow);
+    background-color: #70424A;
 }
 
 .header-search {
@@ -417,7 +418,7 @@ header {
 
 footer {
     background-color: var(--footer-background);
-    color: var(--color-primary);
+    color: var(--primary);
 }
 
 /* questions */
