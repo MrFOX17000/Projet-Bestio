@@ -5,15 +5,12 @@
 
 {% block body %}
 	<div class="block">
-		<h2 class="pb-30">Se connecter</h2>
+		<h2 class="d-flex pb-30 justify-content-center">Se connecter</h2>
 		{{ form_start(form) }}
 		{{ form_row(form.email) }}
 		{{ form_row(form.password) }}
-		<button type="submit" class="btn btn-primary">Se connecter</button>
-		<small>
-			<a href="{{ path('app_register') }}">Vous n'avez pas encore de compte ?</a>
-		</small>
+		<button type="submit" class="d-flex btn btn-primary-dark justify-content-center">Connexion</button>
+		<small class="d-flex justify-content-center mt-10"><a href="{{ path('app_register') }}">Vous n'avez pas encore de compte ?</a></small>
 		{{ form_end(form) }}
 	</div>
-
 {% endblock %}

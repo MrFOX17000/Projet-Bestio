@@ -3,14 +3,17 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Il existe déjà un compte avec cette adresse e-mail')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -19,6 +22,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\Email(message: 'L\'adresse e-mail "{{ value }}" n\'est pas valide.')]
+    #[Assert\NotBlank(message: 'Veuillez entrer une adresse e-mail.')]
     private ?string $email = null;
 
     /**
@@ -35,6 +40,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private bool $isVerified = false;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez entrer un nom d\'utilisateur.')]
+    private ?string $pseudo = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\Url(message: 'L\'URL "{{ value }}" n\'est pas valide.')]
+    #[Assert\NotBlank(message: 'Veuillez entrer une URL pour votre photo de profil.')]
+    private ?string $photo = null;
+
+    /**
+     * @var Collection<int, Commentaire>
+     */
+    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'author', orphanRemoval: true)]
+    private Collection $ecrire;
+
+    public function __construct()
+    {
+        $this->ecrire = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -125,6 +150,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): static
+    {
+        $this->pseudo = $pseudo;
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(string $photo): static
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commentaire>
+     */
+    public function getEcrire(): Collection
+    {
+        return $this->ecrire;
+    }
+
+    public function addEcrire(Commentaire $ecrire): static
+    {
+        if (!$this->ecrire->contains($ecrire)) {
+            $this->ecrire->add($ecrire);
+            $ecrire->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEcrire(Commentaire $ecrire): static
+    {
+        if ($this->ecrire->removeElement($ecrire)) {
+            // set the owning side to null (unless already changed)
+            if ($ecrire->getAuthor() === $this) {
+                $ecrire->setAuthor(null);
+            }
+        }
 
         return $this;
     }

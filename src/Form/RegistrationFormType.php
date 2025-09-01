@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -17,27 +18,33 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('pseudo', null, [
+                'label' => 'Nom d\'utilisateur :',
+                'attr' => [
+                    'placeholder' => 'Votre nom d\'utilisateur',
+                    'autofocus' => true,
+                ],
+                'required' => true,
+            ])
+            ->add('photo', UrlType::class, [
+                'label' => 'Photo de profil (URL) :',
+                'attr' => [
+                    'placeholder' => 'URL de votre photo de profil',
+                ],
+                'required' => true,
+            ])
             ->add('email', null, [
                 'label' => 'Adresse e-mail :',
                 'attr' => [
                     'placeholder' => 'Votre adresse e-mail',
-                    'autofocus' => true,
                 ],
-            ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'label' => 'Accepter les conditions générales',
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'Vous devez accepter nos conditions.',
-                    ]),
-                ],
+                'required' => true,
             ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
+                'attr' => ['autocomplete' => 'new-password', 'placeholder' => 'Votre mot de passe'],
                 'label' => 'Mot de passe :',
                 'constraints' => [
                     new NotBlank([
@@ -49,7 +56,8 @@ class RegistrationFormType extends AbstractType
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
-                ], 
+                ],
+                'required' => true, 
             ])
         ;
     }
