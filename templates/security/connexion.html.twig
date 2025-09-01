@@ -4,9 +4,16 @@
 {% endblock %}
 
 {% block body %}
-	{{ form_start(form) }}
-	{{ form_row(form.email) }}
-	{{ form_row(form.password) }}
-	<button type="submit" class="btn btn-primary">Se connecter</button>
-	{{ form_end(form) }}
+	<div class="block">
+		<h2 class="pb-30">Se connecter</h2>
+		{{ form_start(form) }}
+		{{ form_row(form.email) }}
+		{{ form_row(form.password) }}
+		<button type="submit" class="btn btn-primary">Se connecter</button>
+		<small>
+			<a href="{{ path('app_register') }}">Vous n'avez pas encore de compte ?</a>
+		</small>
+		{{ form_end(form) }}
+	</div>
+
 {% endblock %}
