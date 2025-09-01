@@ -1,6 +1,6 @@
 /* theme */
 :root {
-    --primary: #3498db;
+    --primary: #FCF0F0;
     --primary-light: #dff9fb;
     --accent: #9b59b6;
     --warning: #e74c3c;
@@ -14,9 +14,9 @@
     --color-dark: #444;
     --color-primary: white;
     --gray: #636466;
-    --gray-dark: #444;
+    --gray-dark: #70424A;
     --max-width: 1200px;
-    --footer-background: #34495e;
+    --footer-background: #rgba(219, 189, 181, 0.6);
     --font-size-small: 14px;
     --font-size-regular: 16px;
     --font-weight-regular: 400;
@@ -25,6 +25,18 @@
     --line-height-high: 30px;
     --line-height-regular: 24px;
 }
+
+/*
+
+:root {
+    --base-color: #FCF0F0;
+    --section-color: rgba(219, 189, 181, 0.6);
+    --text-color: #5E3636;
+    --nav-color: #70424A;
+
+}
+
+*/
 
 /* debug */
 

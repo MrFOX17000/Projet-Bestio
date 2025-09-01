@@ -35,10 +35,6 @@ class Question
     #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'question', orphanRemoval: true)]
     private Collection $posseder;
 
-    #[ORM\ManyToOne(inversedBy: 'questions')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $poser = null;
-
     public function __construct()
     {
         $this->posseder = new ArrayCollection();
@@ -123,18 +119,6 @@ class Question
                 $posseder->setQuestion(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getPoser(): ?User
-    {
-        return $this->poser;
-    }
-
-    public function setPoser(?User $poser): static
-    {
-        $this->poser = $poser;
 
         return $this;
     }
