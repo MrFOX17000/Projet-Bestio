@@ -61,7 +61,7 @@ class Espece
 
     public function __construct()
     {
-        $this->appartenir = new ArrayCollection();
+       
         $this->avoir = new ArrayCollection();
         $this->contenir = new ArrayCollection();
     }
