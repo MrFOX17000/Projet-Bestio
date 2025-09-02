@@ -38,6 +38,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Assert\Length(
+        min: 6,
+        minMessage: 'Votre mot de passe doit contenir au moins {{ limit }} caractères.',
+        // max length allowed by Symfony for security reasons
+        max: 4096,
+    )]
+    private ?string $newPassword = null;
+
     #[ORM\Column]
     private bool $isVerified = false;
 
@@ -128,6 +136,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getNewPassword(): ?string
+    {
+        return $this->newPassword;
+    }
+
+    public function setNewPassword(?string $newPassword): static
+    {
+        $this->newPassword = $newPassword;
 
         return $this;
     }

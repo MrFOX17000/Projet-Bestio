@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil{% endblock %}
+
+{% block body %}
+	<div class="fill">
+		<div class="block">
+			<h2 class="d-flex pb-30 justify-content-center">Mon profil</h2>
+            {{ form_start(form) }}
+            {{ form_rest(form) }}
+			<button class="d-flex btn btn-primary-dark justify-content-center">Mettre à jour</button>
+            {{ form_end(form )}}	
+				<small class="d-flex justify-content-center mt-10"><a href="{{ path('deconnexion') }}">Déconnexion</a></small>	
+			</form>
+		</div>
+	</div>
+{% endblock %}
