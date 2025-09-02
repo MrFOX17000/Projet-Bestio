@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Espece;
 use App\Form\EspeceType;
+use App\Repository\EspeceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +15,11 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 final class EspeceController extends AbstractController
 {
     #[Route('/espece', name: 'app_espece')]
-    public function index(): Response
+    public function index(EspeceRepository $especeRepository): Response
     {
+        $especes = $especeRepository->findAll();
         return $this->render('espece/index.html.twig', [
-            'controller_name' => 'EspeceController',
+            'especes' => $especes
         ]);
     }
 
@@ -28,13 +30,13 @@ final class EspeceController extends AbstractController
         $form = $this->createForm(EspeceType::class, $espece);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $image = $form->get('image')->getData();
+            $image = $form->get('image')->getData(); //On récupère le fichier uploadé depuis le formulaire
             if ($image) {
-                $imageDirectory = $this->getParameter('images_directory');
+                $imageDirectory = $this->getParameter('images_directory'); // On récupère le chemin du dossier d'upload depuis le fichier services.yaml
 
-                $newFilename = uniqid().'.'.$image->guessExtension();
+                $newFilename = uniqid().'.'.$image->guessExtension(); //On renomme chaque fichier pour éviter les conflits de noms
                  try {
-                        $image->move($imageDirectory, $newFilename);
+                        $image->move($imageDirectory, $newFilename); //On déplace le fichier dans le dossier Public/Uploads
                     } catch (FileException $e) {
                       // Si l'upload rencontre un problème on affiche un message d'erreur
                     $this->addFlash('error', 'Erreur lors de l\'upload de l\'image : ' . $e->getMessage());
@@ -42,7 +44,7 @@ final class EspeceController extends AbstractController
                       //Et on redirige vers le formulaire
                     return $this->redirectToRoute('add_espece');
                     }
-                    $espece->setImage('/uploads/' . $newFilename);
+                    $espece->setImage('/uploads/' . $newFilename); // On stocke le chemin relatif de l'image dans la base de données
         }
 
                 $entityManager->persist($espece);
