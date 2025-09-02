@@ -36,13 +36,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Assert\NotBlank(message: 'Veuillez entrer un mot de passe.')]
-    #[Assert\Length(
-        min: 6,
-        minMessage: 'Votre mot de passe doit contenir au moins {{ limit }} caractères.',
-        // max length allowed by Symfony for security reasons
-        max: 4096,
-    )]
     private ?string $password = null;
 
     #[ORM\Column]
