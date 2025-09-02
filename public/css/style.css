@@ -167,7 +167,7 @@ small a:hover {
 }
 
 .mr-10 {
-    margin-right: 10px;
+    margin-right: 10px !important;
 }
 
 .mr-20 {
@@ -277,19 +277,18 @@ small a:hover {
 
 .btn-primary {
     background-color: var(--primary);
-    color: var(--color-primary);
+    color: var(--gray-dark);
     font-weight: 600;
 }
 
 .btn-primary-stroke {
-    border: 1px solid var(--primary);
-    color: var(--gray-dark);
-    background-color: white;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    background-color: var(--gray-dark);
     font-weight: 600;
 }
 
 .btn-primary-dark {
-    border: 1px solid var(--primary);
     color: var(--primary);
     background-color: var(--gray-dark);
     font-weight: 600;
@@ -317,7 +316,7 @@ small a:hover {
 }
 
 .form-row label {
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     color: var(--gray-dark);
 }
 
