@@ -478,7 +478,7 @@ footer {
 ******************************************************************************************************************************************************************************************/
 
 .espece-image {
-    width: 300px;
+    width: 400px;
     height: 300px;
     object-fit: cover;
     border-radius: var(--border-radius);
@@ -503,5 +503,23 @@ footer {
 }
 
 .espece a {
-    color: var(--footer-background);
+    color: var(--primary);
+}
+
+.btn-detail {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--footer-background);
+    width: 150px;
+    height: 40px;
+    border-radius: 5px;
+    border: var(--primary);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-detail:hover {
+    opacity: 0.7;
 }
