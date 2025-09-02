@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Espece;
 use App\Form\EspeceType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -21,7 +22,7 @@ final class EspeceController extends AbstractController
     }
 
      #[Route('/add/espece', name: 'add_espece')]
-    public function add(Request $request): Response
+    public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         $espece = new Espece();
         $form = $this->createForm(EspeceType::class, $espece);
@@ -29,6 +30,8 @@ final class EspeceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $image = $form->get('image')->getData();
             if ($image) {
+                $imageDirectory = $this->getParameter('images_directory');
+
                 $newFilename = uniqid().'.'.$image->guessExtension();
                  try {
                         $image->move($imageDirectory, $newFilename);
@@ -39,7 +42,7 @@ final class EspeceController extends AbstractController
                       //Et on redirige vers le formulaire
                     return $this->redirectToRoute('add_espece');
                     }
-                    $espece->setImage('/uploads' . $newFilename);
+                    $espece->setImage('/uploads/' . $newFilename);
         }
 
                 $entityManager->persist($espece);

@@ -39,7 +39,7 @@ class EspeceType extends AbstractType
             ])
             ->add('habitat', TextType::class, [
                 'label' => 'Habitat',
-            ])
+            ]) 
             ->add('alimentation', TextType::class, [
                 'label' => 'Alimentation',
             ])
