@@ -58,4 +58,18 @@ final class EspeceController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/espece/{id}', name: 'detail_espece')]
+    public function detail(Request $request, EspeceRepository $especeRepository, int $id): Response
+    {
+        $espece = $especeRepository->find($id);
+        if(!$espece)
+            {
+                $this->addFlash('message', 'Cette espèce n\'existe pas.');
+                return $this->redirectToRoute('app_espece');
+            }
+        return $this->render('espece/details.html.twig', [
+            'espece' => $espece
+        ]);
+    }
 }

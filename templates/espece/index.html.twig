@@ -11,7 +11,7 @@
                 <div class="espece-image">
                     <img src="{{espece.image}}" alt="{{espece.nomEspece}}" >
                 </div>
-                <a href="{{ path('detail_espece')}}"> Détails</a>
+                <a href="{{ path('detail_espece', {'id' : espece.id })}}"> Détails</a>
            </div>
                 
             {% endfor %}

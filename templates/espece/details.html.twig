@@ -3,19 +3,18 @@
 {% block title %}Hello EspeceController!{% endblock %}
 
 {% block body %}
-<div id="wrapper-espece">
-    <h1>Liste des espèces</h1>
-    <div class="especes">
-           {% for espece in especes %}
-           <div class="espece">
-                <div class="espece-image">
-                    <img src="{{espece.image}}" alt="{{espece.nomEspece}}" >
-                </div>
-                <a href="{{ path('detail_espece')}}"> Détails</a>
-           </div>
-                
-            {% endfor %}
-    </div>
+<div id="wrapper-details">
+    <h1> {{ espece.nomEspece }}</h1>
+        <div class="espece-image">
+            <img src="{{espece.image}}" alt="{{espece.nomEspece}}" >
+        </div>
+            <p>{{ espece.description }}</p>
+            <p> Poids moyen : {{ espece.poidsMoy}} kg</p>
+            <p> Taille moyenne : {{ espece.tailleMoy }} m</p>
+            <p>Habitat : {{ espece.habitat }}</p>
+            <p>Régime alimentaire : {{ espece.alimentation }}</p>
+            <p>Durée de vie moyenne : {{ espece.esperanceVie }} ans</p>
+            <p>Durée de gestation : {{ espece.gestation }} jours</p>
 </div>
 
 {% endblock %}
