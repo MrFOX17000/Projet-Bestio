@@ -36,6 +36,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Veuillez entrer un mot de passe.')]
+    #[Assert\Length(
+        min: 6,
+        minMessage: 'Votre mot de passe doit contenir au moins {{ limit }} caractères.',
+        // max length allowed by Symfony for security reasons
+        max: 4096,
+    )]
     private ?string $password = null;
 
     #[ORM\Column]
@@ -56,9 +63,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $ecrire;
 
+    /**
+     * @var Collection<int, Question>
+     */
+    #[ORM\OneToMany(targetEntity: Question::class, mappedBy: 'author', orphanRemoval: true)]
+    private Collection $poser;
+
     public function __construct()
     {
         $this->ecrire = new ArrayCollection();
+        $this->poser = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -202,6 +216,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($ecrire->getAuthor() === $this) {
                 $ecrire->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Question>
+     */
+    public function getPoser(): Collection
+    {
+        return $this->poser;
+    }
+
+    public function addPoser(Question $poser): static
+    {
+        if (!$this->poser->contains($poser)) {
+            $this->poser->add($poser);
+            $poser->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removePoser(Question $poser): static
+    {
+        if ($this->poser->removeElement($poser)) {
+            // set the owning side to null (unless already changed)
+            if ($poser->getAuthor() === $this) {
+                $poser->setAuthor(null);
             }
         }
 
