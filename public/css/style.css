@@ -109,7 +109,7 @@ small a:hover {
 }
 
 .flex-row-nowrap {
-    flex-flow: row nowrap;
+    flex-flow: row nowrap !important;
 }
 
 .flex-row-rap {
@@ -362,6 +362,26 @@ small a:hover {
 
 .text-small {
     font-size: var(--font-size-small);
+}
+
+/* Agrandir la case */
+.form-check-input {
+    width: 17px; /* taille horizontale */
+    height: 17px; /* taille verticale */
+    cursor: pointer;
+    accent-color: var(--gray-dark); /* magique ! */
+}
+
+/* Changer la couleur quand elle est cochée */
+.form-check-input:checked {
+    background-color: var(--gray-dark);
+    border-color: var(--gray-dark);
+}
+
+/* Changer la bordure par défaut */
+.form-check-input {
+    border: 2px solid var(--gray-dark);
+    border-radius: 4px; /* arrondi optionnel */
 }
 
 /* sidebar */

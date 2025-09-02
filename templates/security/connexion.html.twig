@@ -4,13 +4,33 @@
 {% endblock %}
 
 {% block body %}
-	<div class="block">
-		<h2 class="d-flex pb-30 justify-content-center">Se connecter</h2>
-		{{ form_start(form) }}
-		{{ form_row(form.email) }}
-		{{ form_row(form.password) }}
-		<button type="submit" class="d-flex btn btn-primary-dark justify-content-center">Connexion</button>
-		<small class="d-flex justify-content-center mt-10"><a href="{{ path('app_register') }}">Vous n'avez pas encore de compte ?</a></small>
-		{{ form_end(form) }}
+	<div class="fill">
+		<div class="block">
+			<h2 class="d-flex pb-30 justify-content-center">Se connecter</h2>
+			<form action="{{ path('connexion') }}" method="post">
+
+				<div class="form-row">
+					<label for="email">Adresse email :</label>
+					<input class="mb-20" type="email" id="email" name="_username" value="{{ last_username }}" placeholder="Votre adresse e-mail" required autofocus>
+				</div>
+				<div class="form-row">
+					<label for="password">Mot de passe :</label>
+					<input class="mb-20" type="password" id="password" name="_password" placeholder="Votre mot de passe" required>
+				</div>
+				<div class="d-flex form-row flex-row-nowrap">
+					<input class="form-check-input mr-10" type="checkbox" id="_remember_me" name="_remember_me">
+					<label class="form-check-label" for="_remember_me">
+						Se souvenir de moi
+					</label>
+				</div>	
+				<button type="submit" class="d-flex btn btn-primary-dark justify-content-center">Connexion</button>
+				<small class="d-flex justify-content-center mt-10"><a href="{{ path('app_register') }}">Vous n'avez pas encore de compte ?</a></small>	
+			</form>
+			{% if error %}
+				<div class="alert alert-danger mt-20" role="alert">
+					{{ error.messageKey|trans(error.messageData, 'security') }}
+				</div>
+			{% endif %}
+		</div>
 	</div>
 {% endblock %}
