@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 final class EspeceController extends AbstractController
 {
-    #[Route('/', name: 'app_espece')]
+    #[Route('/', name: 'app_home')]
     public function index(EspeceRepository $especeRepository): Response
     {
         $especes = $especeRepository->findAll();
