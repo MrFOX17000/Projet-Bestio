@@ -22,9 +22,9 @@ class UserType extends AbstractType
         ],
     ])
     ->add('pseudo', null, [
-        'label' => 'Pseudo :',
+        'label' => 'Nom d\'utilisateur :',
         'attr' => [
-            'placeholder' => 'Votre pseudo',
+            'placeholder' => 'Votre nom d\'utilisateur',
         ],
     ])
     ->add('photo', null, [

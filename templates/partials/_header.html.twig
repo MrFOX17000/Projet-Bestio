@@ -7,7 +7,7 @@
 			<i class="fa-solid fa-magnifying-glass"></i>
 			<input type="text">
 		</div>
-		{%- if is_granted('IS_AUTHENTICATED_FULLY') -%}
+		{%- if is_granted('ROLE_USER') -%}
 			<div class="d-flex flex-row-nowrap justify-content-center">
 				<a href="{{ path('current_user') }}">
 					<img src="{{ app.user.photo }}" class="avatar avatar-lg mr-10">

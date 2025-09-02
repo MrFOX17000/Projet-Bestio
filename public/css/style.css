@@ -102,6 +102,11 @@ small a:hover {
     text-decoration: underline;
 }
 
+.warning {
+    color: var(--warning);
+    font-weight: var(--font-weight-semi-bold);
+}
+
 /* flex */
 
 .d-flex {
@@ -360,6 +365,17 @@ small a:hover {
     cursor: pointer;
 }
 
+.clickable-transition {
+    color: var(--warning);
+    cursor: pointer;
+}
+
+.clickable-transition:hover {
+    opacity: 0.8;
+    transition: opacity 0.4s;
+    text-decoration: underline;
+}
+
 .text-small {
     font-size: var(--font-size-small);
 }
@@ -527,7 +543,6 @@ footer {
 }
 
 .btn-detail {
-
     display: flex;
     justify-content: center;
     align-items: center;
