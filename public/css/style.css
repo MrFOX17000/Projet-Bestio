@@ -503,6 +503,7 @@ footer {
     object-fit: cover;
     border-radius: var(--border-radius);
     margin-right: 20px;
+    position: relative;
 }
 
 .espece-image img {
@@ -522,12 +523,19 @@ footer {
     flex-direction: column;
 }
 
+.espece h2  {
+    color: var(--gray-dark);
+    display: flex;
+    justify-content: center;
+}
+
 .espece a {
     color: var(--primary);
 }
 
 .btn-detail {
-
+    bottom: 10px;
+    left: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -535,9 +543,10 @@ footer {
     width: 150px;
     height: 40px;
     border-radius: 5px;
-    border: var(--primary);
+    border: 1px solid var(--primary);
     cursor: pointer;
     transition: 0.3s;
+    position: absolute;
 }
 
 .btn-detail:hover {

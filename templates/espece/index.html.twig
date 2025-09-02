@@ -4,21 +4,22 @@
 
 {% block body %}
 <div id="wrapper-espece">
-    <h1>Liste des espèces</h1>
     <div class="especes">
-           {% for espece in especes %}
-           <div class="espece">
+        {% for espece in especes %}
+            <div class="espece">
+                <a href="{{ path('detail_espece', {'id': espece.id }) }}">
                 <div class="espece-image">
-                    <img src="{{espece.image}}" alt="{{espece.nomEspece}}" >
+                    <img src="{{ espece.image }}" alt="{{ espece.nomEspece }}">
+                    <div class="btn-detail">
+                        <a href="{{ path('detail_espece', {'id': espece.id }) }}">Détails</a>
+                    </div>
                 </div>
-                <div class="btn-detail">
-                    <a href="{{ path('detail_espece', {'id' : espece.id })}}"> Détails</a>
-                </div>
-                
-           </div>
-                
-            {% endfor %}
+                <h2>{{ espece.nomEspece }}</h2>
+                </a>
+            </div>
+        {% endfor %}
     </div>
 </div>
+
 
 {% endblock %}
