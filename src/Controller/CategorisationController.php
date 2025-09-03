@@ -26,8 +26,11 @@ final class CategorisationController extends AbstractController
             $this->addFlash('success', 'Catégorisation ajoutée avec succès !');
             return $this->redirectToRoute('app_categorisation');
         }
+
+        $categories = $categoRepository->findAll();
         return $this->render('categorisation/index.html.twig', [
-            'formCategorisation' => $formCategorisation->createView()
+            'formCategorisation' => $formCategorisation->createView(),
+            'categories' => $categories
         ]);
     }
 

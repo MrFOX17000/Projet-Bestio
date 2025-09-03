@@ -25,8 +25,11 @@ final class RaceController extends AbstractController
             $this->addFlash('success', 'Race ajoutée avec succès !');
             return $this->redirectToRoute('app_race');
         }
+
+        $races = $raceRepository->findAll();
         return $this->render('race/index.html.twig', [
-            'formRace' => $formRace->createView()
+            'formRace' => $formRace->createView(),
+            'races' => $races
         ]);
     }
 
@@ -37,7 +40,7 @@ final class RaceController extends AbstractController
         if(!$race)
             {
                 $this->addFlash('error', 'Cette race n\'existe pas.');
-                return $this->redirectToRoute('app_home');
+                return $this->redirectToRoute('app_race');
             }
 
             $entityManager->remove($race);
