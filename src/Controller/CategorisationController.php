@@ -30,4 +30,22 @@ final class CategorisationController extends AbstractController
             'formCategorisation' => $formCategorisation->createView()
         ]);
     }
+
+       #[Route('/delete/categorie/{id}', name: 'delete_categorie')]
+    public function deleteCategorie(Request $request, EntityManagerInterface $entityManager, CategorisationRepository $categorisationRepository, int $id): Response
+    {
+        $categorie = $categorisationRepository->find($id);
+        if(!$categorie)
+            {
+                $this->addFlash('error', 'Cette catégorie n\'existe pas.');
+                return $this->redirectToRoute('app_home');
+            }
+
+            $entityManager->remove($categorie);
+            $entityManager->flush();
+            $this->addFlash('success', ' La catégorie a bien été supprimée');
+
+
+            return $this->redirectToRoute('app_home');
+    }
 }

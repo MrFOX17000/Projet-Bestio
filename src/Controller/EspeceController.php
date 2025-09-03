@@ -72,4 +72,24 @@ final class EspeceController extends AbstractController
             'espece' => $espece
         ]);
     }
+
+    #[Route('/delete/{id}', name: 'delete_espece')]
+    public function delete(Request $request, EntityManagerInterface $entityManager, EspeceRepository $especeRepository, int $id): Response
+    {
+        $espece = $especeRepository->find($id);
+        if(!$espece)
+            {
+                $this->addFlash('error', 'Cette espèce n\'existe pas.');
+                return $this->redirectToRoute('app_home');
+            }
+
+            $entityManager->remove($espece);
+            $entityManager->flush();
+            $this->addFlash('success', ' L\'espèce a bien été supprimée');
+
+
+            return $this->redirectToRoute('app_home');
+    }
+
+
 }

@@ -17,6 +17,9 @@
             <p> <strong>Durée de vie moyenne :</strong> {{ espece.esperanceVie }} ans</p>
             <p> <strong>Durée de gestation :</strong> {{ espece.gestation }} jours</p>
         </div>
+        <a href="{{ path('delete_espece', {'id':espece.id})}}">
+            <i class="fa-solid fa-trash"></i>
+        </a>
 </div>
 
 {% endblock %}

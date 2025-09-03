@@ -29,4 +29,22 @@ final class RaceController extends AbstractController
             'formRace' => $formRace->createView()
         ]);
     }
+
+     #[Route('/delete/race/{id}', name: 'delete_race')]
+    public function deleteRace(Request $request, EntityManagerInterface $entityManager, RaceRepository $raceRepository, int $id): Response
+    {
+        $race = $raceRepository->find($id);
+        if(!$race)
+            {
+                $this->addFlash('error', 'Cette race n\'existe pas.');
+                return $this->redirectToRoute('app_home');
+            }
+
+            $entityManager->remove($race);
+            $entityManager->flush();
+            $this->addFlash('success', ' La race a bien été supprimée');
+
+
+            return $this->redirectToRoute('app_home');
+    }
 }
