@@ -5,16 +5,18 @@
 {% block body %}
 <div id="wrapper-details">
     <h1> {{ espece.nomEspece }}</h1>
-        <div class="espece-image">
+        <div class="espece-image-details">
             <img src="{{espece.image}}" alt="{{espece.nomEspece}}" >
         </div>
-            <p>{{ espece.description }}</p>
-            <p> Poids moyen : {{ espece.poidsMoy}} kg</p>
-            <p> Taille moyenne : {{ espece.tailleMoy }} m</p>
-            <p>Habitat : {{ espece.habitat }}</p>
-            <p>Régime alimentaire : {{ espece.alimentation }}</p>
-            <p>Durée de vie moyenne : {{ espece.esperanceVie }} ans</p>
-            <p>Durée de gestation : {{ espece.gestation }} jours</p>
+        <div class="espece-infos">
+                 <p class="espece-description">{{ espece.description }}</p>
+            <p> <strong>Poids moyen : </strong>{{ espece.poidsMoy}} kg</p>
+            <p> <strong>Taille moyenne :</strong> {{ espece.tailleMoy }} m</p>
+            <p> <strong>Habitat :</strong> {{ espece.habitat }}</p>
+            <p> <strong>Régime alimentaire :</strong> {{ espece.alimentation }}</p>
+            <p> <strong>Durée de vie moyenne :</strong> {{ espece.esperanceVie }} ans</p>
+            <p> <strong>Durée de gestation :</strong> {{ espece.gestation }} jours</p>
+        </div>
 </div>
 
 {% endblock %}
