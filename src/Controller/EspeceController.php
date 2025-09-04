@@ -23,7 +23,7 @@ final class EspeceController extends AbstractController
         ]);
     }
 
-     #[Route('/add/espece', name: 'add_espece')]
+    #[Route('/add/espece', name: 'add_espece')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         $espece = new Espece();

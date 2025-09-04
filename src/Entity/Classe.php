@@ -32,6 +32,9 @@ class Classe
     #[ORM\OneToMany(targetEntity: Espece::class, mappedBy: 'classe', orphanRemoval: true)]
     private Collection $dependre;
 
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
+
     public function __construct()
     {
         $this->dependre = new ArrayCollection();
@@ -104,6 +107,18 @@ class Classe
                 $dependre->setClasse(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

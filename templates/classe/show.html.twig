@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ classe.nom }}{% endblock %}
+
+
+{% block body %}
+<h2>{{ classe.nom }}</h2>
+<p>Appartient à la catégorisation : {{ classe.appartenir.nomCategorisation }}</p>
+<p> Description : {{ classe.specificite }}</p>
+<img src="{{ classe.image }}" alt="image-{{ classe.nom }}">
+{% endblock %}
