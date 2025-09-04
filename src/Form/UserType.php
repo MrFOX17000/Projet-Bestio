@@ -35,24 +35,8 @@ class UserType extends AbstractType
             'placeholder' => 'Lien vers votre image de profil',
         ],
         'required' => false,
-    ])
-    ->add('plainPassword', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'Les mots de passe ne correspondent pas',
-                'options' => ['attr' => ['class' => 'password-field']],
-                'required' => true,
-                'first_options'  => ['constraints' => [
-                        new Regex([
-                            'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/',
-                            'message' => 'Le mot de passe doit contenir au minimum une majuscule, une minuscule, un chiffre et 12 caractères dont un caractère spécial',
-                        ]),
-                    ],
-                    'label' => 'Mot de passe',
-                ],
-                'second_options' => ['label' => 'Confirmer le mot de passe'],
-                'mapped' => false,
-           
-            ]);
+    ]);
+    
     }
 
     public function configureOptions(OptionsResolver $resolver): void

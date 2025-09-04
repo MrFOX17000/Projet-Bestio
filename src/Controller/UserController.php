@@ -12,6 +12,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\UserType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Validator\Constraints\Regex;
 
 final class UserController extends AbstractController
 {
@@ -42,14 +44,26 @@ final class UserController extends AbstractController
         $userForm->remove('password');
 
         // On ajoute un champ "newPassword" non mappé
-        $userForm->add('newPassword', PasswordType::class, [
-            'required' => false,
-            'mapped'   => false, // très important pour éviter que Doctrine essaie de le persister
-            'label'    => 'Nouveau mot de passe :',
-            'attr'     => [
-                'placeholder' => 'Votre nouveau mot de passe',
-            ],
-        ]);
+        $userForm->add('newPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'Les mots de passe ne correspondent pas',
+                'options' => ['attr' => ['class' => 'password-field']],
+                'required' => true,
+                'first_options'  => ['constraints' => [
+                        new Regex([
+                            'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/',
+                            'message' => 'Le mot de passe doit contenir au minimum une majuscule, une minuscule, un chiffre et 12 caractères dont un caractère spécial',
+                        ]),
+                    ],
+                    'label' => 'Mot de passe :',
+                    'attr' => ['placeholder' => 'Nouveau mot de passe']
+                ],
+                'second_options' => ['label' => 'Confirmer le mot de passe :',
+                    'attr' => ['placeholder' => 'Confirmer le nouveau mot de passe']
+                ],
+                'mapped' => false,
+           
+            ]);
 
         $userForm->handleRequest($request);
 
