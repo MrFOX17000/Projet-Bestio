@@ -23,12 +23,6 @@ class Categorisation
     private ?string $specificite = null;
 
     /**
-     * @var Collection<int, Espece>
-     */
-    #[ORM\OneToMany(targetEntity: Espece::class, mappedBy: 'appartenir', orphanRemoval: true)]
-    private Collection $especes;
-
-    /**
      * @var Collection<int, Classe>
      */
     #[ORM\OneToMany(targetEntity: Classe::class, mappedBy: 'appartenir', orphanRemoval: true)]
@@ -36,7 +30,7 @@ class Categorisation
 
     public function __construct()
     {
-        $this->especes = new ArrayCollection();
+       
         $this->classes = new ArrayCollection();
     }
 
@@ -69,35 +63,7 @@ class Categorisation
         return $this;
     }
 
-    /**
-     * @return Collection<int, Espece>
-     */
-    public function getEspeces(): Collection
-    {
-        return $this->especes;
-    }
 
-    public function addEspece(Espece $espece): static
-    {
-        if (!$this->especes->contains($espece)) {
-            $this->especes->add($espece);
-            $espece->setAppartenir($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEspece(Espece $espece): static
-    {
-        if ($this->especes->removeElement($espece)) {
-            // set the owning side to null (unless already changed)
-            if ($espece->getAppartenir() === $this) {
-                $espece->setAppartenir(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Classe>

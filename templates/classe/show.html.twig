@@ -8,4 +8,14 @@
 <p>Appartient à la catégorisation : {{ classe.appartenir.nomCategorisation }}</p>
 <p> Description : {{ classe.specificite }}</p>
 <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">
+
+<h3>Espèces associées :</h3>
+<ul>
+    {% for espece in classe.dependre|slice(0, 3) %}
+        <img src="{{ espece.image }}" alt="{{ espece.nomEspece }}">
+        <li><a class="warning" href="{{ path('detail_espece', {'id':espece.id})}}">{{ espece.nomEspece }}</a></li>
+    {% else %}
+        <p>Aucune espèce disponible.</p>
+    {% endfor %}
+</ul>
 {% endblock %}

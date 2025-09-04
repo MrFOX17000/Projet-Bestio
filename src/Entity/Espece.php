@@ -43,10 +43,6 @@ class Espece
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
-    #[ORM\ManyToOne(inversedBy: 'especes')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Categorisation $appartenir = null;
-
     /**
      * @var Collection<int, Question>
      */
@@ -175,17 +171,6 @@ class Espece
         return $this;
     }
 
-    public function getAppartenir(): ?Categorisation
-    {
-        return $this->appartenir;
-    }
-
-    public function setAppartenir(?Categorisation $appartenir): static
-    {
-        $this->appartenir = $appartenir;
-
-        return $this;
-    }
     
     /**
      * @return Collection<int, Question>
