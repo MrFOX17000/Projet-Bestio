@@ -8,7 +8,7 @@
         <h1 class="d-flex justify-content-center">{{ categorie }}</h1>
         <div class="d-flex flex-row-nowrap m-10 align-items-center justify-content-center">
             {% for classe in classes %}
-            <div>
+            <div class="underline">
                 <a href="{{ path('app_show_classe', {'nom': classe.nom }) }}" class="d-block justify-content-center classe-card">
                     <div class="espece-image">
                         <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">

@@ -321,6 +321,7 @@ small a:hover {
     font-weight: var(--font-weight-bold);
     border: 0;
     cursor: pointer;
+    font-size: 20px;
 }
 
 .block {
@@ -428,6 +429,10 @@ small a:hover {
 .form-check-input {
     border: 2px solid var(--gray-dark);
     border-radius: 4px; /* arrondi optionnel */
+}
+
+.underline:hover {
+    text-decoration: underline;
 }
 
 /* sidebar */
@@ -556,21 +561,18 @@ footer {
     margin-right: 20px;
 }
 
-.espece-image {
-    border-radius: var(--border-radius);
-}
-
 .espece-image img {
     width: 200px;
     height: 150px;
     object-fit: cover;
     border-bottom: 2px solid var(--gray-dark);
+    border-radius: 10px 10px 0 0;
 }
 
 .classe-card {
     margin: 0 20px;
     border: 2px solid var(--gray-dark);
-    border-radius: var(--border-radius);
+    border-radius: 10px;
 }
 
 .classe-card:hover {
