@@ -5,17 +5,17 @@
 {% block body %}
 <div>
     {% for categorie, classes in classesParCategorie %}
-        <h1>{{ categorie }}</h1>
-        <div class="d-flex flex-row-nowrap justify-content-space-around align-items-center">
+        <h1 class="d-flex justify-content-center">{{ categorie }}</h1>
+        <div class="d-flex flex-row-nowrap m-10 align-items-center justify-content-center">
             {% for classe in classes %}
-                    <div class="d-flex justify-content-center classe-card">
-                        <a href="{{ path('app_show_classe', {'nom': classe.nom }) }}">
-                            <div class="espece-image">
-                                <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">
-                            </div>
-                        <span class="d-flex btn-card mt-5 justify-content-center">{{ classe.nom }}</span>
-                        </a>
-                    </div>
+            <div>
+                <a href="{{ path('app_show_classe', {'nom': classe.nom }) }}" class="d-block justify-content-center classe-card">
+                    <div class="espece-image">
+                        <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">
+                    </div>                    
+                    <div class="d-flex btn-card justify-content-center align-items-center p-20">{{ classe.nom }}</div>
+                </a>
+            </div>
             {% endfor %}
         </div>
     {% endfor %}

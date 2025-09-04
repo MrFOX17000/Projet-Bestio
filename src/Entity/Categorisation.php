@@ -30,7 +30,6 @@ class Categorisation
 
     public function __construct()
     {
-       
         $this->classes = new ArrayCollection();
     }
 
@@ -62,8 +61,6 @@ class Categorisation
 
         return $this;
     }
-
-
 
     /**
      * @return Collection<int, Classe>

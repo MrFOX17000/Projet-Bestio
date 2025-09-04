@@ -8,12 +8,13 @@ use App\Entity\Categorisation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
+use App\Entity\Classe;
 
 class EspeceType extends AbstractType
 {
@@ -64,8 +65,11 @@ class EspeceType extends AbstractType
                     ]),
                 ],
             ])
-         
-        ;
+            ->add('classe', EntityType::class, [
+                'class' => Classe::class,
+                'choice_label' => 'nom', 
+                'multiple' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -171,7 +171,6 @@ class Espece
         return $this;
     }
 
-    
     /**
      * @return Collection<int, Question>
      */
