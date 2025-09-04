@@ -29,13 +29,6 @@ class RegistrationFormType extends AbstractType
                 ],
                 'required' => true,
             ])
-            ->add('photo', UrlType::class, [
-                'label' => 'Photo de profil (URL) :',
-                'attr' => [
-                    'placeholder' => 'URL de votre photo de profil',
-                ],
-                'required' => true,
-            ])
             ->add('email', null, [
                 'label' => 'Adresse e-mail :',
                 'attr' => [

@@ -10,7 +10,7 @@
 		{%- if is_granted('ROLE_USER') -%}
 			<div class="d-flex flex-row-nowrap justify-content-center">
 				<a href="{{ path('current_user') }}">
-					<img src="{{ app.user.photo }}" class="avatar avatar-lg mr-10">
+					<img src="{{ app.user.photo ?? '/images/profil.webp' }}" class="avatar avatar-lg mr-10">
 				</a>
 				<small class="d-flex flex-column justify-content-center">
 					<a href="{{ path('deconnexion') }}">Déconnexion</a>
