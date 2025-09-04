@@ -19,6 +19,7 @@ final class RaceController extends AbstractController
         $race = new Race;
         $formRace = $this->createForm(RaceType::class, $race);
         $formRace->handleRequest($request);
+        
         if ($formRace->isSubmitted() && $formRace->isValid()) {
             $entityManager->persist($race);
             $entityManager->flush();
