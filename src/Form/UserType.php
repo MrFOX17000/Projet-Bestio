@@ -32,6 +32,7 @@ class UserType extends AbstractType
         'attr' => [
             'placeholder' => 'Lien vers votre image de profil',
         ],
+        'required' => false,
     ])
     ->add('password', PasswordType::class, [
         'label' => 'Mot de passe :',

@@ -19,6 +19,9 @@ security:
             form_login:
                 login_path: connexion
                 check_path: connexion
+                enable_csrf: true
+                csrf_token_id: authenticate
+
             logout:
                 path: deconnexion
             remember_me:

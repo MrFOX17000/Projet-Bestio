@@ -13,8 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -23,35 +25,27 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/inscription', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(UserAuthenticatorInterface $userAuthenticator, AuthenticatorInterface $authenticator, Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             $entityManager->persist($user);
             $entityManager->flush();
+
             $this->addFlash('success', 'Inscription réussie ! Veuillez vérifier votre e-mail pour confirmer votre adresse.');
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('bestio@mail.com', 'Bestio'))
-                    ->to((string) $user->getEmail())
-                    ->subject('Veuillez confirmer votre adresse e-mail')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
+            return $userAuthenticator->authenticateUser(
+                $user,
+                $authenticator,
+                $request
             );
-
-            // do anything else you need here, like send an email
-
-            return $this->redirectToRoute('app_home');
         }
 
         return $this->render('registration/register.html.twig', [

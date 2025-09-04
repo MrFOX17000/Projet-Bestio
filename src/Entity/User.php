@@ -55,7 +55,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Assert\Url(message: 'L\'URL "{{ value }}" n\'est pas valide.')]
-    #[Assert\NotBlank(message: 'Veuillez entrer une URL pour votre photo de profil.')]
     private ?string $photo = null;
 
     /**
