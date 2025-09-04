@@ -3,23 +3,21 @@
 {% block title %}Accueil - Bestio{% endblock %}
 
 {% block body %}
-<div id="wrapper-espece">
-    <div class="especes">
-        {% for espece in especes %}
-        <div class="espece-main">
-            <div class="espece">
-                <a href="{{ path('detail_espece', {'id': espece.id }) }}">
-                <div class="espece-image">
-                    <img src="{{ espece.image }}" alt="{{ espece.nomEspece }}">
-                    <a href="{{ path('detail_espece', {'id': espece.id }) }}" class="btn-detail">
-                    Détails
-                    </a>
-                </div>
-                <h2>{{ espece.nomEspece }}</h2>
-                </a>
-            </div>
-        </div>            
-        {% endfor %}
-    </div>
+<div>
+    {% for categorie, classes in classesParCategorie %}
+        <h1>{{ categorie }}</h1>
+        <div class="d-flex flex-row-nowrap justify-content-space-around align-items-center">
+            {% for classe in classes %}
+                    <div class="d-flex justify-content-center classe-card">
+                        <a href="{{ path('app_show_classe', {'nom': classe.nom }) }}">
+                            <div class="espece-image">
+                                <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">
+                            </div>
+                        <span class="d-flex btn-card mt-5 justify-content-center">{{ classe.nom }}</span>
+                        </a>
+                    </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
 </div>
 {% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la categorisation{% endblock %}
+
+{% block body %}
+    <h1>Modifier la categorisation : {{ categorie.nomCategorisation }}</h1>
+
+    {{ form_start(formCategorie) }}
+        {{ form_row(formCategorie.nomCategorisation) }}
+        {{ form_row(formCategorie.specificite) }}
+        <button class="btn btn-primary-stroke">Modifier</button>
+    {{ form_end(formCategorie) }}
+{% endblock %}

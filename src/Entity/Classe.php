@@ -116,10 +116,11 @@ class Classe
         return $this->image;
     }
 
-    public function setImage(string $image): static
+    public function setImage(?string $image): self
     {
-        $this->image = $image;
-
+        if ($image !== null) {
+            $this->image = $image;
+        }
         return $this;
     }
 }

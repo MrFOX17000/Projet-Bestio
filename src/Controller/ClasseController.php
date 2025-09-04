@@ -64,6 +64,56 @@ final class ClasseController extends AbstractController
         ]);
     }
 
+    #[Route('/edit/classe/{id}', name: 'edit_classe')]
+public function editClasse(
+    int $id,
+    Request $request,
+    EntityManagerInterface $entityManager,
+    ClasseRepository $classeRepository
+): Response
+{
+    // On récupère la classe existante
+    $classe = $classeRepository->find($id);
+
+    if (!$classe) {
+        $this->addFlash('error', 'Cette classe n\'existe pas.');
+        return $this->redirectToRoute('app_classe');
+    }
+
+    // On crée le formulaire en injectant l'entité existante
+    $formClasse = $this->createForm(ClasseType::class, $classe, [
+        'method' => 'POST',
+    ]);
+    $formClasse->handleRequest($request);
+
+    if ($formClasse->isSubmitted() && $formClasse->isValid()) {
+        // Gestion de l'image si un nouveau fichier est uploadé
+        $image = $formClasse->get('image')->getData();
+        if ($image) {
+            $imageDirectory = $this->getParameter('images_directory');
+            $newFilename = uniqid() . '.' . $image->guessExtension();
+
+            try {
+                $image->move($imageDirectory, $newFilename);
+                $classe->setImage('/uploads/' . $newFilename);
+            } catch (FileException $e) {
+                $this->addFlash('error', 'Erreur lors de l\'upload de l\'image : ' . $e->getMessage());
+                return $this->redirectToRoute('edit_classe', ['id' => $id]);
+            }
+        }
+        // Si aucune image n'est uploadée, on garde l'image existante
+
+        $entityManager->flush();
+        $this->addFlash('success', 'Classe modifiée avec succès !');
+        return $this->redirectToRoute('app_classe');
+    }
+
+    return $this->render('classe/edit.html.twig', [
+        'formClasse' => $formClasse->createView(),
+        'classe' => $classe
+    ]);
+}
+
     #[Route('/delete/classe/{id}', name: 'delete_classe')]
     public function deleteClasse(EntityManagerInterface $entityManager, ClasseRepository $classeRepository, int $id): Response
     {

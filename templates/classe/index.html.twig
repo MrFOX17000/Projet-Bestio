@@ -13,6 +13,9 @@
     <h1> Liste des classes </h1>
     {% for classe in classes %}
         {{ classe.nom }}
+        <a href="{{ path('edit_classe', {'id':classe.id})}}">
+            <i class="fa-solid fa-pen-to-square"></i>       
+        </a>
         <a href="{{ path('delete_classe', {'id':classe.id})}}">
             <i class="fa-solid fa-trash"></i>
         </a> <br>

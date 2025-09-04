@@ -203,6 +203,10 @@ small a:hover {
     margin: 20px;
 }
 
+.mt-5 {
+    margin-top: 5px;
+}
+
 .mt-10 {
     margin-top: 10px;
 }
@@ -297,6 +301,14 @@ small a:hover {
     color: var(--primary);
     background-color: var(--gray-dark);
     font-weight: 600;
+}
+
+.btn-card {
+    width: 100%;
+    color: var(--gray-dark);
+    font-weight: var(--font-weight-bold);
+    border: 0;
+    cursor: pointer;
 }
 
 .block {
@@ -523,18 +535,22 @@ footer {
 }
 
 .espece-image {
-    width: 400px;
-    height: 300px;
-    object-fit: cover;
+    width: 150px;
+    aspect-ratio: 4 / 3; /* ou 16/9 selon tes images */
     border-radius: var(--border-radius);
-    position: relative;
+    overflow: hidden;
 }
 
 .espece-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: var(--border-radius);
+}
+
+.classe-card:hover {
+    opacity: 0.8;
+    transition: opacity 0.4s;
+    cursor: pointer;
 }
 
 .especes {

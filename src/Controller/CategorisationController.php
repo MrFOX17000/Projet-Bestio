@@ -34,7 +34,31 @@ final class CategorisationController extends AbstractController
         ]);
     }
 
-       #[Route('/delete/categorie/{id}', name: 'delete_categorie')]
+    #[Route('/edit/categorie/{id}', name: 'edit_categorie')]
+    public function editCategorie(Request $request, EntityManagerInterface $entityManager, CategorisationRepository $categorisationRepository, int $id): Response
+    {
+        $categorie = $categorisationRepository->find($id);
+        if(!$categorie)
+            {
+                $this->addFlash('error', 'Cette catégorie n\'existe pas.');
+                return $this->redirectToRoute('app_home');
+            }
+        $formCategorie = $this->createForm(CategorisationType::class, $categorie);
+        $formCategorie->handleRequest($request);
+        if ($formCategorie->isSubmitted() && $formCategorie->isValid()) {
+            $entityManager->persist($categorie);
+            $entityManager->flush();
+            $this->addFlash('success', 'Catégorie modifiée avec succès !');
+            return $this->redirectToRoute('app_home');
+        }
+
+        return $this->render('categorisation/edit.html.twig', [
+            'formCategorie' => $formCategorie->createView(),
+            'categorie' => $categorie
+        ]);
+    }
+
+    #[Route('/delete/categorie/{id}', name: 'delete_categorie')]
     public function deleteCategorie(Request $request, EntityManagerInterface $entityManager, CategorisationRepository $categorisationRepository, int $id): Response
     {
         $categorie = $categorisationRepository->find($id);

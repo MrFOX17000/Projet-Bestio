@@ -33,6 +33,9 @@ class ClasseType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Entrez le lien de l\'image',
                 ],
+                'data_class' => null,
+                'required' => false,
+
             ])
             ->add('appartenir', EntityType::class, [
                 'class' => Categorisation::class,
