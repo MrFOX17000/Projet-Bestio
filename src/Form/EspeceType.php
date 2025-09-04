@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\File;
+use App\Entity\Classe;
 
 class EspeceType extends AbstractType
 {
@@ -58,12 +59,11 @@ class EspeceType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('appartenir', EntityType::class, [
-                'class' => Categorisation::class,
-                'choice_label' => 'nomCategorisation', 
+            ->add('classe', EntityType::class, [
+                'class' => Classe::class,
+                'choice_label' => 'nom', 
                 'multiple' => false,
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
