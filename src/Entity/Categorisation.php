@@ -28,9 +28,16 @@ class Categorisation
     #[ORM\OneToMany(targetEntity: Espece::class, mappedBy: 'appartenir', orphanRemoval: true)]
     private Collection $especes;
 
+    /**
+     * @var Collection<int, Classe>
+     */
+    #[ORM\OneToMany(targetEntity: Classe::class, mappedBy: 'appartenir', orphanRemoval: true)]
+    private Collection $classes;
+
     public function __construct()
     {
         $this->especes = new ArrayCollection();
+        $this->classes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,6 +93,36 @@ class Categorisation
             // set the owning side to null (unless already changed)
             if ($espece->getAppartenir() === $this) {
                 $espece->setAppartenir(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Classe>
+     */
+    public function getClasses(): Collection
+    {
+        return $this->classes;
+    }
+
+    public function addClass(Classe $class): static
+    {
+        if (!$this->classes->contains($class)) {
+            $this->classes->add($class);
+            $class->setAppartenir($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClass(Classe $class): static
+    {
+        if ($this->classes->removeElement($class)) {
+            // set the owning side to null (unless already changed)
+            if ($class->getAppartenir() === $this) {
+                $class->setAppartenir(null);
             }
         }
 

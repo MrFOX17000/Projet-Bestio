@@ -61,8 +61,7 @@ final class UserController extends AbstractController
                 'second_options' => ['label' => 'Confirmer le mot de passe :',
                     'attr' => ['placeholder' => 'Confirmer le nouveau mot de passe']
                 ],
-                'mapped' => false,
-           
+                'mapped' => false,           
             ]);
 
         $userForm->handleRequest($request);

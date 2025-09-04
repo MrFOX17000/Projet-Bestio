@@ -48,21 +48,17 @@ class Espece
     private ?Categorisation $appartenir = null;
 
     /**
-     * @var Collection<int, Race>
-     */
-    #[ORM\OneToMany(targetEntity: Race::class, mappedBy: 'espece', orphanRemoval: true)]
-    private Collection $avoir;
-
-    /**
      * @var Collection<int, Question>
      */
     #[ORM\OneToMany(targetEntity: Question::class, mappedBy: 'espece', orphanRemoval: true)]
     private Collection $contenir;
 
+    #[ORM\ManyToOne(inversedBy: 'dependre')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Classe $classe = null;
+
     public function __construct()
     {
-       
-        $this->avoir = new ArrayCollection();
         $this->contenir = new ArrayCollection();
     }
 
@@ -190,37 +186,7 @@ class Espece
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, Race>
-     */
-    public function getAvoir(): Collection
-    {
-        return $this->avoir;
-    }
-
-    public function addAvoir(Race $avoir): static
-    {
-        if (!$this->avoir->contains($avoir)) {
-            $this->avoir->add($avoir);
-            $avoir->setEspece($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAvoir(Race $avoir): static
-    {
-        if ($this->avoir->removeElement($avoir)) {
-            // set the owning side to null (unless already changed)
-            if ($avoir->getEspece() === $this) {
-                $avoir->setEspece(null);
-            }
-        }
-
-        return $this;
-    }
-
+    
     /**
      * @return Collection<int, Question>
      */
@@ -247,6 +213,18 @@ class Espece
                 $contenir->setEspece(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getClasse(): ?Classe
+    {
+        return $this->classe;
+    }
+
+    public function setClasse(?Classe $classe): static
+    {
+        $this->classe = $classe;
 
         return $this;
     }
