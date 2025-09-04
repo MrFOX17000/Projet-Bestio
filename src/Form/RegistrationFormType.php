@@ -13,6 +13,8 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Validator\Constraints\Regex;
 
 
 class RegistrationFormType extends AbstractType
@@ -36,24 +38,22 @@ class RegistrationFormType extends AbstractType
                 ],
                 'required' => true,
             ])
-            ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password', 'placeholder' => 'Votre mot de passe'],
-                'label' => 'Mot de passe :',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer un mot de passe',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'Les mots de passe ne correspondent pas',
+                'options' => ['attr' => ['class' => 'password-field']],
+                'required' => true,
+                'first_options'  => ['constraints' => [
+                        new Regex([
+                            'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/',
+                            'message' => 'Le mot de passe doit contenir au minimum une majuscule, une minuscule, un chiffre et 12 caractères dont un caractère spécial',
+                        ]),
+                    ],
+                    'label' => 'Mot de passe :',
+                    'attr' => ['placeholder' => 'Votre mot de passe']
                 ],
-                'required' => true, 
+                'second_options' => ['label' => 'Confirmer le mot de passe :', 'attr' => ['placeholder' => 'Confirmez votre mot de passe']],
+                'mapped' => false,
             ])
         ;
     }

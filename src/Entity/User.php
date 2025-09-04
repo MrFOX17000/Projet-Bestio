@@ -38,11 +38,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[Assert\Length(
-        min: 6,
-        minMessage: 'Votre mot de passe doit contenir au moins {{ limit }} caractères.',
-        // max length allowed by Symfony for security reasons
-        max: 4096,
+    #[Assert\Regex(
+        pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/',
+        message: 'Le mot de passe doit contenir au minimum une majuscule, une minuscule, un chiffre et 12 caractères dont un caractère spécial',
     )]
     private ?string $newPassword = null;
 
@@ -53,8 +51,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: 'Veuillez entrer un nom d\'utilisateur.')]
     private ?string $pseudo = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\Url(message: 'L\'URL "{{ value }}" n\'est pas valide.')]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
 
     /**
