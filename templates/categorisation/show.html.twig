@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégorie : {{ categorie.nomCategorisation }}{% endblock %}
+
+{% block body %}
+    <h1 class="d-flex justify-content-center pb-30">{{ categorie.nomCategorisation }}</h1>
+    <div class="d-flex flexw-row justify-content-center">
+        {% for classe in classes %}
+        <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}" class="detail-classe-espece p-20">
+            <div class="espece-column">
+                <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">
+                <small>
+                    <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}" class="detail-classe-espece">{{ classe.nom }}</a>
+                </small>
+            </div>
+        </a>
+        {% else %}
+            <li>Aucune classe pour cette catégorie.</li>
+        {% endfor %}
+    </div>
+{% endblock %}

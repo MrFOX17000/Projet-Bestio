@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<h1 class="d-flex justify-content-center pb-30">Bienvenue sur Bestio !</h1>
+
+<div class="d-flex flex-row-nowrap justify-content-center align-items-center" style="gap: 2rem;">
+    {% for categorie in categories %}
+        <a href="{{ path('app_categorie_show', {'categorie': categorie.nomCategorisation}) }}">
+            <div class="categorie-flip">
+                <div class="categorie-flip-inner">
+                    <div class="categorie-flip-front">
+                        {# Choix de l'image selon la catégorie #}
+                        {% if categorie.nomCategorisation == 'Reptiles' %}
+                            <img src="{{ asset('images/reptile.png') }}" alt="Reptile" class="categorie-img">
+                        {% elseif categorie.nomCategorisation == 'Oiseaux' %}
+                            <img src="{{ asset('images/oiseau.png') }}" alt="Oiseau" class="categorie-img">
+                        {% elseif categorie.nomCategorisation == 'Poissons' %}
+                            <img src="{{ asset('images/poisson.png') }}" alt="Poisson" class="categorie-img">
+                        {% elseif categorie.nomCategorisation == 'Mammifères' %}
+                            <img src="{{ asset('images/mammifere.png') }}" alt="Mammifère" class="categorie-img">
+                        {% elseif categorie.nomCategorisation == 'Amphibiens' %}
+                            <img src="{{ asset('images/grenouille.png') }}" alt="Amphibien" class="categorie-img">
+                        {% else %}
+                            <img src="{{ asset('images/default.png') }}" alt="{{ categorie.nomCategorisation }}" class="categorie-img">
+                        {% endif %}
+                    </div>
+                    <div class="categorie-flip-back d-flex align-items-center justify-content-center">
+                        <span class="categorie-nom">{{ categorie.nomCategorisation }}</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+    {# Bulle "Tout" à la fin #}
+    <a href="{{ path('app_classe') }}">
+        <div class="categorie-flip">
+            <div class="categorie-flip-inner">
+                <div class="categorie-flip-front">
+                    <span style="font-size:2.5rem;">🐾</span>
+                </div>
+                <div class="categorie-flip-back d-flex align-items-center justify-content-center">
+                    <span class="categorie-nom">Tout</span>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+{% endblock %}
