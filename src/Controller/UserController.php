@@ -67,6 +67,23 @@ final class UserController extends AbstractController
         $userForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
+
+             $image = $userForm->get('photo')->getData(); //On récupère le fichier uploadé depuis le formulaire
+            if ($image) {
+                $avatarDirectory = $this->getParameter('avatar_directory'); // On récupère le chemin du dossier d'upload depuis le fichier services.yaml
+
+                $newFilename = uniqid().'.'.$image->guessExtension(); //On renomme chaque fichier pour éviter les conflits de noms
+                 try {
+                        $image->move($avatarDirectory, $newFilename); //On déplace le fichier dans le dossier Public/Uploads
+                    } catch (FileException $e) {
+                      // Si l'upload rencontre un problème on affiche un message d'erreur
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image : ' . $e->getMessage());
+                            
+                      //Et on redirige vers le formulaire
+                    return $this->redirectToRoute('current_user');
+                    }
+                    $user->setPhoto('/uploads/avatar/' . $newFilename); // On stocke le chemin relatif de l'image dans la base de données
+        }
             $newPassword = $userForm->get('newPassword')->getData();
 
             if ($newPassword) {
