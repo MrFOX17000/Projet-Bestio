@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Classe;
 use App\Form\ClasseType;
 use App\Repository\ClasseRepository;
+use App\Repository\EspeceRepository;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 final class ClasseController extends AbstractController
@@ -50,7 +51,7 @@ final class ClasseController extends AbstractController
         ]);
     }
 
-    #[Route('/classe/{nom}', name: 'app_show_classe')]
+    #[Route('/{nom}', name: 'app_show_classe')]
     public function showClasse(ClasseRepository $classeRepository, string $nom): Response
     {
         $classe = $classeRepository->findOneBy(['nom' => $nom]);
@@ -61,6 +62,23 @@ final class ClasseController extends AbstractController
             }
         return $this->render('classe/show.html.twig', [
             'classe' => $classe
+        ]);
+    }
+
+    #[Route('/{nom}/{nom_espece}', name: 'app_show_espece')]
+    public function showEspece(ClasseRepository $classeRepository, string $nom, EspeceRepository $especeRepository, string $nom_espece): Response
+    {
+        $classe = $classeRepository->findOneBy(['nom' => $nom]);
+        $espece = $especeRepository->findOneBy(['nomEspece' => $nom_espece]);
+        if(!$classe || !$espece)
+            {
+                $this->addFlash('warning', 'La page n\'existe pas.');
+                return $this->redirectToRoute('app_home');
+            }
+        return $this->render('espece/details.html.twig', [
+            'classe' => $classe,
+            'nom_espece' => $nom_espece,
+            'espece' => $espece,
         ]);
     }
 

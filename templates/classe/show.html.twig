@@ -13,7 +13,7 @@
 <ul>
     {% for espece in classe.dependre|slice(0, 3) %}
         <img src="{{ espece.image }}" alt="{{ espece.nomEspece }}">
-        <li><a class="warning" href="{{ path('detail_espece', {'id':espece.id})}}">{{ espece.nomEspece }}</a></li>
+        <li><a class="warning" href="{{ path('app_show_espece', {'nom':classe.nom,'nom_espece':espece.nomEspece})}}">{{ espece.nomEspece }}</a></li>
     {% else %}
         <p>Aucune espèce disponible.</p>
     {% endfor %}
