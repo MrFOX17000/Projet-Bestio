@@ -1,23 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - Bestio{% endblock %}
+{% block title %}Espèces de la classe {{ classe.nom }}{% endblock %}
 
 {% block body %}
 <div>
-    {% for categorie, classes in classesParCategorie %}
-        <h1 class="d-flex justify-content-center">{{ categorie }}</h1>
-        <div class="d-flex flex-row-nowrap m-10 align-items-center justify-content-center">
-            {% for classe in classes %}
+    <h1 class="d-flex justify-content-center pb-30">
+        Espèces de la classe {{ classe.nom }}
+    </h1>
+    <div class="d-flex flex-row-nowrap m-10 align-items-center justify-content-center">
+        {% for espece in especes %}
             <div class="underline">
-                <a href="{{ path('app_show_classe', {'nom': classe.nom }) }}" class="d-block justify-content-center classe-card">
+                <a href="{{ path('app_show_espece', {'nom': classe.nom, 'nom_espece': espece.nomEspece }) }}" class="d-block justify-content-center classe-card">
                     <div class="espece-image">
-                        <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">
-                    </div>                    
-                    <div class="d-flex btn-card justify-content-center align-items-center p-20">{{ classe.nom }}</div>
+                        <img src="{{ espece.image }}" alt="image-{{ espece.nomEspece }}">
+                    </div>
+                    <div class="d-flex btn-card justify-content-center align-items-center p-20">{{ espece.nomEspece }}</div>
                 </a>
             </div>
-            {% endfor %}
-        </div>
-    {% endfor %}
+        {% else %}
+            <p>Aucune espèce pour cette classe.</p>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

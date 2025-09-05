@@ -253,6 +253,10 @@ small a:hover {
     padding-bottom: 30px;
 }
 
+.pb-50 {
+    padding-bottom: 50px;
+}
+
 .py-20 {
     padding-top: 20px;
     padding-bottom: 20px;

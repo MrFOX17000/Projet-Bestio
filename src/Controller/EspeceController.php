@@ -28,7 +28,7 @@ final class EspeceController extends AbstractController
             $classesParCategorie[$categorie][] = $classe;
         }
 
-        return $this->render('espece/index.html.twig', [
+        return $this->render('espece/home.html.twig', [
             'especes' => $especes,
             'classesParCategorie' => $classesParCategorie,
         ]);
@@ -67,20 +67,6 @@ final class EspeceController extends AbstractController
 
         return $this->render('espece/add.html.twig', [
             'form' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/espece/{id}', name: 'detail_espece')]
-    public function detail(Request $request, EspeceRepository $especeRepository, int $id): Response
-    {
-        $espece = $especeRepository->find($id);
-        if(!$espece)
-            {
-                $this->addFlash('message', 'Cette espèce n\'existe pas.');
-                return $this->redirectToRoute('app_espece');
-            }
-        return $this->render('espece/details.html.twig', [
-            'espece' => $espece
         ]);
     }
 
