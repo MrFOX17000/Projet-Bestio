@@ -4,23 +4,23 @@
 {% endblock %}
 
 {% block body %}
-	{% for flash_error in app.flashes('verify_email_error') %}
-		<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-	{% endfor %}
+    {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
 
-	<div class="block">
-		<h2 class="d-flex pb-30 justify-content-center">Inscription</h2>
+    <div class="block">
+        <h2 class="d-flex pb-30 justify-content-center">Inscription</h2>
 
-	{{ form_errors(registrationForm) }}
+    {{ form_errors(registrationForm) }}
 
-	{{ form_start(registrationForm) }}
-	{{ form_row(registrationForm.pseudo) }}
-	{# {{ form_row(registrationForm.photo) }} #}
-	{{ form_row(registrationForm.email) }}
-	{{ form_row(registrationForm.plainPassword)}}
+    {{ form_start(registrationForm) }}
+    {{ form_row(registrationForm.pseudo) }}
+    {# {{ form_row(registrationForm.photo) }} #}
+    {{ form_row(registrationForm.email) }}
+    {{ form_row(registrationForm.plainPassword)}}
 
-	<button type="submit" class="d-flex btn btn-primary-dark justify-content-center">S'enregistrer</button>
-	<small class="d-flex justify-content-center mt-10"><a href="{{ path('connexion') }}">Vous avez déjà un compte ?</a></small>
-	{{ form_end(registrationForm) }}
-	</div>
+    <button type="submit" class="d-flex btn btn-primary-dark justify-content-center">S'enregistrer</button>
+    <small class="d-flex justify-content-center mt-10"><a href="{{ path('connexion') }}">Vous avez déjà un compte ?</a></small>
+    {{ form_end(registrationForm) }}
+    </div>
 {% endblock %}

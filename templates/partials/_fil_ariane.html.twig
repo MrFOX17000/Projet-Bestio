@@ -2,13 +2,24 @@
     <small class="ml-20 mt-10">
         <a href="{{ path('app_home') }}">Accueil</a>
 
-        {% if app.request.attributes.get('_route') == 'app_show_classe' %}
-            {% set nom = app.request.attributes.get('_route_params').nom %}
+        {# Page Classe #}
+        {% if app.request.attributes.get('_route') == 'app_show_classe' and classe is defined %}
             /
-            <a href="{{ path('app_show_classe', {'nom': nom}) }}">
+            <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}">
                 {{ classe.nom }}
             </a>
         {% endif %}
 
+        {# Page Espèce #}
+        {% if app.request.attributes.get('_route') == 'app_show_espece' and classe is defined and espece is defined %}
+            /
+            <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}">
+                {{ classe.nom }}
+            </a>
+            /
+            <a href="{{ path('app_show_espece', {'nom': classe.nom, 'nom_espece': espece.nomEspece}) }}">
+                {{ espece.nomEspece }}
+            </a>
+        {% endif %}
     </small>
 </div>

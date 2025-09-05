@@ -1,26 +1,26 @@
 <header class="d-flex flex-row-nowrap justify-content-center p-20">
-	<div class="content flex-fill d-flex flex-row-nowrap align-items-center justify-content-between">
-		<a class="header-logo" href="{{ path('app_home') }}">
-			<img src="{{ asset('images/logo.webp')}}" alt="Logo">
-		</a>
-		<div class="header-search p-10 flex-fill">
-			<i class="fa-solid fa-magnifying-glass"></i>
-			<input type="text">
-		</div>
-		{%- if is_granted('ROLE_USER') -%}
-			<div class="d-flex flex-row-nowrap justify-content-center">
-				<a href="{{ path('current_user') }}">
-					<img src="{{ app.user.photo ?? '/images/profil.webp' }}" class="avatar avatar-lg mr-10">
-				</a>
-				<small class="d-flex flex-column justify-content-center">
-					<a href="{{ path('deconnexion') }}">Déconnexion</a>
-				</small>
-			</div>
-		{% else %}
-			<div>
-				<a href="{{ path('app_register') }}" class="btn btn-primary mr-10">inscription</a>
-				<a href="{{ path('connexion') }}" class="btn btn-primary-stroke">connexion</a>
-			</div>
-		{%- endif -%}
-	</div>
+    <div class="content flex-fill d-flex flex-row-nowrap align-items-center justify-content-between">
+        <a class="header-logo" href="{{ path('app_home') }}">
+            <img src="{{ asset('images/logo.webp')}}" alt="Logo">
+        </a>
+        <div class="header-search p-10 flex-fill">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text">
+        </div>
+        {%- if is_granted('ROLE_USER') -%}
+            <div class="d-flex flex-row-nowrap justify-content-center">
+                <a href="{{ path('current_user') }}">
+                    <img src="{{ app.user.photo ?? '/images/profil.webp' }}" class="avatar avatar-lg mr-10">
+                </a>
+                <small class="d-flex flex-column justify-content-center">
+                    <a href="{{ path('deconnexion') }}">Déconnexion</a>
+                </small>
+            </div>
+        {% else %}
+            <div>
+                <a href="{{ path('app_register') }}" class="btn btn-primary mr-10">inscription</a>
+                <a href="{{ path('connexion') }}" class="btn btn-primary-stroke">connexion</a>
+            </div>
+        {%- endif -%}
+    </div>
 </header>

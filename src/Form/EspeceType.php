@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Classe;
 use App\Entity\Espece;
 use App\Entity\Categorisation;
 use Symfony\Component\Form\AbstractType;
@@ -13,7 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\File;
-use App\Entity\Classe;
 
 class EspeceType extends AbstractType
 {
@@ -43,6 +43,11 @@ class EspeceType extends AbstractType
             ]) 
             ->add('alimentation', TextType::class, [
                 'label' => 'Alimentation',
+            ])
+            ->add('classe', EntityType::class, [
+                'class' => Classe::class,
+                'choice_label' => 'nom', 
+                'multiple' => false,
             ])
             ->add('image', FileType::class, [ //on utilise un FileType pour pouvoir upload des fichiers
                 'label' => 'Votre image (JPG/JPEG/PNG)', // On précise à l'utilisateur quels types de fichiers sont acceptés
