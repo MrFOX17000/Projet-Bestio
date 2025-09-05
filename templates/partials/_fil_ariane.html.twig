@@ -1,61 +1,34 @@
 <div class="d-flex flex-row-nowrap fil-ariane">
     <small class="ml-20 mt-10">
-        <a href="{{ path('app_home') }}">Accueil /</a>
+        <a href="{{ path('app_home') }}">Accueil</a>
+        {# Page catégorie #}
+        {% if app.request.attributes.get('_route') in ['app_categorie_show', 'app_show_classe', 'app_espece', 'app_show_espece'] and categorie is defined %}
+            / <a href="{{ path('app_categorie_show', {'categorie': categorie.nomCategorisation}) }}">{{ categorie.nomCategorisation }}</a>
+        {% endif %}
 
         {# Page classe #}
-        {% if app.request.attributes.get('_route') == 'app_classe' %}
-            <a href="{{ path('app_classe') }}">
-                Classe /
-            </a>
+        {% if app.request.attributes.get('_route') in ['app_show_classe', 'app_espece', 'app_show_espece'] and classe is defined %}
+            / <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}">{{ classe.nom }}</a>
         {% endif %}
 
-        {# Page d'une classe #}
-        {% if app.request.attributes.get('_route') == 'app_show_classe' and classe is defined %}
-            <a href="{{ path('app_classe') }}">
-                Classe /
-            </a> 
-            <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}">
-                {{ classe.nom }} /
-            </a>
-        {% endif %}
-
-        {# Page espèce #}
-        {% if app.request.attributes.get('_route') == 'app_espece' %}
-            <a href="{{ path('app_classe') }}">
-                Classe /
-            </a> 
-            <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}">
-                {{ classe.nom }} /
-            </a>
-            <a href="{{ path('app_espece', {'nom': classe.nom}) }}">
-                Espèce /
-            </a>
+        {# Page espèce (liste des espèces d'une classe) #}
+        {% if app.request.attributes.get('_route') in ['app_espece', 'app_show_espece'] and classe is defined %}
+            / <a href="{{ path('app_espece', {'nom': classe.nom}) }}">Espèces</a>
         {% endif %}
 
         {# Page d'une espèce #}
         {% if app.request.attributes.get('_route') == 'app_show_espece' and classe is defined and espece is defined %}
-            <a href="{{ path('app_classe') }}">
-                Classe /
-            </a>
-            <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}">
-                {{ classe.nom }} /
-            </a>
-            <a href="{{ path('app_espece', {'nom': classe.nom}) }}">
-                Espèce /
-            </a>
-            <a href="{{ path('app_show_espece', {'nom': classe.nom, 'nom_espece': espece.nomEspece}) }}">
-                {{ espece.nomEspece }}
-            </a>
+            / <a href="{{ path('app_show_espece', {'nom': classe.nom, 'nom_espece': espece.nomEspece}) }}">{{ espece.nomEspece }}</a>
         {% endif %}
 
         {# Page Inscription #}
         {% if app.request.attributes.get('_route') == 'app_register' %}
-            <a href="{{ path('app_register') }}">Inscription</a>
+            / <a href="{{ path('app_register') }}">Inscription</a>
         {% endif %}
 
         {# Page Connexion #}
         {% if app.request.attributes.get('_route') == 'connexion' %}
-            <a href="{{ path('connexion') }}">Connexion</a>
+            / <a href="{{ path('connexion') }}">Connexion</a>
         {% endif %}
     </small>
 </div>

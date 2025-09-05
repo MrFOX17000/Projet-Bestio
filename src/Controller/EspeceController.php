@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Espece;
 use App\Form\EspeceType;
-use App\Repository\ClasseRepository;
 use App\Repository\EspeceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,25 +14,6 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 final class EspeceController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function index(EspeceRepository $especeRepository, ClasseRepository $classeRepository): Response
-    {
-        $especes = $especeRepository->findAll();
-        $classes = $classeRepository->findAll();
-
-        // Grouper les classes par catégorie
-        $classesParCategorie = [];
-        foreach ($classes as $classe) {
-            $categorie = $classe->getAppartenir()?->getNomCategorisation() ?? 'Autres';
-            $classesParCategorie[$categorie][] = $classe;
-        }
-
-        return $this->render('espece/home.html.twig', [
-            'especes' => $especes,
-            'classesParCategorie' => $classesParCategorie,
-        ]);
-    }
-
     #[Route('/add/espece', name: 'add_espece')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {

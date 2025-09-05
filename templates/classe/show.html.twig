@@ -2,36 +2,30 @@
 
 {% block title %}{{ classe.nom }}{% endblock %}
 
-
 {% block body %}
+<h1 class="d-flex justify-content-center pb-30">{{ classe.nom }}</h1>
 <div id="wrapper-detail-classe">
-    <h2>{{ classe.nom }}</h2>
     <div class="detail-classe-img">
         <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">
     </div>
     <div class="detail-classe-description">
         <p> <strong>Appartient à la catégorisation :</strong> {{ classe.appartenir.nomCategorisation }}</p>
-        
         <p> <strong>Description :</strong>  {{ classe.specificite }}</p>
     </div>
-    
-
-    <h3>Espèces associées :</h3>
-    <div class="detail-classe-espece">
-  
-    <ul>
-        {% for espece in classe.dependre|slice(0, 3) %}
-        <div class="espece-column">
-             <img src="{{ espece.image }}" alt="{{ espece.nomEspece }}">
-            <li><a  href="{{ path('app_show_espece', {'nom':classe.nom,'nom_espece':espece.nomEspece})}}">{{ espece.nomEspece }}</a></li>
-        </div>
-           
-        {% else %}
-            <p><strong>Aucune espèce disponible.</strong></p>
-        {% endfor %}
-    </ul>
-    </div>
-    
 </div>
-
+<h2 class="d-flex justify-content-center m-20">Espèces associées</h2>
+<div class="detail-classe-espece d-flex flex-row justify-content-center">
+    {% for espece in classe.dependre|slice(0, 3) %}
+        <a href="{{ path('app_show_espece', {'nom':classe.nom,'nom_espece':espece.nomEspece})}}" class="detail-classe-espece p-20">
+            <div class="espece-column">
+                <img src="{{ espece.image }}" alt="image-{{ espece.nomEspece }}">
+                <small>
+                    <a href="{{ path('app_show_espece', {'nom':classe.nom,'nom_espece':espece.nomEspece})}}" class="detail-classe-espece">{{ espece.nomEspece }}</a>
+                </small>
+            </div>
+        </a>
+    {% else %}
+        <p>Aucune espèce pour cette catégorie.</p>
+    {% endfor %}
+</div>
 {% endblock %}

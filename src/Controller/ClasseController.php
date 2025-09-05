@@ -20,7 +20,7 @@ final class ClasseController extends AbstractController
     public function index(EspeceRepository $especeRepository, ClasseRepository $classeRepository): Response
     {
         $especes = $especeRepository->findAll();
-        $classes = $classeRepository->findAll();
+        $classes = $classeRepository->findAllWithCategorie(); // Utilise la méthode optimisée
 
         // Grouper les classes par catégorie
         $classesParCategorie = [];

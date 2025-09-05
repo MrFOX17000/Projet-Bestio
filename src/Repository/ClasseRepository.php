@@ -16,6 +16,26 @@ class ClasseRepository extends ServiceEntityRepository
         parent::__construct($registry, Classe::class);
     }
 
+    public function findAllWithCategorie(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.appartenir', 'cat')
+            ->addSelect('cat')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllWithCategorieAndEspeces(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.appartenir', 'cat')
+            ->addSelect('cat')
+            ->leftJoin('c.dependre', 'espece')
+            ->addSelect('espece')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Classe[] Returns an array of Classe objects
     //     */

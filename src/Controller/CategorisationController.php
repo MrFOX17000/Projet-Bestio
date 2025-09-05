@@ -13,8 +13,28 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class CategorisationController extends AbstractController
 {
+    #[Route('/categorie/{categorie}', name: 'app_categorie_show')]
+    public function showCategorie(
+        CategorisationRepository $categorisationRepository,
+        string $categorie
+    ): Response
+    {
+        $categorieEntity = $categorisationRepository->findOneBy(['nomCategorisation' => $categorie]);
+        if (!$categorieEntity) {
+            $this->addFlash('error', 'Cette catégorie n\'existe pas.');
+            return $this->redirectToRoute('app_home');
+        }
 
-      #[Route('/categorisation', name: 'app_categorisation')]
+        // Récupère les classes associées à cette catégorie
+        $classes = $categorieEntity->getClasses();
+
+        return $this->render('categorisation/show.html.twig', [
+            'categorie' => $categorieEntity,
+            'classes' => $classes,
+        ]);
+    }
+
+    #[Route('/add/categorisation', name: 'add_categorisation')]
     public function addCategorisation(Request $request, EntityManagerInterface $entityManager, CategorisationRepository $categoRepository): Response
     {
         $categorisation = new Categorisation;
@@ -28,7 +48,7 @@ final class CategorisationController extends AbstractController
         }
 
         $categories = $categoRepository->findAll();
-        return $this->render('categorisation/index.html.twig', [
+        return $this->render('categorisation/add.html.twig', [
             'formCategorisation' => $formCategorisation->createView(),
             'categories' => $categories
         ]);
