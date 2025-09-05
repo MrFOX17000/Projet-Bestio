@@ -795,10 +795,8 @@ footer {
     width: 60%;
     height: 60%;
     object-fit: cover;
-    border-radius: 50%;
 }
 .categorie-flip-back {
-    background: var(--primary, #f5f5f5);
     color: var(--gray-dark, #6d4c41);
     transform: rotateY(180deg);
     font-weight: bold;
