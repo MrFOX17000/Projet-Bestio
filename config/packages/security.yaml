@@ -19,11 +19,9 @@ security:
             form_login:
                 login_path: connexion
                 check_path: connexion
-                enable_csrf: true
-                csrf_token_id: authenticate
-
             logout:
                 path: deconnexion
+                target: app_home
             remember_me:
                 secret: "%kernel.secret%"
                 lifetime: 604800 # 1 semaine en secondes

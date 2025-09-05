@@ -51,7 +51,7 @@ final class ClasseController extends AbstractController
         ]);
     }
 
-    #[Route('/{nom}', name: 'app_show_classe')]
+    #[Route('/classe/{nom}', name: 'app_show_classe')]
     public function showClasse(ClasseRepository $classeRepository, string $nom): Response
     {
         $classe = $classeRepository->findOneBy(['nom' => $nom]);
@@ -65,7 +65,7 @@ final class ClasseController extends AbstractController
         ]);
     }
 
-    #[Route('/{nom}/{nom_espece}', name: 'app_show_espece')]
+    #[Route('/classe/{nom}/espece/{nom_espece}', name: 'app_show_espece')]
     public function showEspece(ClasseRepository $classeRepository, string $nom, EspeceRepository $especeRepository, string $nom_espece): Response
     {
         $classe = $classeRepository->findOneBy(['nom' => $nom]);

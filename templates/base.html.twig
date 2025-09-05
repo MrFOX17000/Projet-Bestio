@@ -17,7 +17,9 @@
 	</head>
 	<body class="d-flex flex-column">
 		{{ include('partials/_header.html.twig') }}
-		{{ include('partials/_fil_ariane.html.twig') }}
+		{% if app.request.attributes.get('_route') not in ['app_register', 'connexion'] %}
+			{{ include('partials/_fil_ariane.html.twig') }}
+		{% endif %}		
 		<div class="app-content flex-fill d-flex flex-row-nowrap justify-content-center">
 			<div class="content d-flex flex-row-nowrap flex-fill py-50 align-items-center">
 				{{ include('partials/_sidebar.html.twig') }}
