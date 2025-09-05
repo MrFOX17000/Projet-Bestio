@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'espèce {% endblock %}
+
+{% block body %}
+    <h1>Modifier l'espèce : {{ espece.nomEspece }}</h1>
+
+    {{ form_start(formEspece) }}
+        {{ form_row(formEspece.nomEspece) }}
+        {{ form_row(formEspece.description) }}
+        {{ form_row(formEspece.tailleMoy) }}
+        {{ form_row(formEspece.poidsMoy) }}
+        {{ form_row(formEspece.gestation) }}
+        {{ form_row(formEspece.esperanceVie) }}
+        {{ form_row(formEspece.habitat) }}
+        {{ form_row(formEspece.alimentation) }}
+        {{ form_row(formEspece.image) }}
+        {% if espece.image %}
+            <p>Image actuelle :</p>
+            <img src="{{ espece.image }}" alt="{{ espece.nomEspece }}" style="max-width:200px;">
+        {% endif %}
+        {{ form_row(formEspece.classe) }}
+
+        <button class="btn btn-primary-stroke">Modifier</button>
+    {{ form_end(formEspece) }}
+
+{% endblock %}

@@ -8,7 +8,6 @@ framework:
         cookie_lifetime: 604800 # 1 week
         gc_maxlifetime: 604800 # 1 week
         cookie_secure: true
-        sid_bits_per_character: 5
         cookie_samesite: lax
         storage_factory_id: session.storage.factory.native
     csrf_protection: true
