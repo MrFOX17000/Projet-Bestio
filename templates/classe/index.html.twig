@@ -4,12 +4,15 @@
 
 {% block body %}
 <div>
-    <h1 class="d-flex justify-content-center pb-30">Liste des classes</h1>
+    <h1 class="d-flex justify-content-center">Liste des classes</h1>
+    <div class="separator"></div>
     {% for categorie, classes in classesParCategorie %}
-        <h2 class="d-flex justify-content-center">{{ categorie }}</h2>
+        <h2 class="d-flex justify-content-center underline pb-10">        
+            <a href="{{ path('app_categorie_show', {'categorie': categorie}) }}" class="underline" style="color:var(--gray-dark)">{{ categorie }}</a>
+        </h2>
         <div class="d-flex flex-row-nowrap m-10 align-items-center justify-content-center">
             {% for classe in classes %}
-            <div class="underline">
+            <div class="underline pb-20">
                 <a href="{{ path('app_show_classe', {'nom': classe.nom }) }}" class="d-block justify-content-center classe-card">
                     <div class="espece-image">
                         <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">
@@ -19,6 +22,7 @@
             </div>
             {% endfor %}
         </div>
+        <div class="separator"></div>
     {% endfor %}
 </div>
 {% endblock %}

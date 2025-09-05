@@ -3,7 +3,8 @@
 {% block title %}{{ classe.nom }}{% endblock %}
 
 {% block body %}
-<h1 class="d-flex justify-content-center pb-30">{{ classe.nom }}</h1>
+<h1 class="d-flex justify-content-center">{{ classe.nom }}</h1>
+<div class="separator"></div>
 <div id="wrapper-detail-classe">
     <div class="detail-classe-img">
         <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">

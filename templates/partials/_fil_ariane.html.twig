@@ -1,9 +1,19 @@
 <div class="d-flex flex-row-nowrap fil-ariane">
     <small class="ml-20 mt-10">
         <a href="{{ path('app_home') }}">Accueil</a>
+        {# Affiche "Classe" si on est sur la page /classe #}
+        {% if app.request.attributes.get('_route') == 'app_classe' %}
+            / <a href="{{ path('app_classe') }}">Classe</a>
+        {% endif %}
+        
         {# Page catégorie #}
         {% if app.request.attributes.get('_route') in ['app_categorie_show', 'app_show_classe', 'app_espece', 'app_show_espece'] and categorie is defined %}
             / <a href="{{ path('app_categorie_show', {'categorie': categorie.nomCategorisation}) }}">{{ categorie.nomCategorisation }}</a>
+        {% endif %}
+
+        {# Lien vers la liste des classes #}
+        {% if app.request.attributes.get('_route') in ['app_show_classe', 'app_show_espece'] %}
+            / <a href="{{ path('app_classe') }}">Classe</a>
         {% endif %}
 
         {# Page classe #}
@@ -29,6 +39,11 @@
         {# Page Connexion #}
         {% if app.request.attributes.get('_route') == 'connexion' %}
             / <a href="{{ path('connexion') }}">Connexion</a>
+        {% endif %}
+
+        {# Page Profil #}
+        {% if app.request.attributes.get('_route') == 'current_user' %}
+            / <a href="{{ path('current_user') }}">Profil</a>
         {% endif %}
     </small>
 </div>

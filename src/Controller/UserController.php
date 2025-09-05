@@ -14,6 +14,7 @@ use App\Form\UserType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 final class UserController extends AbstractController
 {
@@ -48,7 +49,7 @@ final class UserController extends AbstractController
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe ne correspondent pas',
                 'options' => ['attr' => ['class' => 'password-field']],
-                'required' => true,
+                'required' => false,
                 'first_options'  => ['constraints' => [
                         new Regex([
                             'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/',
