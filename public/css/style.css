@@ -682,3 +682,64 @@ footer {
 #wrapper-categorie i {
     color: #70424a;
 }
+
+/*************************************************************************************************************************************************************************
+*************************************************************************************WRAPPER DETAIL CLASSE******************************************************************************************************
+******************************************************************************************************************************************************************************************/
+#wrapper-detail-classe {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 60px;
+    font-size: 18px;
+}
+
+#rapper-detail-classe h2 {
+    font-size: 40px;
+}
+
+.detail-classe-img img {
+    width: 700px;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.detail-classe-description {
+    max-width: 800px;
+    font-weight: 400;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.detail-classe-espece {
+    display: flex;
+}
+
+.detail-classe-espece ul {
+    display: flex;
+   flex-direction: row;
+   gap: 40px;
+}
+
+.detail-classe-espece img {
+    border-radius: 100%;
+     width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.espece-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.espece-column a {
+    color: var(--gray-dark);
+}
+
+.espece-column a:hover {
+    text-decoration: underline;
+}
