@@ -21,5 +21,15 @@
                 {{ espece.nomEspece }}
             </a>
         {% endif %}
+
+        {# Page Inscription #}
+        {% if app.request.attributes.get('_route') == 'app_register' %}
+            / <a href="{{ path('app_register') }}">Inscription</a>
+        {% endif %}
+
+        {# Page Connexion #}
+        {% if app.request.attributes.get('_route') == 'connexion' %}
+            / <a href="{{ path('connexion') }}">Connexion</a>
+        {% endif %}
     </small>
 </div>
