@@ -15,7 +15,27 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 final class ClasseController extends AbstractController
 {
-    #[Route('/add/classe', name: 'app_classe')]
+
+    #[Route('/classe', name: 'app_classe')]
+    public function index(EspeceRepository $especeRepository, ClasseRepository $classeRepository): Response
+    {
+        $especes = $especeRepository->findAll();
+        $classes = $classeRepository->findAll();
+
+        // Grouper les classes par catégorie
+        $classesParCategorie = [];
+        foreach ($classes as $classe) {
+            $categorie = $classe->getAppartenir()?->getNomCategorisation() ?? 'Autres';
+            $classesParCategorie[$categorie][] = $classe;
+        }
+
+        return $this->render('classe/index.html.twig', [
+            'especes' => $especes,
+            'classesParCategorie' => $classesParCategorie,
+        ]);
+    }
+
+    #[Route('/add/classe', name: 'app_add_classe')]
     public function addClasse(Request $request, EntityManagerInterface $entityManager, ClasseRepository $classeRepository): Response
     {
         $classe = new Classe;
@@ -62,6 +82,24 @@ final class ClasseController extends AbstractController
             }
         return $this->render('classe/show.html.twig', [
             'classe' => $classe
+        ]);
+    }
+
+    #[Route('classe/{nom}/espece/', name: 'app_espece')]
+    public function espece(EspeceRepository $especeRepository, ClasseRepository $classeRepository, string $nom): Response
+    {
+        $classe = $classeRepository->findOneBy(['nom' => $nom]);
+        if (!$classe) {
+            $this->addFlash('warning', 'La classe demandée n\'existe pas.');
+            return $this->redirectToRoute('app_classe');
+        }
+
+        // On suppose que tu as une relation OneToMany entre Classe et Espece
+        $especes = $classe->getDependre();
+
+        return $this->render('espece/index.html.twig', [
+            'classe' => $classe,
+            'especes' => $especes,
         ]);
     }
 
