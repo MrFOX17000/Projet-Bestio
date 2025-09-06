@@ -74,7 +74,7 @@ final class ClasseController extends AbstractController
     #[Route('/classe/{nom}', name: 'app_show_classe')]
     public function showClasse(ClasseRepository $classeRepository, string $nom): Response
     {
-        $classe = $classeRepository->findOneBy(['nom' => $nom]);
+        $classe = $classeRepository->findOneWithRelations($nom);        
         if(!$classe)
             {
                 $this->addFlash('warning', 'La page ' . $nom . ' n\'existe pas.');

@@ -3,9 +3,9 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-<h1 class="d-flex justify-content-center">Bienvenue sur Bestio !</h1>
+<h1 class="d-flex justify-content-center border-radius margin-auto">Bienvenue sur Bestio !</h1>
 <div class="separator"></div>
-<div class="d-flex flex-row-nowrap justify-content-center align-items-center" style="gap: 2rem;">
+<div class="d-flex flex-row-nowrap align-items-center justify-content-around">
     {% for categorie in categories %}
         <a href="{{ path('app_categorie_show', {'categorie': categorie.nomCategorisation}) }}">
             <div class="categorie-flip">
@@ -47,4 +47,26 @@
         </div>
     </a>
 </div>
+<div class="separator"></div>
+<div class="description-site d-flex justify-content-center mb-20">
+    <p style="max-width: 700px;">
+        Bestio est un site dédié à la découverte du monde animal. Explorez les différentes catégories, classes et espèces pour en apprendre plus sur la biodiversité et les particularités de chaque animal. Notre objectif : rendre la connaissance animale accessible à tous !
+    </p>
+</div>
+<div class="separator"></div>
+{% if animalDuJour %}
+<div class="animal-jour d-flex flex-column align-items-center mb-30">
+    <h2 class="border-radius">Animal du jour</h2>
+    <div class="animal-card">
+        <img src="{{ animalDuJour.image }}" alt="{{ animalDuJour.nomEspece }}">
+        <h3 class="p-20">{{ animalDuJour.nomEspece }}</h3>
+        <p class="pb-20">{{ animalDuJour.description|slice(0, 120) ~ '...' }}</p>
+        <a href="{{ path('app_show_espece', {
+            'categorie': animalDuJour.classe.appartenir.nomCategorisation,
+            'nom': animalDuJour.classe.nom,
+            'nom_espece': animalDuJour.nomEspece
+        }) }}" class="btn btn-primary-stroke p-20">Découvrir</a>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

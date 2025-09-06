@@ -14,7 +14,7 @@
         <p> <strong>Description :</strong>  {{ classe.specificite }}</p>
     </div>
 </div>
-<h2 class="d-flex justify-content-center m-20">Espèces associées</h2>
+<h2 class="d-flex justify-content-center p-20">Espèces associées</h2>
 <div class="detail-classe-espece d-flex flex-row justify-content-center">
     {% for espece in classe.dependre|slice(0, 3) %}
         <a href="{{ path('app_show_espece', {'nom':classe.nom,'nom_espece':espece.nomEspece})}}" class="detail-classe-espece p-20">

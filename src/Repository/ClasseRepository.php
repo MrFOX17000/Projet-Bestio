@@ -36,6 +36,17 @@ class ClasseRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findOneWithRelations(string $nom): ?Classe
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.appartenir', 'cat')->addSelect('cat')
+            ->leftJoin('c.dependre', 'e')->addSelect('e')
+            ->where('c.nom = :nom')
+            ->setParameter('nom', $nom)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return Classe[] Returns an array of Classe objects
     //     */
