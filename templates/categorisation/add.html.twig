@@ -2,21 +2,26 @@
 
 {% block title %}Ajouter une catégorie{% endblock %}
 
-
 {% block body %}
 <div id="wrapper-categorie">
-   {{ form_start(formCategorisation) }}
-       {{ form_widget(formCategorisation) }}
-       <button type="submit" class="btn btn-primary">Enregistrer</button>
-   {{ form_end(formCategorisation) }}
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ form_start(formCategorisation) }}
+            {{ form_widget(formCategorisation) }}
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        {{ form_end(formCategorisation) }}
 
-    <h1> Liste des catégories </h1>
-    {% for category in categories %}
-        {{ category.nomCategorisation }}
-        <a href="{{ path('delete_categorie', {'id':category.id})}}">
-            <i class="fa-solid fa-trash"></i>
-        </a> <br>
-    {% endfor %}
+        <h1>Liste des catégories</h1>
+        {% for category in categories %}
+            {{ category.nomCategorisation }}
+            <a href="{{ path('delete_categorie', {'id': category.id}) }}">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+            <br>
+        {% else %}
+            <p>Aucune catégorie disponible.</p>
+        {% endfor %}
+    {% else %}
+        <p>Vous n'avez pas les droits pour accéder à cette page.</p>
+    {% endif %}
 </div>
 {% endblock %}
-

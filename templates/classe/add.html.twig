@@ -5,20 +5,22 @@
 
 {% block body %}
 <div id="wrapper-categorie">
-   {{ form_start(formClasse) }}
-       {{ form_widget(formClasse) }}
-       <button type="submit" class="btn btn-primary">Enregistrer</button>
-   {{ form_end(formClasse) }}
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ form_start(formClasse) }}
+            {{ form_widget(formClasse) }}
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        {{ form_end(formClasse) }}
 
-    <h1> Liste des classes </h1>
-    {% for classe in classes %}
-        {{ classe.nom }}
-        <a href="{{ path('edit_classe', {'id':classe.id})}}">
-            <i class="fa-solid fa-pen-to-square"></i>       
-        </a>
-        <a href="{{ path('delete_classe', {'id':classe.id})}}">
-            <i class="fa-solid fa-trash"></i>
-        </a> <br>
-    {% endfor %}
+            <h1> Liste des classes </h1>
+            {% for classe in classes %}
+                {{ classe.nom }}
+                <a href="{{ path('edit_classe', {'id':classe.id})}}">
+                    <i class="fa-solid fa-pen-to-square"></i>       
+                </a>
+                <a href="{{ path('delete_classe', {'id':classe.id})}}">
+                    <i class="fa-solid fa-trash"></i>
+                </a> <br>
+            {% endfor %}
+    {% endif %}
 </div>
 {% endblock %}
