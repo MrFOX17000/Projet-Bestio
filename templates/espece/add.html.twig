@@ -5,10 +5,14 @@
 
 {% block body %}
 <div class="example-wrapper">
-   {{ form_start(form) }}
-       {{ form_widget(form) }}
-       <button aria-label="Enregistrer" type="submit" class="btn btn-primary">Enregistrer</button>
-   {{ form_end(form) }}
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button aria-label="Enregistrer" type="submit" class="btn btn-primary">Enregistrer</button>
+        {{ form_end(form) }}
+     {% else %}
+        <p>Vous n'avez pas les droits pour accéder à cette page.</p>
+    {% endif %}
 </div>
 {% endblock %}
 

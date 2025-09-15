@@ -3,6 +3,7 @@
 {% block title %}Modifier la categorisation{% endblock %}
 
 {% block body %}
+ {% if is_granted('ROLE_ADMIN') %}
     <h1>Modifier la categorisation : {{ categorie.nomCategorisation }}</h1>
 
     {{ form_start(formCategorie) }}
@@ -10,4 +11,7 @@
         {{ form_row(formCategorie.specificite) }}
         <button aria-label="Modifier" class="btn btn-primary-stroke">Modifier</button>
     {{ form_end(formCategorie) }}
+    {% else %}        
+        <p>Vous n'avez pas les droits pour accéder à cette page.</p>
+    {% endif %}
 {% endblock %}

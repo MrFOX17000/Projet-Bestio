@@ -38,6 +38,11 @@ final class ClasseController extends AbstractController
     #[Route('/add/classe', name: 'app_add_classe')]
     public function addClasse(Request $request, EntityManagerInterface $entityManager, ClasseRepository $classeRepository): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+        $this->addFlash('error', 'Accès réservé aux administrateurs.');
+        return $this->redirectToRoute('app_home');
+        }
+
         $classe = new Classe;
         $formClasse = $this->createForm(ClasseType::class, $classe);
         $formClasse->handleRequest($request);
@@ -128,6 +133,11 @@ public function editClasse(
     ClasseRepository $classeRepository
 ): Response
 {
+    if (!$this->isGranted('ROLE_ADMIN')) {
+        $this->addFlash('error', 'Accès réservé aux administrateurs.');
+        return $this->redirectToRoute('app_home');
+        }
+
     // On récupère la classe existante
     $classe = $classeRepository->find($id);
 
@@ -173,6 +183,11 @@ public function editClasse(
     #[Route('/delete/classe/{id}', name: 'delete_classe')]
     public function deleteClasse(EntityManagerInterface $entityManager, ClasseRepository $classeRepository, int $id): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+        $this->addFlash('error', 'Accès réservé aux administrateurs.');
+        return $this->redirectToRoute('app_home');
+        }
+        
         $classe = $classeRepository->find($id);
         if(!$classe)
             {

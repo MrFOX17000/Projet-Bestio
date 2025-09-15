@@ -3,21 +3,24 @@
 {% block title %}Modifier la classe{% endblock %}
 
 {% block body %}
-    <h1>Modifier la classe : {{ classe.nom }}</h1>
+    {% if is_granted('ROLE_ADMIN') %}
+        <h1>Modifier la classe : {{ classe.nom }}</h1>
 
-    {{ form_start(formClasse) }}
-        {{ form_row(formClasse.nom) }}
-        {{ form_row(formClasse.specificite) }}
-        {{ form_row(formClasse.image) }}
-        {% if classe.image %}
-            <p>Image actuelle :</p>
-            <img src="{{ classe.image }}" alt="{{ classe.nom }}" style="max-width:200px;">
-        {% endif %}
-        {{ form_row(formClasse.appartenir) }}
+        {{ form_start(formClasse) }}
+            {{ form_row(formClasse.nom) }}
+            {{ form_row(formClasse.specificite) }}
+            {{ form_row(formClasse.image) }}
+            {% if classe.image %}
+                <p>Image actuelle :</p>
+                <img src="{{ classe.image }}" alt="{{ classe.nom }}" style="max-width:200px;">
+            {% endif %}
+            {{ form_row(formClasse.appartenir) }}
 
-        <button aria-label="Modifier" class="btn btn-primary-stroke">Modifier</button>
-    {{ form_end(formClasse) }}
+            <button aria-label="Modifier" class="btn btn-primary-stroke">Modifier</button>
+        {{ form_end(formClasse) }}
 
-    <small><a href="{{ path('app_classe') }}">Retour à la liste des classes</a></small>
-
+        <small><a href="{{ path('app_classe') }}">Retour à la liste des classes</a></small>
+    {% else %}
+        <p>Vous n'avez pas les droits pour accéder à cette page.</p>
+    {% endif %}
 {% endblock %}

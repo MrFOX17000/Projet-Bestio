@@ -37,6 +37,11 @@ final class CategorisationController extends AbstractController
     #[Route('/add/categorisation', name: 'add_categorisation')]
     public function addCategorisation(Request $request, EntityManagerInterface $entityManager, CategorisationRepository $categoRepository): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+        $this->addFlash('error', 'Accès réservé aux administrateurs.');
+        return $this->redirectToRoute('app_home');
+        }
+
         $categorisation = new Categorisation;
         $formCategorisation = $this->createForm(CategorisationType::class, $categorisation);
         $formCategorisation->handleRequest($request);
@@ -57,6 +62,11 @@ final class CategorisationController extends AbstractController
     #[Route('/edit/categorie/{id}', name: 'edit_categorie')]
     public function editCategorie(Request $request, EntityManagerInterface $entityManager, CategorisationRepository $categorisationRepository, int $id): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+        $this->addFlash('error', 'Accès réservé aux administrateurs.');
+        return $this->redirectToRoute('app_home');
+        }
+
         $categorie = $categorisationRepository->find($id);
         if(!$categorie)
             {
@@ -81,6 +91,11 @@ final class CategorisationController extends AbstractController
     #[Route('/delete/categorie/{id}', name: 'delete_categorie')]
     public function deleteCategorie(Request $request, EntityManagerInterface $entityManager, CategorisationRepository $categorisationRepository, int $id): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+        $this->addFlash('error', 'Accès réservé aux administrateurs.');
+        return $this->redirectToRoute('app_home');
+        }
+        
         $categorie = $categorisationRepository->find($id);
         if(!$categorie)
             {

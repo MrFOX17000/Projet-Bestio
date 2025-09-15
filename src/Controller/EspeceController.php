@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Espece;
 use App\Form\EspeceType;
+use Symfony\Component\Mime\Email;
 use App\Repository\EspeceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +19,11 @@ final class EspeceController extends AbstractController
     #[Route('/add/espece', name: 'add_espece')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+        $this->addFlash('error', 'Accès réservé aux administrateurs.');
+        return $this->redirectToRoute('app_home');
+        }
+
         $espece = new Espece();
         $form = $this->createForm(EspeceType::class, $espece);
         $form->handleRequest($request);
@@ -58,6 +65,11 @@ public function editEspece(
     EspeceRepository $especeRepository
 ): Response
 {
+    if (!$this->isGranted('ROLE_ADMIN')) {
+        $this->addFlash('error', 'Accès réservé aux administrateurs.');
+        return $this->redirectToRoute('app_home');
+        }
+
     // On récupère l'espece existante
     $espece = $especeRepository->find($id);
 
@@ -100,10 +112,30 @@ public function editEspece(
     ]);
 }
 
+#[Route('/test-mail')]
+public function testMail(MailerInterface $mailer): Response
+{
+    $email = (new Email())
+        ->from('noreply@bestio.com')
+        ->to('ton-email@exemple.com') // mets ton email réel, ou un email de test
+        ->subject('Test Mail Symfony')
+        ->text('Ce mail vient de Symfony vers Mailpit.');
+
+    $mailer->send($email);
+
+    return new Response('Mail envoyé, vérifie Mailpit à http://localhost:8080');
+}
+
+
 
     #[Route('/delete/{id}', name: 'delete_espece')]
     public function delete(Request $request, EntityManagerInterface $entityManager, EspeceRepository $especeRepository, int $id): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+        $this->addFlash('error', 'Accès réservé aux administrateurs.');
+        return $this->redirectToRoute('app_home');
+        }
+
         $espece = $especeRepository->find($id);
         if(!$espece)
             {
