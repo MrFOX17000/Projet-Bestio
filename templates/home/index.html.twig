@@ -13,17 +13,15 @@
                     <div class="categorie-flip-front">
                         {# Choix de l'image selon la catégorie #}
                         {% if categorie.nomCategorisation == 'Reptiles' %}
-                            <img src="{{ asset('images/reptile.png') }}" alt="Reptile" class="categorie-img">
+                            <img src="{{ asset('images/reptile.png') }}" alt="Image de serpent" class="categorie-img">
                         {% elseif categorie.nomCategorisation == 'Oiseaux' %}
-                            <img src="{{ asset('images/oiseau.png') }}" alt="Oiseau" class="categorie-img">
+                            <img src="{{ asset('images/oiseau.png') }}" alt="Image d'oiseau" class="categorie-img">
                         {% elseif categorie.nomCategorisation == 'Poissons' %}
-                            <img src="{{ asset('images/poisson.png') }}" alt="Poisson" class="categorie-img">
+                            <img src="{{ asset('images/poisson.png') }}" alt="Image de poisson" class="categorie-img">
                         {% elseif categorie.nomCategorisation == 'Mammifères' %}
-                            <img src="{{ asset('images/mammifere.png') }}" alt="Mammifère" class="categorie-img">
+                            <img src="{{ asset('images/mammifere.png') }}" alt="Image de lion" class="categorie-img">
                         {% elseif categorie.nomCategorisation == 'Amphibiens' %}
-                            <img src="{{ asset('images/grenouille.png') }}" alt="Amphibien" class="categorie-img">
-                        {% else %}
-                            <img src="{{ asset('images/default.png') }}" alt="{{ categorie.nomCategorisation }}" class="categorie-img">
+                            <img src="{{ asset('images/grenouille.png') }}" alt="Image de grenouille" class="categorie-img">
                         {% endif %}
                     </div>
                     <div class="categorie-flip-back d-flex align-items-center justify-content-center">
@@ -38,7 +36,7 @@
         <div class="categorie-flip">
             <div class="categorie-flip-inner">
                 <div class="categorie-flip-front">
-                    <img src="{{ asset('images/patte.png') }}" alt="Tout" class="categorie-img">
+                    <img src="{{ asset('images/patte.png') }}" alt="Image patte" class="categorie-img">
                 </div>
                 <div class="categorie-flip-back d-flex align-items-center justify-content-center">
                     <span class="categorie-nom">Tout</span>

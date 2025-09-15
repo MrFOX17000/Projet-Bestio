@@ -54,18 +54,18 @@ final class ClasseController extends AbstractController
                     $this->addFlash('error', 'Erreur lors de l\'upload de l\'image : ' . $e->getMessage());
 
                       //Et on redirige vers le formulaire
-                    return $this->redirectToRoute('add_classe');
+                    return $this->redirectToRoute('app_add_classe');
                     }
                     $classe->setImage('/uploads/' . $newFilename); // On stocke le chemin relatif de l'image dans la base de données
             }
             $entityManager->persist($classe);
             $entityManager->flush();
             $this->addFlash('success', 'Classe ajoutée avec succès !');
-            return $this->redirectToRoute('app_classe');
+            return $this->redirectToRoute('app_add_classe');
         }
 
         $classes = $classeRepository->findAll();
-        return $this->render('classe/index.html.twig', [
+        return $this->render('classe/add.html.twig', [
             'formClasse' => $formClasse->createView(),
             'classes' => $classes
         ]);

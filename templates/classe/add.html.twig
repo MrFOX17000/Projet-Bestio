@@ -8,7 +8,7 @@
     {% if is_granted('ROLE_ADMIN') %}
         {{ form_start(formClasse) }}
             {{ form_widget(formClasse) }}
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <button aria-label="Enregistrer" type="submit" class="btn btn-primary">Enregistrer</button>
         {{ form_end(formClasse) }}
 
             <h1> Liste des classes </h1>

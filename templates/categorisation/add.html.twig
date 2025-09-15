@@ -7,7 +7,7 @@
     {% if is_granted('ROLE_ADMIN') %}
         {{ form_start(formCategorisation) }}
             {{ form_widget(formCategorisation) }}
-            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <button aria-label="Enregistrer" type="submit" class="btn btn-primary">Enregistrer</button>
         {{ form_end(formCategorisation) }}
 
         <h1>Liste des catégories</h1>
