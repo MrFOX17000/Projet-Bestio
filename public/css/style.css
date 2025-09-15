@@ -125,6 +125,29 @@ small a:hover {
     display: flex;
 }
 
+.d-flex.flex-row-nowrap {
+    flex-flow: row wrap !important;
+}
+
+.flex-row-wrap {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px 30px; /* espace entre les bulles */
+}
+
+.gap-40 {
+    gap: 40px 30px;
+}
+
+.detail-classe-espece {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 .d-block {
     display: block;
 }
@@ -517,12 +540,9 @@ header {
     background-color: var(--gray-light);
 }
 
-.header-logo {
-    width: 150px;
-}
-
 .header-logo img {
-    max-width: 180px;
+    height: 50px;
+    width: 140px;
 }
 
 header small a {
@@ -741,6 +761,9 @@ footer {
 
 .detail-classe-espece {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .detail-classe-espece ul {
@@ -760,6 +783,7 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 200px;
 }
 
 .espece-column:hover {
@@ -774,6 +798,14 @@ footer {
 
 .espece-column a:hover {
     text-decoration: underline;
+}
+
+.espece-column img {
+    border-radius: 100%;
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    margin-bottom: 10px;
 }
 
 .categorie-flip {

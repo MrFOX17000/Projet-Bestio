@@ -1,37 +1,51 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>
-			{% block title %}Welcome!
-			{% endblock %}
-		</title>
-		 <script defer src="{{ asset('js/index.js') }}"></script>
-		{% block stylesheets %}
-			<link rel="stylesheet" href="{{ asset('css/style.css') }}">
-			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-			<link rel="preconnect" href="https://fonts.googleapis.com">
-			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-			<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-		{% endblock %}
-	</head>
-	<body class="d-flex flex-column">
-		{{ include('partials/_header.html.twig') }}
-		{{ include('partials/_fil_ariane.html.twig') }}
-		<div class="app-content flex-fill d-flex flex-row-nowrap justify-content-center">
-			<div class="content d-flex flex-row-nowrap flex-fill py-50">
-				{{ include('partials/_sidebar.html.twig') }}
-				<div class="flex-fill">
-					{% block body %}Contenu
-					{% endblock %}
-				</div>
-			</div>
-		</div>
-		{% for cat, list in app.flashes %}
-			{% for message in list %}
-				<div class="flash flash-{{ cat }}">{{ message }}</div>
-			{% endfor %}
-		{% endfor %}
-		{{ include('partials/_footer.html.twig') }}
-	</body>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {# SEO description dynamique ou par défaut #}
+    <meta name="description" content="{% block meta_description %}Site Bestio - Découvrez nos classes et espèces{% endblock %}">
+    <title>
+        {% block title %}Welcome!{% endblock %}
+    </title>
+
+    {# JS chargé avec defer = non bloquant #}
+    <script defer src="{{ asset('js/index.js') }}"></script>
+
+    {% block stylesheets %}
+        {# CSS principal en non-bloquant #}
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}" media="print" onload="this.media='all'">
+        <noscript><link rel="stylesheet" href="{{ asset('css/style.css') }}"></noscript>
+
+        {# Font Awesome (chargé async si possible) #}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+        {# Google Fonts optimisé avec preconnect #}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    {% endblock %}
+</head>
+<body class="d-flex flex-column">
+
+    {{ include('partials/_header.html.twig') }}
+    {{ include('partials/_fil_ariane.html.twig') }}
+
+    <div class="app-content flex-fill d-flex flex-row-nowrap justify-content-center">
+        <div class="content d-flex flex-row-nowrap flex-fill py-50">
+            {{ include('partials/_sidebar.html.twig') }}
+            <div class="flex-fill">
+                {% block body %}Contenu{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    {% for cat, list in app.flashes %}
+        {% for message in list %}
+            <div class="flash flash-{{ cat }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ include('partials/_footer.html.twig') }}
+</body>
 </html>
