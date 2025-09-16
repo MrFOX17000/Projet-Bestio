@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Detail - {{ espece.nomEspece }}{% endblock %}
+{% block title %}Détails - {{ espece.nomEspece }}{% endblock %}
 
 {% block body %}
     <h1 class="d-flex justify-content-center">{{ espece.nomEspece }}</h1>
@@ -18,7 +18,16 @@
             <p> <strong>Régime alimentaire :</strong> {{ espece.alimentation }}</p>
             <p> <strong>Durée de vie moyenne :</strong> {{ espece.esperanceVie }} ans</p>
             <p> <strong>Durée de gestation :</strong> {{ espece.gestation }} jours</p>
+        <div class="separator"></div>
+        <div class="d-flex flex-row justify-content-center mt-20">
+            <a href="{{ path('app_forum_show', {'nom_espece': espece.nomEspece}) }}" class="btn btn-primary-stroke">
+                Voir les questions posées sur l'espèce : {{ espece.nomEspece }}
+            </a>
         </div>
+        <div class="separator"></div>
+        </div>
+
+
         {% if is_granted('ROLE_ADMIN') %}
             <a href="{{ path('delete_espece', {'id':espece.id})}}">
                 <i class="fa-solid fa-trash"></i>
@@ -26,12 +35,28 @@
         {% endif %}
         
         {% if app.user %}
-            {{ form_start(formQuestion) }}
-            {{ form_rest(formQuestion) }}
-            {{ form_end(formQuestion) }}
+            <div class="fill">
+                <div class="block">
+                    <h2 class="d-flex pb-30 justify-content-center">Poser une question</h2>
+                    {{ form_start(formQuestion) }}
+                        <div class="form-row">
+                            {{ form_label(formQuestion.titreQuestion) }}
+                            {{ form_widget(formQuestion.titreQuestion, {'attr': {'class': 'mb-20'}}) }}
+                            {{ form_errors(formQuestion.titreQuestion) }}
+                        </div>
+                        <div class="form-row">
+                            {{ form_label(formQuestion.description) }}
+                            {{ form_widget(formQuestion.description, {'attr': {'class': 'mb-20'}}) }}
+                            {{ form_errors(formQuestion.description) }}
+                        </div>     
+                        <button class="d-flex btn btn-primary-stroke justify-content-center margin-auto" type="submit">Envoyer</button> 
+                    {{ form_end(formQuestion) }}
+                </div>
+            </div>
         {% else %}
-            <p class="warning">Vous avez une question ? <small> <a href="{{ path('connexion') }}">Se connecter</a> </small></p>
-            
+        <div class="d-flex flex-row justify-content-center lien-question border-radius">
+            <p>Vous avez une question ? <small> <a href="{{ path('connexion') }}">Se connecter</a> </small></p>
+        </div>
         {% endif %}
         
     </div>

@@ -11,16 +11,21 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class QuestionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('titreQuestion', TextType::class)
-            ->add('description', TextType::class)
-            ->add('Valider', SubmitType::class)
-            ;
+            ->add('titreQuestion', TextType::class, [
+                'label' => 'Titre de la question :',
+                'attr' => ['placeholder' => 'Votre titre...']
+            ])
+            ->add('description', TextareaType::class, [
+                'label' => 'Votre question :',
+                'attr' => ['placeholder' => 'Décrivez votre question...']
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
