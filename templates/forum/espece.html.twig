@@ -1,17 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ForumController!{% endblock %}
+{% block title %}Questions sur {{ nom_espece }}{% endblock %}
 
 {% block body %}
-
-<div class="question-wrapper">
-    {% for question in questions %}
-        <div class="question-card">
-            <h2>{{ question.titreQuestion }}</h2>
-            <p>{{ question.description }}</p>
-            <p>Posted by: {{ question.author.pseudo }} on {{ question.createdAt|date('Y-m-d H:i') }}</p>
-            <a class="warning" href="{{ path('app_forum_question_show', {'id': question.id, 'nom_espece': nom_espece}) }}">View Details</a>        
-        </div>
-    {% endfor %}
-</div>
+    <h1 class="d-flex justify-content-center pb-30">Forum : {{ nom_espece }}</h1>
+    <div class="separator"></div>
+    <div class="d-flex flex-column align-items-center">
+        {% if questions|length == 0 %}
+            <div class="lien-question mb-20">
+                <p>Aucune question n'a encore été posée sur cette espèce.<br> Soyez le premier à en poser une !</p>
+            </div>
+        {% else %}
+            <div class="d-flex flex-row-wrap justify-content-center gap-40">
+                {% for question in questions %}
+                    <div class="block mb-20 question-card position-relative">
+                        <div class="d-flex justify-content-between align-items-center mb-10">
+                            <h2 class="d-flex">{{ question.titreQuestion }}</h2>
+                            {% if question.author.photo %}
+                                <img src="{{ question.author.photo }}" alt="avatar" class="avatar" style="width:32px; height:32px; object-fit:cover; border-radius:50%; margin-left:10px;">
+                            {% else %}
+                                <img src="{{ asset('images/profil.webp') }}" alt="avatar" class="avatar" style="width:32px; height:32px; object-fit:cover; border-radius:50%; margin-left:10px;">
+                            {% endif %}
+                        </div>
+                        <p class="question-text mb-20">{{ question.description }}</p>
+                        <small>Posée par <strong>{{ question.author.pseudo }}</strong> le {{ question.createdAt|date('d/m/Y à H:i') }}</small>
+                        <div class="d-flex justify-content-center mt-20">
+                            <a class="btn btn-primary-stroke" href="{{ path('app_forum_question_show', {'id': question.id, 'nom_espece': nom_espece}) }}">Voir la discussion</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

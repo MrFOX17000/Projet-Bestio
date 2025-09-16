@@ -869,6 +869,20 @@ footer {
     line-height: 1.7;
 }
 
+.lien-question {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(112, 66, 74, 0.07);
+    padding: 20px;
+    margin: 40px auto 30px auto;
+    max-width: 700px;
+    font-size: 14px;
+    color: var(--gray-dark);
+    text-align: center;
+    letter-spacing: 0.01em;
+    line-height: 1.7;
+}
+
 .animal-card {
     background: #fff;
     border-radius: 16px;
@@ -890,10 +904,9 @@ footer {
 /*************************************************************************************************************************************************************************
 *************************************************************************************DASHBOARD ADMIN******************************************************************************************************
 ******************************************************************************************************************************************************************************************/
- 
+
 .user-info a {
     color: var(--gray-dark);
-
 }
 
 .ban-btn a {
@@ -902,7 +915,6 @@ footer {
 
 .unban-btn a {
     color: white;
-
 }
 
 .ban-btn {
@@ -921,14 +933,12 @@ footer {
     justify-content: center;
 }
 
-
 .buttons-admin a {
     color: black;
 }
 
 .buttons-admin {
-        display: flex;
-        gap: 30px;
-        margin-bottom: 50px;
- 
+    display: flex;
+    gap: 30px;
+    margin-bottom: 50px;
 }
