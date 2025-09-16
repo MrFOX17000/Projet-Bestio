@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\CommentaireRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CommentaireRepository;
 
 #[ORM\Entity(repositoryClass: CommentaireRepository::class)]
 class Commentaire
@@ -18,7 +19,7 @@ class Commentaire
     private ?string $contenu = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAtComm = null;
+    private ?DateTimeImmutable $createdAtComm = null;
 
     #[ORM\ManyToOne(inversedBy: 'posseder')]
     #[ORM\JoinColumn(nullable: false)]
@@ -27,6 +28,11 @@ class Commentaire
     #[ORM\ManyToOne(inversedBy: 'ecrire')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
+
+    public function __construct()
+    {
+        $this->createdAtComm = new DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {

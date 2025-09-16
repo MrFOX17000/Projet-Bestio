@@ -3,5 +3,16 @@
 {% block title %}Bestio - Forum{% endblock %}
 
 {% block body %}
+    <ul>
+        {% for espece in especes %}
+            <li>
+                <a class="warning" href="{{ path('app_forum_show', { nom_espece: espece.nomEspece }) }}">
+                    {{ espece.nomEspece }}
+                </a>
+            </li>
+        {% else %}
+            <li>Aucune espèce trouvée.</li>
+        {% endfor %}
+    </ul>
 
 {% endblock %}
