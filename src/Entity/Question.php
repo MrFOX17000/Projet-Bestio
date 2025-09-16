@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\QuestionRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\QuestionRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question
@@ -41,6 +43,7 @@ class Question
 
     public function __construct()
     {
+        $this->createdAt = new DateTimeImmutable();
         $this->posseder = new ArrayCollection();
     }
 

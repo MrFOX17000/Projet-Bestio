@@ -521,6 +521,10 @@ small a:hover {
     background-color: var(--warning);
 }
 
+.flash-info {
+    background-color: var(--gray-dark);
+}
+
 /* header */
 
 header {

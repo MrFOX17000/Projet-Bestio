@@ -24,6 +24,16 @@
                 <i class="fa-solid fa-trash"></i>
             </a>
         {% endif %}
+        
+        {% if app.user %}
+            {{ form_start(formQuestion) }}
+            {{ form_rest(formQuestion) }}
+            {{ form_end(formQuestion) }}
+        {% else %}
+            <p class="warning">Vous avez une question ? <small> <a href="{{ path('connexion') }}">Se connecter</a> </small></p>
+            
+        {% endif %}
+        
     </div>
 
 {% endblock %}

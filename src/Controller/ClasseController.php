@@ -2,15 +2,17 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Classe;
+use App\Entity\Question;
 use App\Form\ClasseType;
+use App\Form\QuestionType;
 use App\Repository\ClasseRepository;
 use App\Repository\EspeceRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 final class ClasseController extends AbstractController
@@ -109,8 +111,10 @@ final class ClasseController extends AbstractController
     }
 
     #[Route('/classe/{nom}/espece/{nom_espece}', name: 'app_show_espece')]
-    public function showEspece(ClasseRepository $classeRepository, string $nom, EspeceRepository $especeRepository, string $nom_espece): Response
+    public function showEspece(ClasseRepository $classeRepository, string $nom, EspeceRepository $especeRepository, string $nom_espece, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+
         $classe = $classeRepository->findOneBy(['nom' => $nom]);
         $espece = $especeRepository->findOneBy(['nomEspece' => $nom_espece]);
         if(!$classe || !$espece)
@@ -118,12 +122,34 @@ final class ClasseController extends AbstractController
                 $this->addFlash('warning', 'La page n\'existe pas.');
                 return $this->redirectToRoute('app_home');
             }
+
+        $question = new Question();
+        $question->setEspece($espece);
+        $question->setAuthor($user);
+
+
+        $formQuestion = $this->createForm(QuestionType::class, $question);
+        $formQuestion->handleRequest($request);
+
+        if ($formQuestion->isSubmitted() && $formQuestion->isValid()) {
+            $entityManager->persist($question);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La question a bien été ajoutée');
+
+            return $this->redirectToRoute('app_forum_show', ['nom_espece' => $nom_espece]);
+        }
+        
+        
         return $this->render('espece/details.html.twig', [
             'classe' => $classe,
             'nom_espece' => $nom_espece,
             'espece' => $espece,
+            'formQuestion' => $formQuestion->createView(),
         ]);
     }
+
+
 
     #[Route('/edit/classe/{id}', name: 'edit_classe')]
 public function editClasse(
