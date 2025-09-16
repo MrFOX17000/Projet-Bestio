@@ -883,3 +883,48 @@ footer {
     object-fit: cover;
     border-radius: var(--border-radius);
 }
+/*************************************************************************************************************************************************************************
+*************************************************************************************DASHBOARD ADMIN******************************************************************************************************
+******************************************************************************************************************************************************************************************/
+ 
+.user-info a {
+    color: var(--gray-dark);
+
+}
+
+.ban-btn a {
+    color: white;
+}
+
+.unban-btn a {
+    color: white;
+
+}
+
+.ban-btn {
+    background-color: var(--warning);
+    width: 100px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.unban-btn {
+    background-color: blue;
+    width: 100px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+
+.buttons-admin a {
+    color: black;
+}
+
+.buttons-admin {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 50px;
+ 
+}

@@ -66,6 +66,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Question::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $poser;
 
+    #[ORM\Column]
+    private ?bool $banned = false;
+
     public function __construct()
     {
         $this->ecrire = new ArrayCollection();
@@ -257,6 +260,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $poser->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isBanned(): ?bool
+    {
+        return $this->banned;
+    }
+
+    public function setBanned(bool $banned): static
+    {
+        $this->banned = $banned;
 
         return $this;
     }
