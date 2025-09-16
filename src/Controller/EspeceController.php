@@ -112,19 +112,6 @@ public function editEspece(
     ]);
 }
 
-#[Route('/test-mail')]
-public function testMail(MailerInterface $mailer): Response
-{
-    $email = (new Email())
-        ->from('noreply@bestio.com')
-        ->to('ton-email@exemple.com') // mets ton email réel, ou un email de test
-        ->subject('Test Mail Symfony')
-        ->text('Ce mail vient de Symfony vers Mailpit.');
-
-    $mailer->send($email);
-
-    return new Response('Mail envoyé, vérifie Mailpit à http://localhost:8080');
-}
 
 
 
