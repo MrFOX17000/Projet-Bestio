@@ -16,6 +16,22 @@ class CommentaireRepository extends ServiceEntityRepository
         parent::__construct($registry, Commentaire::class);
     }
 
+    /**
+     * Retourne les commentaires d'une question avec leurs auteurs (fetch join)
+     */
+    public function findByQuestionWithAuthor(int $questionId): array
+    {
+        return $this->createQueryBuilder('c')
+            ->addSelect('author')
+            ->innerJoin('c.question', 'q')
+            ->leftJoin('c.author', 'author')
+            ->andWhere('q.id = :qid')
+            ->setParameter('qid', $questionId)
+            ->orderBy('c.createdAtComm', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Commentaire[] Returns an array of Commentaire objects
     //     */

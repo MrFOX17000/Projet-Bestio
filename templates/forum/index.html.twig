@@ -3,16 +3,37 @@
 {% block title %}Bestio - Forum{% endblock %}
 
 {% block body %}
-    <ul>
-        {% for espece in especes %}
-            <li>
-                <a class="warning" href="{{ path('app_forum_show', { nom_espece: espece.nomEspece }) }}">
-                    {{ espece.nomEspece }}
-                </a>
-            </li>
-        {% else %}
-            <li>Aucune espèce trouvée.</li>
-        {% endfor %}
-    </ul>
+<h1 class="d-flex justify-content-center pb-30">Forum des espèces</h1>
+<div class="separator"></div>
 
+<div class="d-flex flex-column align-items-center">
+    {% if especes is empty %}
+        <div class="lien-question mb-20">
+            <p>Aucune espèce avec des questions pour le moment.<br> Lancez la première discussion depuis une fiche espèce !</p>
+        </div>
+        <div class="d-flex gap-40">
+            <a class="btn btn-primary-stroke" href="{{ path('app_classe') }}">Explorer les classes</a>
+            <a class="btn btn-primary-stroke" href="{{ path('app_home') }}">Retour à l’accueil</a>
+        </div>
+    {% else %}
+        <div class="d-flex flex-row-wrap justify-content-center gap-40" style="max-width: var(--max-width);">
+            {% for espece in especes %}
+                <div class="block question-card" style="max-width:320px; width:100%; padding:0; overflow:hidden;">
+                    {% set image = espece.image is defined and espece.image ? espece.image : asset('images/patte.png') %}
+                    <div style="width:100%; height:180px; overflow:hidden; border-radius:12px 12px 0 0;">
+                        <img src="{{ image }}" alt="{{ espece.nomEspece }}" style="width:100%; height:100%; object-fit:cover; display:block;">
+                    </div>
+                    <div class="p-20">
+                        <h3 class="mb-10" style="color:var(--gray-dark); text-align:center;">{{ espece.nomEspece }}</h3>
+                        {% set nbQuestions = counts[espece.id]|default(0) %}
+                        <p class="text-small" style="color:#777; text-align:center;">{{ nbQuestions }} question{{ nbQuestions > 1 ? 's' : '' }} posée{{ nbQuestions > 1 ? 's' : '' }}</p>
+                        <div class="d-flex justify-content-center mt-20">
+                            <a class="btn btn-primary-stroke" href="{{ path('app_forum_show', { nom_espece: espece.nomEspece }) }}">Voir les discussions</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

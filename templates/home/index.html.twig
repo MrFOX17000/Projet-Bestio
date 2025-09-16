@@ -52,6 +52,12 @@
     </p>
 </div>
 <div class="separator"></div>
+{# Appel à l’action vers le forum #}
+<div class="lien-question d-flex flex-column align-items-center margin-auto mb-20">
+    <p class="mb-10">Une question sur une espèce ? Discutez avec la communauté.</p>
+    <a href="{{ path('app_forum') }}" class="btn btn-primary-stroke">Accéder au forum</a>
+</div>
+<div class="separator"></div>
 {% if animalDuJour %}
 <div class="animal-jour d-flex flex-column align-items-center mb-30">
     <h2 class="border-radius">Animal du jour</h2>

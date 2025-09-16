@@ -1,27 +1,78 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ForumController!{% endblock %}
+{% block title %}Forum - Question{% endblock %}
 
 {% block body %}
-
-<div class="commentaires-wrapper">
-  {% for commentaire in commentaires %}
-    <div class="commentaire">
-      <p class="content">{{ commentaire.contenu }}</p>
-      <p>Posted by: {{ commentaire.author.pseudo }} on {{ commentaire.createdAtComm|date('Y-m-d H:i') }}</p>
+<h1 class="d-flex justify-content-center mb-20">Discussion</h1>
+<div class="separator"></div>
+<div class="d-flex flex-column align-items-center" style="background:transparent;">
+    {# Carte principale de la question #}
+    <div class="block mb-20 question-detail-card position-relative">
+        <div class="d-flex justify-content-between align-items-center mb-10">
+            <h2 class="d-flex">{{ question.titreQuestion }}</h2>
+            {% if question.author.photo %}
+                <img src="{{ question.author.photo }}" alt="avatar" class="avatar" style="width:32px; height:32px; object-fit:cover; border-radius:50%; margin-left:10px;">
+            {% else %}
+                <img src="{{ asset('images/profil.webp') }}" alt="avatar" class="avatar" style="width:32px; height:32px; object-fit:cover; border-radius:50%; margin-left:10px;">
+            {% endif %}
+        </div>
+        <p class="question-text mb-20">{{ question.description }}</p>
+        <small>Posée par <strong>{{ question.author.pseudo }}</strong> le {{ question.createdAt|date('d/m/Y à H:i') }}</small>
     </div>
 
-      
-  {% endfor %}
-</div>
-
- {% if app.user %}
-            {{ form_start(formComm) }}
-            {{ form_rest(formComm) }}
-            {{ form_end(formComm) }}
+    {# Liste des commentaires #}
+    <div class="commentaires-wrapper" style="width:100%; max-width:700px;">
+    <div class="separator"></div>
+        <h2 class="d-flex justify-content-center mb-20">Commentaires</h2>
+        {% if commentaires|length == 0 %}
+            <div class="lien-question">
+                <p>Aucun commentaire pour cette question.<br> Soyez le premier à en poster un !</p>
+            </div>
         {% else %}
-            <p class="warning">Vous souhaitez contribuer au forum ? <small> <a href="{{ path('connexion') }}">Se connecter</a> </small></p>
-            
+            <div style="display:flex; flex-direction:column; gap:18px;">
+            {% for commentaire in commentaires %}
+                <div class="comment-card">
+                    <div class="comment-header">
+                        <div class="comment-user">
+                            {% if commentaire.author.photo %}
+                                <img src="{{ commentaire.author.photo }}" alt="avatar" class="avatar">
+                            {% else %}
+                                <img src="{{ asset('images/profil.webp') }}" alt="avatar" class="avatar">
+                            {% endif %}
+                            <span class="font-weight-bold" style="color:var(--gray-dark);">{{ commentaire.author.pseudo }}</span>
+                        </div>
+                        <span class="comment-meta">{{ commentaire.createdAtComm|date('d/m/Y à H:i') }}</span>
+                    </div>
+                    <p class="comment-content">{{ commentaire.contenu }}</p>
+                </div>
+            {% endfor %}
+            </div>
         {% endif %}
-    
+    </div>
+    <div style="width:100%; max-width:700px;">
+        <div class="separator"></div>
+    </div>
+    {# Formulaire d'ajout de commentaire #}
+    <div class="block">
+        <h2 class="d-flex pb-30 justify-content-center">Ajouter un commentaire</h2>
+        {% if app.user %}
+            {% if canComment %}
+                {{ form_start(formComm, {attr: {class: 'd-flex flex-column'}}) }}
+                    <div class="form-row">
+                        {{ form_label(formComm.contenu) }}
+                        {{ form_widget(formComm.contenu, {attr: {rows: 5}}) }}
+                        {{ form_errors(formComm.contenu) }}
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary-stroke">Publier</button>
+                    </div>
+                {{ form_end(formComm) }}
+            {% else %}
+                <p class="d-flex justify-content-center gray-dark">Vous êtes l’auteur de cette question, vous ne pouvez pas y répondre.</p>
+            {% endif %}
+        {% else %}
+            <p class="info">Vous devez être connecté pour répondre à cette question ! <small> <a href="{{ path('connexion') }}">Se connecter</a> </small></p>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

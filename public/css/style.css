@@ -109,6 +109,10 @@ small a:hover {
     font-weight: var(--font-weight-semi-bold);
 }
 
+.gray-dark {
+    color: var(--gray-dark);
+}
+
 .border-radius {
     border: 2px solid var(--gray-dark);
     padding: 10px;
@@ -368,7 +372,7 @@ small a:hover {
 
 .block {
     padding: 20px;
-    width: 500px;
+    width: 700px;
     margin: auto;
     border-radius: var(--border-radius);
     background-color: var(--gray);
@@ -523,6 +527,7 @@ small a:hover {
 
 .flash-info {
     background-color: var(--gray-dark);
+    border-bottom: 1px solid var(--primary);
 }
 
 /* header */
@@ -874,9 +879,9 @@ footer {
     border-radius: 16px;
     box-shadow: 0 2px 8px rgba(112, 66, 74, 0.07);
     padding: 20px;
-    margin: 40px auto 30px auto;
     max-width: 700px;
-    font-size: 14px;
+    width: 100%;
+    font-size: 1.15rem;
     color: var(--gray-dark);
     text-align: center;
     letter-spacing: 0.01em;
@@ -900,6 +905,100 @@ footer {
     height: 300px;
     object-fit: cover;
     border-radius: var(--border-radius);
+}
+
+/*************************************************************************************************************************************************************************
+*************************************************************************************FORUM QUESTION CARDS*************************************************************************************************
+******************************************************************************************************************************************************************************************/
+/*
+  Important: on ne modifie plus .block (utilisée sur tout le site),
+  on surcharge uniquement les cartes du forum avec .question-card
+*/
+.question-card,
+.question-detail-card {
+    /* surcharges de .block pour ce contexte uniquement */
+    width: 100%;
+    max-width: 700px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(112, 66, 74, 0.12);
+    box-shadow: 0 4px 16px rgba(112, 66, 74, 0.08);
+    border-radius: 12px;
+    position: relative;
+    top: 0;
+    transition: top 0.2s ease, box-shadow 0.25s ease,
+        background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.question-card h2 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.question-card .question-text {
+    color: var(--color-dark);
+}
+
+.question-card .btn {
+    box-shadow: none;
+}
+
+.question-card:hover {
+    top: -2px;
+    box-shadow: 0 10px 24px rgba(112, 66, 74, 0.16);
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(112, 66, 74, 0.2);
+}
+
+.question-card .btn {
+    transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+.question-card .btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Forum: entête des commentaires */
+.comment-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(112, 66, 74, 0.07);
+    padding: 15px 16px;
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.comment-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.comment-user .avatar {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.comment-meta {
+    color: #888;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.comment-content {
+    color: var(--color-dark);
+    font-size: 1.05rem;
+    white-space: pre-wrap; /* respecte les retours à la ligne */
+    overflow-wrap: anywhere; /* casse les longues chaînes sans espaces */
+    word-break: break-word; /* compat rétro */
+    hyphens: auto; /* césure si possible */
 }
 /*************************************************************************************************************************************************************************
 *************************************************************************************DASHBOARD ADMIN******************************************************************************************************

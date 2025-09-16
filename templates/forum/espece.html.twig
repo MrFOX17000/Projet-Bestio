@@ -10,6 +10,11 @@
             <div class="lien-question mb-20">
                 <p>Aucune question n'a encore été posée sur cette espèce.<br> Soyez le premier à en poser une !</p>
             </div>
+            <div class="d-flex justify-content-center">
+                <a href="{{ path('app_show_espece', {'nom': nom, 'nom_espece': nom_espece}) }}" class="btn btn-primary-stroke">
+                    Poser une question
+                </a>
+            </div>
         {% else %}
             <div class="d-flex flex-row-wrap justify-content-center gap-40">
                 {% for question in questions %}
