@@ -86,9 +86,9 @@
         {% if app.user %}
             {% if canComment %}
                 {% if question.locked == true %}
-                    <p class="text-danger">Ce sujet est verrouillé.</p>
+                    <p class="d-flex justify-content-center gray-dark">Ce sujet est verrouillé.</p>
                 {% elseif app.user.banned %}
-                    <p class="text-danger">Vous ne pouvez pas ajouter de posts.</p>
+                    <p class="d-flex justify-content-center gray-dark">Vous ne pouvez pas ajouter de posts.</p>
                 {% else %}
                     {{ form_start(formComm, {attr: {class: 'd-flex flex-column'}}) }}
                         <div class="form-row">
