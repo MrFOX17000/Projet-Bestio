@@ -32,6 +32,12 @@
                         <div class="d-flex justify-content-center mt-20">
                             <a class="btn btn-primary-stroke" href="{{ path('app_forum_question_show', {'id': question.id, 'nom_espece': nom_espece}) }}">Voir la discussion</a>
                         </div>
+                        {% if app.user == question.author or is_granted('ROLE_ADMIN')  %}
+                            <form method="post" action="{{ path('delete_commentaire', {id: question.id}) }}";
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button class="btn-delete-question" type="submit"> <i class="fa-solid fa-trash"></i> </button>
+                            </form>  
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>

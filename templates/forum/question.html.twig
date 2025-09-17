@@ -44,7 +44,14 @@
                         <span class="comment-meta">{{ commentaire.createdAtComm|date('d/m/Y à H:i') }}</span>
                     </div>
                     <p class="comment-content">{{ commentaire.contenu }}</p>
+                     {% if app.user == commentaire.author or is_granted('ROLE_ADMIN')  %}
+                    <form method="post" action="{{ path('delete_commentaire', {id: commentaire.id}) }}";
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button class="btn-delete-commentaire" type="submit"> <i class="fa-solid fa-trash"></i> </button>
+                    </form>  
+                {% endif %}
                 </div>
+                
             {% endfor %}
             </div>
         {% endif %}

@@ -110,4 +110,82 @@ final class ForumController extends AbstractController
             'canComment' => $canComment,
         ]);
     }
+
+   #[Route('/delete/question/{id}', name: 'delete_question')]
+        public function deleteQuestion(
+            int $id,
+            QuestionRepository $questionRepository, CommentaireRepository $commRepository, EntityManagerInterface $entityManager ): Response 
+    {
+            $userLogin = $this->getUser();
+
+            if (!$userLogin) {
+                throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
+            }
+
+            $roles = $userLogin->getRoles();
+
+            $question = $questionRepository->find($id);
+            $nom_espece = $question->getEspece()->getNomEspece();
+
+
+            if (!$question) {
+                $this->addFlash('warning', 'Cette question n\'existe pas.');
+                return $this->redirectToRoute('app_forum_show', ['nom_espece' => $nom_espece]);
+            }
+
+            if ($question->getAuthor() === $userLogin || in_array('ROLE_ADMIN', $roles)) {
+                $commentaires = $commRepository->findBy(['question' => $question]);
+
+                foreach ($commentaires as $commentaire) {
+                    $entityManager->remove($commentaire);
+                }
+
+                $entityManager->remove($question);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'La question a bien été supprimée.');
+            } else {
+                $this->addFlash('success', 'Vous ne pouvez pas supprimer cette question.');
+            }
+
+           return $this->redirectToRoute('app_forum_show', ['nom_espece' => $nom_espece]);
+    }
+
+   #[Route('/delete/commentaire/{id}', name: 'delete_commentaire')]
+    public function deleteCommentaire(
+        int $id, CommentaireRepository $commRepository, EntityManagerInterface $entityManager ): Response {
+        $userLogin = $this->getUser();
+
+        if (!$userLogin) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
+        }
+
+        $roles = $userLogin->getRoles();
+        $commentaire = $commRepository->find($id);
+
+        if (!$commentaire) {
+            $this->addFlash('warning', 'Ce commentaire n\'existe pas.');
+            return $this->redirectToRoute('app_forum');
+        }
+
+        $question = $commentaire->getQuestion();
+        $nom_espece = $question->getEspece()->getNomEspece();
+        $question_id = $question->getId();
+
+        if ($commentaire->getAuthor() === $userLogin || in_array('ROLE_ADMIN', $roles)) {
+            $entityManager->remove($commentaire);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Le commentaire a bien été supprimé.');
+        } else {
+            $this->addFlash('warning', 'Vous ne pouvez pas supprimer ce commentaire.');
+        }
+
+        return $this->redirectToRoute('app_forum_question_show', [
+            'nom_espece' => $nom_espece,
+            'id' => $question_id,
+        ]);
+    }
+
+
 }
