@@ -31,11 +31,6 @@
                 Voir les questions posées sur l'espèce : {{ espece.nomEspece }}
             </a>
         </div>
-        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('delete_espece', {'id':espece.id})}}">
-                <i class="fa-solid fa-trash"></i>
-            </a>
-        {% endif %}
         <div class="separator"></div>
         </div>
 

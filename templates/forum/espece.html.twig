@@ -20,7 +20,14 @@
                 {% for question in questions %}
                     <div class="block mb-20 question-card position-relative">
                         <div class="d-flex justify-content-between align-items-center mb-10">
-                            <h2 class="d-flex">{{ question.titreQuestion }}</h2>
+                            <h2 class="d-flex">{{ question.titreQuestion }} </h2>
+
+                            {% if question.locked == true %}
+                                <i class="fa-solid fa-lock"></i>
+                            {% else %}
+                                <i class="fa-solid fa-unlock"></i>
+                            {% endif %}
+
                             {% if question.author.photo %}
                                 <img src="{{ question.author.photo }}" alt="avatar" class="avatar" style="width:32px; height:32px; object-fit:cover; border-radius:50%; margin-left:10px;">
                             {% else %}
@@ -32,15 +39,9 @@
                         <div class="d-flex justify-content-center mt-20">
                             <a class="btn btn-primary-stroke" href="{{ path('app_forum_question_show', {'id': question.id, 'nom_espece': nom_espece}) }}">Voir la discussion</a>
                         </div>
-                        
-                            {% if question.locked == true %}
-                                <i class="fa-solid fa-lock"></i>
-                            {% else %}
-                                <i class="fa-solid fa-unlock"></i>
-                            {% endif %}
 
                         {% if app.user == question.author or is_granted('ROLE_ADMIN')  %}
-                            <form method="post" action="{{ path('delete_commentaire', {id: question.id}) }}";
+                            <form class = "delete-question" method="post" action="{{ path('delete_commentaire', {id: question.id}) }}";
                                 <input type="hidden" name="_method" value="DELETE">
                                 <button class="btn-delete-question" type="submit"> <i class="fa-solid fa-trash"></i> </button>
                             </form>
