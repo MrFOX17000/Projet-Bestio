@@ -3,44 +3,52 @@
 {% block title %}Questions sur {{ nom_espece }}{% endblock %}
 
 {% block body %}
-    <h1 class="d-flex justify-content-center pb-30">Forum : {{ nom_espece }}</h1>
-    <div class="separator"></div>
-    <div class="d-flex flex-column align-items-center">
-        {% if questions|length == 0 %}
-            <div class="lien-question mb-20">
-                <p>Aucune question n'a encore été posée sur cette espèce.<br> Soyez le premier à en poser une !</p>
-            </div>
-            <div class="d-flex justify-content-center">
-                <a href="{{ path('app_show_espece', {'nom': nom, 'nom_espece': nom_espece}) ~ '#form-question' }}" class="btn btn-primary-stroke">
-                    Poser une question
-                </a>
-            </div>
-        {% else %}
-            <div class="d-flex flex-row-wrap justify-content-center gap-40">
-                {% for question in questions %}
-                    <div class="block mb-20 question-card position-relative">
-                        <div class="d-flex justify-content-between align-items-center mb-10">
-                            <h2 class="d-flex">{{ question.titreQuestion }}</h2>
-                            {% if question.author.photo %}
-                                <img src="{{ question.author.photo }}" alt="avatar" class="avatar" style="width:32px; height:32px; object-fit:cover; border-radius:50%; margin-left:10px;">
-                            {% else %}
-                                <img src="{{ asset('images/profil.webp') }}" alt="avatar" class="avatar" style="width:32px; height:32px; object-fit:cover; border-radius:50%; margin-left:10px;">
-                            {% endif %}
-                        </div>
-                        <p class="question-text mb-20">{{ question.description }}</p>
-                        <small>Posée par <strong>{{ question.author.pseudo }}</strong> le {{ question.createdAt|date('d/m/Y à H:i') }}</small>
-                        <div class="d-flex justify-content-center mt-20">
-                            <a class="btn btn-primary-stroke" href="{{ path('app_forum_question_show', {'id': question.id, 'nom_espece': nom_espece}) }}">Voir la discussion</a>
-                        </div>
-                        {% if app.user == question.author or is_granted('ROLE_ADMIN')  %}
-                            <form method="post" action="{{ path('delete_commentaire', {id: question.id}) }}";
-                                <input type="hidden" name="_method" value="DELETE">
-                                <button class="btn-delete-question" type="submit"> <i class="fa-solid fa-trash"></i> </button>
-                            </form>  
+<h1 class="d-flex justify-content-center pb-30">Forum : {{ nom_espece }}</h1>
+<div class="separator"></div>
+
+<div class="d-flex flex-column align-items-center">
+    {% if questions is not defined or questions|length == 0 %}
+        <div class="lien-question mb-20">
+            <p>Aucune question n'a encore été posée sur cette espèce.</p>
+        </div>
+        <div class="d-flex justify-content-center">
+            <a href="{{ path('app_show_espece', {'nom': nom, 'nom_espece': nom_espece}) ~ '#form-question' }}" class="btn btn-primary-stroke">
+                Poser une question
+            </a>
+        </div>
+    {% else %}
+        <div class="d-flex flex-row-wrap justify-content-center gap-40">
+            {% for question in questions %}
+                <div class="block question-card">
+                    <div class="d-flex align-items-center justify-content-between mb-10">
+                        <h2 class="m-0">{{ question.titreQuestion ?? question.titre ?? 'Question' }}</h2>
+
+                        {# Avatar auteur cliquable vers le profil #}
+                        {# Utilise 'photo' (pas 'avatar') et gère les 2 formats: "fichier.ext" ou "/uploads/avatar/fichier.ext" #}
+                        {% set photo = attribute(question.author, 'photo') ?? null %}
+                        {% if photo %}
+                            {% set avatarUrl = photo starts with('/') ? asset(photo) : asset('uploads/avatar/' ~ photo) %}
+                        {% else %}
+                            {% set avatarUrl = asset('images/profil.webp') %}
                         {% endif %}
+                        <a href="{{ path('user', {'id': question.author.id}) }}" class="avatar-link" title="Voir le profil de {{ question.author.pseudo ?? question.author.email }}">
+                            <img src="{{ avatarUrl }}" alt="Avatar de {{ question.author.pseudo ?? 'utilisateur' }}" class="avatar-img">
+                        </a>
                     </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
+
+                    {% if question.description is defined and question.description %}
+                        <p class="question-text">{{ question.description }}</p>
+                    {% endif %}
+                    <small>Posée par <strong>{{ question.author.pseudo ?? question.author.email }}</strong> le {{ question.createdAt|date('d/m/Y à H:i') }}</small>
+
+                    <div class="d-flex justify-content-end mt-10">
+                        <a class="btn btn-primary-stroke" href="{{ path('app_forum_question_show', {'id': question.id, 'nom_espece': nom_espece}) }}">
+                            Voir la discussion
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
 {% endblock %}
