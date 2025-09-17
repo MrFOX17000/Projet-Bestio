@@ -100,10 +100,7 @@
                 </p>
             {% endif %}
         {% else %}
-            <p class="info">
-                Vous devez être connecté pour répondre à cette question !
-                <small><a href="{{ path('connexion') }}">Se connecter</a></small>
-            </p>
+            <p class="d-flex justify-content-center gray-dark">Vous devez être connecté pour répondre à cette question ! <small class="d-flex align-items-end ml-10"> <a href="{{ path('connexion') }}"> Se connecter</a> </small></p>
         {% endif %}
     </div>
 </div>

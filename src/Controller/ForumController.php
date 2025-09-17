@@ -85,7 +85,7 @@ final class ForumController extends AbstractController
     // Charge les commentaires avec leurs auteurs en une seule requête
     $commentaires = $commentaireRepository->findByQuestionWithAuthor($id);
 
-        $canComment = $user && $user !== $question->getAuthor();
+        $canComment = $user && $user !== $question->getAuthor() || $this->isGranted('ROLE_ADMIN');
         $formComm = null;
 
         if ($canComment) {
