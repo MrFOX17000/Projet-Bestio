@@ -16,6 +16,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class ForumController extends AbstractController
 {
+    
+    /////////////////////////////////////////////////////////////////////////////Affichage des espèces sur le forum (avec au moins une question)///////////////////////////////////////////////////////////////////////////
+
     #[Route('/forum', name: 'app_forum')]
     public function index(EspeceRepository $especeRepository, QuestionRepository $questionRepository): Response
     {
@@ -29,6 +32,9 @@ final class ForumController extends AbstractController
             'counts' => $counts,
         ]);
     }
+
+    
+    /////////////////////////////////////////////////////////////////////////////Affichage des questions par rapport à une espèce///////////////////////////////////////////////////////////////////////////
 
     #[Route('/forum/{nom_espece}', name: 'app_forum_show')]
     public function show(string $nom_espece, QuestionRepository $questionRepository, EspeceRepository $especeRepository): Response
@@ -50,6 +56,9 @@ final class ForumController extends AbstractController
             'nom' => $espece->getClasse()->getNom(),
         ]);
     }
+
+    
+    /////////////////////////////////////////////////////////////////////////////Affichage des réponses à une question///////////////////////////////////////////////////////////////////////////
 
     #[Route('/forum/{nom_espece}/question/{id}', name: 'app_forum_question_show')]
     public function showQuestion(string $nom_espece, int $id, QuestionRepository $questionRepository,
@@ -110,6 +119,8 @@ final class ForumController extends AbstractController
             'canComment' => $canComment,
         ]);
     }
+    
+    /////////////////////////////////////////////////////////////////////////////Suppression d'une question///////////////////////////////////////////////////////////////////////////
 
    #[Route('/delete/question/{id}', name: 'delete_question')]
         public function deleteQuestion(
@@ -151,6 +162,9 @@ final class ForumController extends AbstractController
            return $this->redirectToRoute('app_forum_show', ['nom_espece' => $nom_espece]);
     }
 
+
+    /////////////////////////////////////////////////////////////////////////////Suppression d'un commentaire///////////////////////////////////////////////////////////////////////////
+
    #[Route('/delete/commentaire/{id}', name: 'delete_commentaire')]
     public function deleteCommentaire(
         int $id, CommentaireRepository $commRepository, EntityManagerInterface $entityManager ): Response {
@@ -185,6 +199,85 @@ final class ForumController extends AbstractController
             'nom_espece' => $nom_espece,
             'id' => $question_id,
         ]);
+    }
+
+    
+    /////////////////////////////////////////////////////////////////////////////Verrouillage d'une question///////////////////////////////////////////////////////////////////////////
+    #[Route('/question/lock/{id}', name: 'lock_question')]
+    public function lock($id , QuestionRepository $questionRepository, EntityManagerInterface $entityManager): Response
+    {
+        $userLogin = $this->getUser();
+
+        if(!$userLogin) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
+        }
+
+        $roles = $userLogin->getRoles();
+        $question = $questionRepository->find($id);
+
+        if (!$question) {
+            $this->addFlash('warning', 'Cette question n\'existe pas');
+            return $this->redirectToRoute('app_forum'); 
+        }
+
+
+        if ($question->getAuthor() === $userLogin || in_array("ROLE_ADMIN", $roles)) {
+            $question->setLocked(true);
+            $entityManager->persist($question);
+            $entityManager->flush();
+
+           return $this->redirectToRoute('app_forum_question_show', [
+            'nom_espece' => $question->getEspece()->getNomEspece(), 
+            'id' => $question->getId(),
+        ]);
+
+        } else {
+            $this->addFlash('warning', 'Vous ne pouvez pas verrouiller ce topic.');
+           return $this->redirectToRoute('app_forum_question_show', [
+                'nom_espece' => $question->getEspece()->getNomEspece(), 
+                'id' => $question->getId(),
+            ]);
+        }
+    }
+
+     /////////////////////////////////////////////////////////////////////////////Déverrouillage d'une question///////////////////////////////////////////////////////////////////////////
+
+ #[Route('/question/unlock/{id}', name: 'unlock_question')]
+    public function unlock($id, QuestionRepository $questionRepository, EntityManagerInterface $entityManager): Response
+    {
+        $userLogin = $this->getUser();
+
+        if (!$userLogin) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
+        }
+
+        $roles = $userLogin->getRoles();
+
+        $question = $questionRepository->find($id);
+
+       
+        if (!$question) {
+            $this->addFlash('warning', 'Ce topic n\'existe pas.');
+            return $this->redirectToRoute('app_forum'); 
+        }
+
+        if ($question->getAuthor() === $userLogin || in_array("ROLE_ADMIN", $roles)) {
+            $question->setLocked(false);
+            $entityManager->persist($question);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_forum_question_show', [
+            'nom_espece' => $question->getEspece()->getNomEspece(),
+            'id' => $question->getId(),
+            ]);
+        } else {
+
+            $this->addFlash('warning', 'Vous ne pouvez pas déverrouiller cette question.');
+            return $this->redirectToRoute('app_forum_question_show', [
+                'nom_espece' => $question->getEspece()->getNomEspece(),
+                'id' => $question->getId(),
+            ]);
+        }
     }
 
 

@@ -41,6 +41,9 @@ class Question
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
+    #[ORM\Column]
+    private ?bool $locked = false;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -138,6 +141,18 @@ class Question
     public function setAuthor(?User $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function isLocked(): ?bool
+    {
+        return $this->locked;
+    }
+
+    public function setLocked(bool $locked): static
+    {
+        $this->locked = $locked;
 
         return $this;
     }

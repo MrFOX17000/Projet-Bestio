@@ -18,6 +18,19 @@
         </div>
         <p class="question-text mb-20">{{ question.description }}</p>
         <small>Posée par <strong>{{ question.author.pseudo }}</strong> le {{ question.createdAt|date('d/m/Y à H:i') }}</small>
+            {% if question.locked == true %}
+                <i class="fa-solid fa-lock"></i>
+            {% else %}
+                <i class="fa-solid fa-unlock"></i>
+            {% endif %}
+        {# Bouton de Verrouillage/Déverouillage #}
+            {% if app.user == question.author or is_granted('ROLE_ADMIN')  %}
+                <form method="post" action="{{ path(question.locked ? 'unlock_question' : 'lock_question', {id: question.id}) }}">  {# On vérifie le statut du champ "Locked" dans l'entité topic pour l'affichage du bouton #} 
+                    <button class="lock-question" type="submit">
+                        {{ question.locked ? 'Déverrouiller' : 'Verrouiller' }} 
+                    </button>
+                </form> 
+            {% endif %}
     </div>
 
     {# Liste des commentaires #}
@@ -45,8 +58,8 @@
                     </div>
                     <p class="comment-content">{{ commentaire.contenu }}</p>
                      {% if app.user == commentaire.author or is_granted('ROLE_ADMIN')  %}
-                    <form method="post" action="{{ path('delete_commentaire', {id: commentaire.id}) }}";
-                        <input type="hidden" name="_method" value="DELETE">
+                        <form method="post" action="{{ path('delete_commentaire', {id: commentaire.id}) }}";
+                            <input type="hidden" name="_method" value="DELETE">
                         <button class="btn-delete-commentaire" type="submit"> <i class="fa-solid fa-trash"></i> </button>
                     </form>  
                 {% endif %}
@@ -60,25 +73,37 @@
         <div class="separator"></div>
     </div>
     {# Formulaire d'ajout de commentaire #}
-    <div class="block">
+   <div class="block">
         <h2 class="d-flex pb-30 justify-content-center">Ajouter un commentaire</h2>
+
         {% if app.user %}
             {% if canComment %}
-                {{ form_start(formComm, {attr: {class: 'd-flex flex-column'}}) }}
-                    <div class="form-row">
-                        {{ form_label(formComm.contenu) }}
-                        {{ form_widget(formComm.contenu, {attr: {rows: 5}}) }}
-                        {{ form_errors(formComm.contenu) }}
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-primary-stroke">Publier</button>
-                    </div>
-                {{ form_end(formComm) }}
+                {% if question.locked == true %}
+                    <p class="text-danger">Ce sujet est verrouillé.</p>
+                {% elseif app.user.banned %}
+                    <p class="text-danger">Vous ne pouvez pas ajouter de posts.</p>
+                {% else %}
+                    {{ form_start(formComm, {attr: {class: 'd-flex flex-column'}}) }}
+                        <div class="form-row">
+                            {{ form_label(formComm.contenu) }}
+                            {{ form_widget(formComm.contenu, {attr: {rows: 5}}) }}
+                            {{ form_errors(formComm.contenu) }}
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary-stroke">Publier</button>
+                        </div>
+                    {{ form_end(formComm) }}
+                {% endif %}
             {% else %}
-                <p class="d-flex justify-content-center gray-dark">Vous êtes l’auteur de cette question, vous ne pouvez pas y répondre.</p>
+                <p class="d-flex justify-content-center gray-dark">
+                    Vous êtes l’auteur de cette question, vous ne pouvez pas y répondre.
+                </p>
             {% endif %}
         {% else %}
-            <p class="info">Vous devez être connecté pour répondre à cette question ! <small> <a href="{{ path('connexion') }}">Se connecter</a> </small></p>
+            <p class="info">
+                Vous devez être connecté pour répondre à cette question !
+                <small><a href="{{ path('connexion') }}">Se connecter</a></small>
+            </p>
         {% endif %}
     </div>
 </div>
