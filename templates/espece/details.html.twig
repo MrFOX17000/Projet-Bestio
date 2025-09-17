@@ -24,18 +24,16 @@
                 Voir les questions posées sur l'espèce : {{ espece.nomEspece }}
             </a>
         </div>
-        <div class="separator"></div>
-        </div>
-
-
         {% if is_granted('ROLE_ADMIN') %}
             <a href="{{ path('delete_espece', {'id':espece.id})}}">
                 <i class="fa-solid fa-trash"></i>
             </a>
         {% endif %}
-        
+        <div class="separator"></div>
+        </div>
+
         {% if app.user %}
-            <div class="fill">
+            <div class="fill" id="form-question">
                 <div class="block">
                     <h2 class="d-flex pb-30 justify-content-center">Poser une question</h2>
                     {{ form_start(formQuestion) }}

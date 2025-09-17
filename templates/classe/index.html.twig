@@ -10,16 +10,16 @@
         <h2 class="d-flex justify-content-center underline pb-10">        
             <a href="{{ path('app_categorie_show', {'categorie': categorie}) }}" class="underline" style="color:var(--gray-dark)">{{ categorie }}</a>
         </h2>
-        <div class="d-flex flex-row-nowrap m-10 align-items-center justify-content-center">
+        <div class="d-flex flex-row-wrap justify-content-center gap-40">
             {% for classe in classes %}
-            <div class="underline pb-20">
-                <a href="{{ path('app_show_classe', {'nom': classe.nom }) }}" class="d-block justify-content-center classe-card">
-                    <div class="espece-image">
-                        <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">
-                    </div>                    
-                    <div class="d-flex btn-card justify-content-center align-items-center p-20">{{ classe.nom }}</div>
-                </a>
-            </div>
+            <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}" class="detail-classe-espece p-20">
+                <div class="espece-column">
+                    <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">
+                    <small>
+                        <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}" class="detail-classe-espece">{{ classe.nom }}</a>
+                    </small>
+                </div>
+            </a>
             {% endfor %}
         </div>
         <div class="separator"></div>
