@@ -45,9 +45,24 @@
                                 <button class="btn-delete-question" type="submit"> <i class="fa-solid fa-trash"></i> </button>
                             </form>
                         {% endif %}
+                        <a href="{{ path('user', {'id': question.author.id}) }}" class="avatar-link" title="Voir le profil de {{ question.author.pseudo ?? question.author.email }}">
+                            <img src="{{ avatarUrl }}" alt="Avatar de {{ question.author.pseudo ?? 'utilisateur' }}" class="avatar-img">
+                        </a>
                     </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
+
+                    {% if question.description is defined and question.description %}
+                        <p class="question-text">{{ question.description }}</p>
+                    {% endif %}
+                    <small>Posée par <strong>{{ question.author.pseudo ?? question.author.email }}</strong> le {{ question.createdAt|date('d/m/Y à H:i') }}</small>
+
+                    <div class="d-flex justify-content-end mt-10">
+                        <a class="btn btn-primary-stroke" href="{{ path('app_forum_question_show', {'id': question.id, 'nom_espece': nom_espece}) }}">
+                            Voir la discussion
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

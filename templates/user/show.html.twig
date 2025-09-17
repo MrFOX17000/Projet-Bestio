@@ -1,36 +1,89 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Profil de {{ user.pseudo }} {% endblock %}
+{% block title %}Profil de {{ user.pseudo }}{% endblock %}
 
 {% block body %}
-    <div class="block mb-20">
-        <h2 class="pb-30">Profil de {{ user.pseudo }}</h2>
-        <div class="d-flex flex-row-nowrap">
-            <img src="{{ user.photo }}" alt="Photo de profil" class="mr-10 profile-picture">
-            <ul>
-                <li class="mb-10"><strong class="mr-10">Pseudo :</strong>{{ user.pseudo }}</li>
-                <li class="mb-10"><strong class="mr-10">Email :</strong>{{ user.email }}</li>
-            </ul>
+    {# Avatar avec fallback et gestion du chemin déjà complet #}
+    {% if user.photo %}
+        {% set avatarUrl = user.photo starts with('/') ? asset(user.photo) : asset('uploads/avatar/' ~ user.photo) %}
+    {% else %}
+        {% set avatarUrl = asset('images/profil.webp') %}
+    {% endif %}
+
+    <div class="profile-header block">
+        <div class="profile-avatar">
+            <img src="{{ avatarUrl }}" alt="Avatar de {{ user.pseudo }}" class="avatar-img-lg">
+        </div>
+        <div class="profile-info">
+            <div class="d-flex align-items-center gap-40">
+                <h1 class="m-0">Profil de {{ user.pseudo }}</h1>
+                {% if user.isVerified is defined and user.isVerified %}
+                    <span class="badge-verified" title="Email vérifié">✔ Vérifié</span>
+                {% endif %}
+            </div>
+            <small class="profile-sub">Membre de Bestio</small>
         </div>
     </div>
 
-    {# <div class="block mb-20">
-        <h3 class="pb-30">Questions</h3>
-        <ul>
-        {% for question in user.questions %}    
-        <li>{{ question.title }}</li>            
-        {% endfor %}
-        </ul>
+    <div class="profile-sections">
+        <div class="block profile-list">
+            <h2 class="pb-20">Questions posées</h2>
+
+            {# Utiliser la bonne relation: poser (getPoser) #}
+            {% set mesQuestions = user.poser %}
+            {% if mesQuestions is empty %}
+                <p class="profile-empty">Aucune question posée pour le moment.</p>
+            {% else %}
+                <ul class="profile-items">
+                    {% for q in mesQuestions %}
+                        <li>
+                            <a class="profile-item-link"
+                               href="{{ path('app_forum_question_show', {
+                                   id: q.id,
+                                   nom_espece: q.espece.nomEspece
+                               }) }}">
+                                <div class="profile-item">
+                                    <div class="item-title">{{ q.titreQuestion ?? q.titre ?? 'Question' }}</div>
+                                    <small class="item-meta">
+                                        Espèce : {{ q.espece.nomEspece }} • {{ q.createdAt|date('d/m/Y à H:i') }}
+                                    </small>
+                                </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="block profile-list">
+            <h2 class="pb-20">Commentaires</h2>
+
+            {# Utiliser la bonne relation: ecrire (getEcrire) #}
+            {% set mesCommentaires = user.ecrire %}
+            {% if mesCommentaires is empty %}
+                <p class="profile-empty">Aucun commentaire pour le moment.</p>
+            {% else %}
+                <ul class="profile-items">
+                    {% for c in mesCommentaires %}
+                        {% set extrait = c.contenu is defined
+                            ? (c.contenu|length > 120 ? c.contenu|slice(0,120) ~ '…' : c.contenu)
+                            : (c.content is defined ? (c.content|length > 120 ? c.content|slice(0,120) ~ '…' : c.content) : '') %}
+                        <li>
+                            <a class="profile-item-link"
+                               href="{{ path('app_forum_question_show', {
+                                   id: c.question.id,
+                                   nom_espece: c.question.espece.nomEspece
+                               }) ~ '#comment-' ~ c.id }}">
+                                <div class="profile-item">
+                                    <div class="item-title">{{ c.question.titreQuestion ?? c.question.titre ?? 'Question' }}</div>
+                                    <p class="item-excerpt">{{ extrait }}</p>
+                                    <small class="item-meta">{{ c.createdAtComm|date('d/m/Y à H:i') }}</small>
+                                </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
     </div>
-
-    <div class="block mb-20">
-        <h3 class="pb-30">Commentaires</h3>
-        <ul>
-        {% for comment in user.comments %}
-        <li>{{ comment.content }}</li>            
-        {% endfor %}
-        </ul>
-    </div> #}
 {% endblock %}
-
-
