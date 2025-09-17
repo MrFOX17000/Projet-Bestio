@@ -10,11 +10,15 @@
     <div class="block mb-20 question-detail-card position-relative">
         <div class="d-flex justify-content-between align-items-center mb-10">
             <h2 class="d-flex">{{ question.titreQuestion }}</h2>
-            {% if question.author.photo %}
-                <img src="{{ question.author.photo }}" alt="avatar" class="avatar" style="width:32px; height:32px; object-fit:cover; border-radius:50%; margin-left:10px;">
+            {% set photo = attribute(question.author, 'photo') ?? null %}
+            {% if photo %}
+                {% set avatarUrl = photo starts with('/') ? asset(photo) : asset('uploads/avatar/' ~ photo) %}
             {% else %}
-                <img src="{{ asset('images/profil.webp') }}" alt="avatar" class="avatar" style="width:32px; height:32px; object-fit:cover; border-radius:50%; margin-left:10px;">
+                {% set avatarUrl = asset('images/profil.webp') %}
             {% endif %}
+            <a href="{{ path('user', {'id': question.author.id}) }}" class="avatar-link" title="Voir le profil de {{ question.author.pseudo ?? question.author.email }}">
+                <img src="{{ avatarUrl }}" alt="Avatar de {{ question.author.pseudo ?? 'utilisateur' }}" class="avatar-img">
+            </a>
         </div>
         <p class="question-text mb-20">{{ question.description }}</p>
         <small>Posée par <strong>{{ question.author.pseudo }}</strong> le {{ question.createdAt|date('d/m/Y à H:i') }}</small>
@@ -47,11 +51,15 @@
                 <div class="comment-card">
                     <div class="comment-header">
                         <div class="comment-user">
-                            {% if commentaire.author.photo %}
-                                <img src="{{ commentaire.author.photo }}" alt="avatar" class="avatar">
-                            {% else %}
-                                <img src="{{ asset('images/profil.webp') }}" alt="avatar" class="avatar">
-                            {% endif %}
+                        {% set photo = attribute(commentaire.author, 'photo') ?? null %}
+                        {% if photo %}
+                            {% set avatarUrl = photo starts with('/') ? asset(photo) : asset('uploads/avatar/' ~ photo) %}
+                        {% else %}
+                            {% set avatarUrl = asset('images/profil.webp') %}
+                        {% endif %}
+                        <a href="{{ path('user', {'id': commentaire.author.id}) }}" class="avatar-link" title="Voir le profil de {{ commentaire.author.pseudo ?? commentaire.author.email }}">
+                            <img src="{{ avatarUrl }}" alt="Avatar de {{ commentaire.author.pseudo ?? 'utilisateur' }}" class="avatar-img">
+                        </a>
                             <span class="font-weight-bold" style="color:var(--gray-dark);">{{ commentaire.author.pseudo }}</span>
                         </div>
                         <span class="comment-meta">{{ commentaire.createdAtComm|date('d/m/Y à H:i') }}</span>
@@ -64,7 +72,6 @@
                     </form>  
                 {% endif %}
                 </div>
-                
             {% endfor %}
             </div>
         {% endif %}
@@ -79,9 +86,9 @@
         {% if app.user %}
             {% if canComment %}
                 {% if question.locked == true %}
-                    <p class="text-danger">Ce sujet est verrouillé.</p>
+                    <p class="d-flex justify-content-center gray-dark">Ce sujet est verrouillé.</p>
                 {% elseif app.user.banned %}
-                    <p class="text-danger">Vous ne pouvez pas ajouter de posts.</p>
+                    <p class="d-flex justify-content-center gray-dark">Vous ne pouvez pas ajouter de posts.</p>
                 {% else %}
                     {{ form_start(formComm, {attr: {class: 'd-flex flex-column'}}) }}
                         <div class="form-row">
@@ -100,7 +107,7 @@
                 </p>
             {% endif %}
         {% else %}
-            <p class="d-flex justify-content-center gray-dark">Vous devez être connecté pour répondre à cette question ! <small class="d-flex align-items-end ml-10"> <a href="{{ path('connexion') }}"> Se connecter</a> </small></p>
+            <p class="info">Vous devez être connecté pour répondre à cette question ! <small> <a href="{{ path('connexion') }}">Se connecter</a> </small></p>
         {% endif %}
     </div>
 </div>
