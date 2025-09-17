@@ -18,17 +18,19 @@
             <p> <strong>Régime alimentaire :</strong> {{ espece.alimentation }}</p>
             <p> <strong>Durée de vie moyenne :</strong> {{ espece.esperanceVie }} ans</p>
             <p> <strong>Durée de gestation :</strong> {{ espece.gestation }} jours</p>
+        {% if is_granted('ROLE_ADMIN') %}
+        <div class="d-flex flex-row justify-content-center">
+            <a href="{{ path('delete_espece', {'id':espece.id})}}">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+        </div>
+        {% endif %}
         <div class="separator"></div>
         <div class="d-flex flex-row justify-content-center mt-20">
             <a href="{{ path('app_forum_show', {'nom_espece': espece.nomEspece}) }}" class="btn btn-primary-stroke">
                 Voir les questions posées sur l'espèce : {{ espece.nomEspece }}
             </a>
         </div>
-        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('delete_espece', {'id':espece.id})}}">
-                <i class="fa-solid fa-trash"></i>
-            </a>
-        {% endif %}
         <div class="separator"></div>
         </div>
 
