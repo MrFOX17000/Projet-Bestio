@@ -80,7 +80,7 @@ final class ForumController extends AbstractController
     #[Route('/forum/{nom_espece}/question/{id}', name: 'app_forum_question_show')]
     public function showQuestion(string $nom_espece, int $id, QuestionRepository $questionRepository,
      EspeceRepository $especeRepository, Request $request, CommentaireRepository $commentaireRepository,
-     EntityManagerInterface $entityManager): Response
+     EntityManagerInterface $entityManager, PaginatorInterface $paginatorInterface): Response
     {
         $espece = $especeRepository->findOneBy(['nomEspece' => $nom_espece]);
 
@@ -100,7 +100,15 @@ final class ForumController extends AbstractController
         $user = $this->getUser();
 
     // Charge les commentaires avec leurs auteurs en une seule requête
-    $commentaires = $commentaireRepository->findByQuestionWithAuthor($id);
+    $data = $commentaireRepository->findByQuestionWithAuthor($id);
+
+      //Pagination des questions à l'aide de KNB Paginator
+                $commentaires = $paginatorInterface->paginate
+                (
+                $data,
+                $request->query->getInt('page', 1),
+                12 // Nombre d'éléments par page
+                );
 
         $canComment = $user && $user !== $question->getAuthor() || $this->isGranted('ROLE_ADMIN');
         $formComm = null;

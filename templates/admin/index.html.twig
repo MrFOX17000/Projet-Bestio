@@ -6,17 +6,17 @@
 
 <div class="admin-wrapper">
      <div class="search-user">
-                        {{ form_start(form) }}
-                        <div class="search-name">
-                            {{ form_row(form.pseudo) }}
-                        </div>
+        {{ form_start(form) }}
+            <div class="search-name">
+                {{ form_row(form.pseudo) }}
+            </div>
 
-                            <div class="buttons-admin">
-                                {{ form_row(form.Valider) }}
-                                <button> <a href="{{ path('app_admin')}}"> Réinitialiser </a> </button>
-                            </div>
-                        {{ form_end(form) }}
-        </div>
+            <div class="buttons-admin">
+                {{ form_row(form.Valider) }}
+                <button> <a href="{{ path('app_admin')}}"> Réinitialiser </a> </button>
+            </div>
+        {{ form_end(form) }}
+    </div>
 
    {% for user in users %}
         {# On affiche seulement les pseudos des personnes n'ayant pas le rôle 'ROLE_ADMIN' #}
