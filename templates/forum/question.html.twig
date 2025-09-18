@@ -29,7 +29,7 @@
             {% endif %}
         {# Bouton de Verrouillage/Déverouillage #}
             {% if app.user == question.author or is_granted('ROLE_ADMIN')  %}
-                <form method="post" action="{{ path(question.locked ? 'unlock_question' : 'lock_question', {id: question.id}) }}">  {# On vérifie le statut du champ "Locked" dans l'entité topic pour l'affichage du bouton #} 
+                <form class ="lock-question-form" method="post" action="{{ path(question.locked ? 'unlock_question' : 'lock_question', {id: question.id}) }}">  {# On vérifie le statut du champ "Locked" dans l'entité topic pour l'affichage du bouton #} 
                     <button class="lock-question" type="submit">
                         {{ question.locked ? 'Déverrouiller' : 'Verrouiller' }} 
                     </button>
@@ -66,7 +66,7 @@
                     </div>
                     <p class="comment-content">{{ commentaire.contenu }}</p>
                      {% if app.user == commentaire.author or is_granted('ROLE_ADMIN')  %}
-                        <form method="post" action="{{ path('delete_commentaire', {id: commentaire.id}) }}";
+                        <form class ="delete-commentaire" method="post" action="{{ path('delete_commentaire', {id: commentaire.id}) }}";
                             <input type="hidden" name="_method" value="DELETE">
                         <button class="btn-delete-commentaire" type="submit"> <i class="fa-solid fa-trash"></i> </button>
                     </form>  

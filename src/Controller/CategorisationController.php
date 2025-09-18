@@ -10,13 +10,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
+
 
 final class CategorisationController extends AbstractController
 {
     #[Route('/categorie/{categorie}', name: 'app_categorie_show')]
     public function showCategorie(
         CategorisationRepository $categorisationRepository,
-        string $categorie
+        string $categorie,
+        PaginatorInterface $paginatorInterface,
+        Request $request
     ): Response
     {
         $categorieEntity = $categorisationRepository->findOneBy(['nomCategorisation' => $categorie]);
@@ -26,7 +30,15 @@ final class CategorisationController extends AbstractController
         }
 
         // Récupère les classes associées à cette catégorie
-        $classes = $categorieEntity->getClasses();
+        $data = $categorieEntity->getClasses();
+
+          //Pagination des animaux à l'aide de KNP Paginator
+                $classes = $paginatorInterface->paginate
+                (
+                $data,
+                $request->query->getInt('page', 1),
+                8 // Nombre d'éléments par page
+                );
 
         return $this->render('categorisation/show.html.twig', [
             'categorie' => $categorieEntity,

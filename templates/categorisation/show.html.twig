@@ -19,4 +19,8 @@
             <li>Aucune classe pour cette catégorie.</li>
         {% endfor %}
     </div>
+
+    <div class="pagination">
+        {{ knp_pagination_render(classes) }}
+    </div>
 {% endblock %}

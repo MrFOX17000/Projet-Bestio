@@ -56,6 +56,14 @@
                             Voir la discussion
                         </a>
                     </div>
+
+                    {% if app.user == question.author or is_granted('ROLE_ADMIN')  %}
+                        <form class= "delete-question" method="post" action="{{ path('delete_question', {id: question.id}) }}";
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn-delete-question" type="submit"> <i class="fa-solid fa-trash"></i> </button>
+                        </form>  
+                    {% endif %}
+
                 </div>
             {% endfor %}
         </div>

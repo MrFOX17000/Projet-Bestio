@@ -9,6 +9,7 @@ use App\Repository\EspeceRepository;
 use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\CommentaireRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,9 +21,17 @@ final class ForumController extends AbstractController
     /////////////////////////////////////////////////////////////////////////////Affichage des espèces sur le forum (avec au moins une question)///////////////////////////////////////////////////////////////////////////
 
     #[Route('/forum', name: 'app_forum')]
-    public function index(EspeceRepository $especeRepository, QuestionRepository $questionRepository): Response
+    public function index(EspeceRepository $especeRepository, QuestionRepository $questionRepository, PaginatorInterface $paginatorInterface, Request $request): Response
     {
-        $especes = $especeRepository->findEspecesWithQuestions();
+        $data = $especeRepository->findEspecesWithQuestions();
+
+        //Pagination des animaux à l'aide de KNB Paginator
+                $especes = $paginatorInterface->paginate
+                (
+                $data,
+                $request->query->getInt('page', 1),
+                8 // Nombre d'éléments par page
+                );
 
         // Récupère tous les compteurs en une seule requête groupée
         $counts = $questionRepository->countQuestionsByEspece();
@@ -37,7 +46,7 @@ final class ForumController extends AbstractController
     /////////////////////////////////////////////////////////////////////////////Affichage des questions par rapport à une espèce///////////////////////////////////////////////////////////////////////////
 
     #[Route('/forum/{nom_espece}', name: 'app_forum_show')]
-    public function show(string $nom_espece, QuestionRepository $questionRepository, EspeceRepository $especeRepository): Response
+    public function show(string $nom_espece, QuestionRepository $questionRepository, EspeceRepository $especeRepository, PaginatorInterface $paginatorInterface, Request $request): Response
     {
         $espece = $especeRepository->findOneBy(['nomEspece' => $nom_espece]);
 
@@ -47,7 +56,15 @@ final class ForumController extends AbstractController
         }
 
     // Charge les questions avec leurs auteurs en une seule requête
-    $questions = $questionRepository->findByEspeceWithAuthor($espece->getId());
+    $data = $questionRepository->findByEspeceWithAuthor($espece->getId());
+
+     //Pagination des questions à l'aide de KNB Paginator
+                $questions = $paginatorInterface->paginate
+                (
+                $data,
+                $request->query->getInt('page', 1),
+                8 // Nombre d'éléments par page
+                );
         
         return $this->render('forum/espece.html.twig', [
             'questions' => $questions,
