@@ -17,7 +17,7 @@ final class AdminController extends AbstractController
     public function index(UserRepository $userRepository, Request $request): Response
     {
          if (!$this->isGranted('ROLE_ADMIN')) {
-        $this->addFlash('error', 'Accès réservé aux administrateurs.');
+        $this->addFlash('warning', 'Accès réservé aux administrateurs.');
         return $this->redirectToRoute('app_home');
         }
 
@@ -51,7 +51,7 @@ final class AdminController extends AbstractController
             $userLogin = $this->getUser(); 
 
             if (!$this->isGranted('ROLE_ADMIN')) {
-                $this->addFlash('error', 'Accès réservé aux administrateurs.');
+                $this->addFlash('warning', 'Accès réservé aux administrateurs.');
                 return $this->redirectToRoute('app_home');
             }
 
@@ -60,7 +60,7 @@ final class AdminController extends AbstractController
             $user = $userRepository->find($id);
 
             if (!$user) {
-                $this->addFlash('error', 'Utilisateur introuvable.');
+                $this->addFlash('warning', 'Utilisateur introuvable.');
                 return $this->redirectToRoute('app_admin');
             }
 
@@ -79,7 +79,7 @@ final class AdminController extends AbstractController
     public function unban(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
          if (!$this->isGranted('ROLE_ADMIN')) {
-        $this->addFlash('error', 'Accès réservé aux administrateurs.');
+        $this->addFlash('warning', 'Accès réservé aux administrateurs.');
         return $this->redirectToRoute('app_home');
         }
 
@@ -91,7 +91,7 @@ final class AdminController extends AbstractController
         $user = $userRepository->find($id);
 
         if(!$user) {
-            $this->addFlash('message', 'Utilisateur introuvable');
+            $this->addFlash('warning', 'Utilisateur introuvable');
             return $this->redirectToRoute('app_admin');
         }
 
@@ -99,10 +99,10 @@ final class AdminController extends AbstractController
         $user->setBanned(false);
         $entityManager->flush();
 
-        $this->addFlash('message', 'L\'utilisateur à bien été débanni');
+        $this->addFlash('warning', 'L\'utilisateur à bien été débanni');
         return $this->redirectToRoute('app_admin');
         } else {
-            $this->addFlash('message', 'Vous n\'avez pas l\'autorisation d\'effectuer cette action.');
+            $this->addFlash('warning', 'Vous n\'avez pas l\'autorisation d\'effectuer cette action.');
             return $this->redirectToRoute('app_cat');
         }
 
