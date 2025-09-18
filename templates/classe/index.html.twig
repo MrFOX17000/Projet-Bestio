@@ -5,6 +5,16 @@
 {% block body %}
 <div>
     <h1 class="d-flex justify-content-center">Liste des classes</h1>
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-primary">Rechercher</button>
+        <button>
+            <a href="{{ path('app_classe')}}">
+                Réinitialiser
+            </a>
+        </button>
+
+        {{ form_end(form) }}
     <div class="separator"></div>
     {% for categorie, classes in classesParCategorie %}
         <h2 class="d-flex justify-content-center underline pb-10">        

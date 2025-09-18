@@ -57,6 +57,18 @@ class ClasseRepository extends ServiceEntityRepository
                 ->getQuery()
                 ->getResult();
         }
+    
+  public function searchByClasses(?string $search)
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        if (!empty($search)) {
+            $qb->where('c.nom LIKE :search')
+            ->setParameter('search', '%' . $search . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 
 
 

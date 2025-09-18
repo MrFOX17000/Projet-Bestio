@@ -6,6 +6,7 @@ use App\Entity\Classe;
 use App\Entity\Question;
 use App\Form\ClasseType;
 use App\Form\QuestionType;
+use App\Form\ClasseNameType;
 use App\Repository\ClasseRepository;
 use App\Repository\EspeceRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,10 +20,20 @@ final class ClasseController extends AbstractController
 {
 
     #[Route('/classe', name: 'app_classe')]
-    public function index(EspeceRepository $especeRepository, ClasseRepository $classeRepository): Response
+    public function index(EspeceRepository $especeRepository, ClasseRepository $classeRepository, Request $request): Response
     {
         $especes = $especeRepository->findAll();
         $classes = $classeRepository->findAllWithCategorie(); // Utilise la méthode optimisée
+
+        $form = $this->createForm(ClasseNameType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->get('search')->getData();
+            $classes = $classeRepository->searchByClasses($search);
+        } else {
+            $classes = $classeRepository->findAllWithCategorie();
+        }
 
         // Grouper les classes par catégorie
         $classesParCategorie = [];
@@ -34,6 +45,7 @@ final class ClasseController extends AbstractController
         return $this->render('classe/index.html.twig', [
             'especes' => $especes,
             'classesParCategorie' => $classesParCategorie,
+             'form' => $form->createView(),
         ]);
     }
 
