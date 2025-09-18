@@ -1172,3 +1172,14 @@ footer {
     max-width: 900px; /* largeur confortable */
     margin: 16px auto; /* respiration */
 }
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.pagination a {
+    color: var(--gray-dark);
+}

@@ -4,9 +4,22 @@
 
 {% block body %}
     <h1 class="d-flex justify-content-center">{{ categorie.nomCategorisation }}</h1>
+    <p class="d-flex justify-content-center">{{ categorie.description }}</p>
+    
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-primary">Rechercher</button>
+        <button>
+            <a href="{{ path('app_categorie_show', { categorie: categorie.nomCategorisation }) }}">
+                Réinitialiser
+            </a>
+        </button>
+
+        {{ form_end(form) }}
+
+
     <div class="separator"></div>
     <div class="d-flex flex-row-wrap justify-content-center gap-40">
-        
         {% for classe in classes %}
         <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}" class="detail-classe-espece p-20">
             <div class="espece-column">

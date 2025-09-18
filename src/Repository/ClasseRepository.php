@@ -47,6 +47,19 @@ class ClasseRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function searchByName(string $search, $categorieId)
+        {
+            return $this->createQueryBuilder('c')
+                ->andWhere('c.nom LIKE :search')
+                ->andWhere('c.appartenir = :categorie')
+                ->setParameter('search', '%' . $search . '%')
+                ->setParameter('categorie', $categorieId)
+                ->getQuery()
+                ->getResult();
+        }
+
+
+
     //    /**
     //     * @return Classe[] Returns an array of Classe objects
     //     */

@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Form\SearchClassType;
 use App\Entity\Categorisation;
 use App\Form\CategorisationType;
+use App\Repository\ClasseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\CategorisationRepository;
@@ -17,31 +19,44 @@ final class CategorisationController extends AbstractController
     #[Route('/categorie/{categorie}', name: 'app_categorie_show')]
     public function showCategorie(
         CategorisationRepository $categorisationRepository,
+        ClasseRepository $classeRepository,
         string $categorie,
         PaginatorInterface $paginatorInterface,
         Request $request
-    ): Response
-    {
+    ): Response {
         $categorieEntity = $categorisationRepository->findOneBy(['nomCategorisation' => $categorie]);
         if (!$categorieEntity) {
             $this->addFlash('error', 'Cette catégorie n\'existe pas.');
             return $this->redirectToRoute('app_home');
         }
 
-        // Récupère les classes associées à cette catégorie
-        $data = $categorieEntity->getClasses();
+        // Création du formulaire
+        $form = $this->createForm(SearchClassType::class);
+        $form->handleRequest($request);
 
-         //Pagination des animaux à l'aide de KNP Paginator
-                $classes = $paginatorInterface->paginate
-                (
-                $data,
-                $request->query->getInt('page', 1),
-                8 // Nombre d'éléments par page
-                );
+        if ($form->isSubmitted() && $form->isValid()) {
+        $search = $form->get('search')->getData();
+        
+        if ($search) {
+            $data = $classeRepository->searchByName($search, $categorieEntity->getId());
+        } else {
+            $data = $categorieEntity->getClasses();
+        }
+        } else {
+            $data = $categorieEntity->getClasses();
+        }
+
+        // Pagination
+        $classes = $paginatorInterface->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            8
+        );
 
         return $this->render('categorisation/show.html.twig', [
             'categorie' => $categorieEntity,
             'classes' => $classes,
+            'form' => $form->createView(),
         ]);
     }
 
