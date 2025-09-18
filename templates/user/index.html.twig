@@ -5,13 +5,65 @@
 {% block body %}
 	<div class="fill">
 		<div class="block">
-			<h2 class="d-flex pb-30 justify-content-center">Mon profil</h2>
-            {{ form_start(form) }}
-            {{ form_rest(form) }}
+			<h2 class="d-flex pb-30 justify-content-center">Mon profil
+				{% if isVerified %}
+					<span class="badge-verified ml-10" title="Email vérifié">✔ Vérifié</span>
+				{% else %}
+					<span class="badge-unverified ml-10" title="Email non vérifié">✖ Non vérifié</span>
+				{% endif %}
+			</h2>
+			{{ form_start(form) }}
+			{{ form_rest(form) }}
 			<button aria-label="Mettre à jour" class="d-flex btn btn-primary-dark justify-content-center margin-auto">Mettre à jour</button>
-            {{ form_end(form)}}	
-				<small class="d-flex justify-content-center mt-10"><a href="{{ path('deconnexion') }}">Déconnexion</a></small>	
-			</form>
+			{{ form_end(form)}}
 		</div>
 	</div>
+
+	<div class="profile-sections">
+		<div class="block profile-list">
+			<h2 class="pb-20">Mes questions posées</h2>
+			{% if myQuestions is empty %}
+				<p class="profile-empty">Aucune question posée pour le moment.</p>
+			{% else %}
+				<ul class="profile-items">
+					{% for q in myQuestions %}
+						<li>
+							<a class="profile-item-link" href="{{ path('app_forum_question_show', { id: q.id, nom_espece: q.espece.nomEspece }) }}">
+								<div class="profile-item">
+									<div class="item-title">{{ q.titreQuestion ?? q.titre ?? 'Question' }}</div>
+									<small class="item-meta">Espèce : {{ q.espece.nomEspece }} • {{ q.createdAt|date('d/m/Y à H:i') }}</small>
+								</div>
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+		</div>
+
+		<div class="block profile-list">
+			<h2 class="pb-20">Mes commentaires</h2>
+			{% if myComments is empty %}
+				<p class="profile-empty">Aucun commentaire pour le moment.</p>
+			{% else %}
+				<ul class="profile-items">
+					{% for c in myComments %}
+						{% set extrait = c.contenu is defined
+							? (c.contenu|length > 120 ? c.contenu|slice(0,120) ~ '…' : c.contenu)
+							: (c.content is defined ? (c.content|length > 120 ? c.content|slice(0,120) ~ '…' : c.content) : '') %}
+						<li>
+							<a class="profile-item-link" href="{{ path('app_forum_question_show', { id: c.question.id, nom_espece: c.question.espece.nomEspece }) ~ '#comment-' ~ c.id }}">
+								<div class="profile-item">
+									<div class="item-title">{{ c.question.titreQuestion ?? c.question.titre ?? 'Question' }}</div>
+									<p class="item-excerpt">{{ extrait }}</p>
+									<small class="item-meta">{{ c.createdAtComm|date('d/m/Y à H:i') }}</small>
+								</div>
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+		</div>
+	</div>
+
+	<small class="d-flex justify-content-center mt-10"><a href="{{ path('deconnexion') }}">Déconnexion</a></small>
 {% endblock %}

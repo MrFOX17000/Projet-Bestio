@@ -24,7 +24,10 @@
                 </div>    
                 <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
                 <button aria-label="Connexion" type="submit" class="d-flex btn btn-primary-dark justify-content-center margin-auto">Connexion</button>
-                <small class="d-flex justify-content-center mt-10"><a href="{{ path('app_register') }}">Vous n'avez pas encore de compte ?</a></small>    
+                <small class="d-flex justify-content-center mt-10"><a href="{{ path('app_register') }}">Vous n'avez pas encore de compte ?</a></small> 
+                <small class="d-flex justify-content-center mt-10">
+                    <a href="{{ path('reset-password-request') }}">Mot de passe oublié ?</a>
+                </small>   
             </form>
             {% if error %}
                 <div class="alert alert-danger mt-20" role="alert">

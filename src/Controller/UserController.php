@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\QuestionRepository;
+use App\Repository\CommentaireRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\UserType;
@@ -33,7 +35,7 @@ final class UserController extends AbstractController
 
     #[Route('/profil', name: 'current_user')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function currentUserprofile(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
+    public function currentUserprofile(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, QuestionRepository $questionRepository, CommentaireRepository $commentaireRepository): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -100,8 +102,14 @@ final class UserController extends AbstractController
             return $this->redirectToRoute('current_user'); // pour éviter la resoumission du form
         }
 
+        $myQuestions = $questionRepository->findBy(['author' => $user], ['createdAt' => 'DESC']);
+        $myComments = $commentaireRepository->findBy(['author' => $user], ['createdAtComm' => 'DESC']);
+
         return $this->render('user/index.html.twig', [
             'form' => $userForm->createView(),
+            'myQuestions' => $myQuestions,
+            'myComments' => $myComments,
+            'isVerified' => $user->isVerified(),
         ]);
     }
 }
