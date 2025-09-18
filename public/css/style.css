@@ -1190,3 +1190,19 @@ footer {
 .pagination a {
     color: var(--gray-dark);
 }
+
+.btn-filter-categorie, .btn-filter-classes {
+    display: flex;
+    flex-direction: row;
+    width: 150px;
+    gap: 20px;
+}
+
+.reset-filter, .reset-classe {
+    border-radius: 20px;
+    padding: 10px 20px;
+    border: 0;
+    box-shadow: var(--box-shadow);
+    cursor: pointer;
+    background-color: var(--gray-dark);
+}
