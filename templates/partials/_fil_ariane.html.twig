@@ -50,7 +50,7 @@
 
         {# Forum - question #}
         {% if route == 'app_forum_question_show' and question is defined %}
-            / <span>{{ question.titreQuestion ?? question.titre ?? 'Question' }}</span>
+            / <span class="gray-dark bold">{{ question.titreQuestion ?? question.titre ?? 'Question' }}</span>
         {% endif %}
 
         {# Inscription / Connexion #}
