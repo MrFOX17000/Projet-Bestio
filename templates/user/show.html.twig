@@ -19,6 +19,8 @@
                 <h1 class="m-0">Profil de {{ user.pseudo }}</h1>
                 {% if user.isVerified is defined and user.isVerified %}
                     <span class="badge-verified" title="Email vérifié">✔ Vérifié</span>
+                {% else %}
+                    <span class="badge-unverified" title="Email non vérifié">✖ Non vérifié</span>
                 {% endif %}
             </div>
             <small class="profile-sub">Membre de Bestio</small>
