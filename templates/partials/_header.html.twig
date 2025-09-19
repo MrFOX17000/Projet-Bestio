@@ -1,29 +1,29 @@
-<header class="d-flex flex-row-nowrap justify-content-center p-20">
-    <div class="content flex-fill d-flex flex-row-nowrap align-items-center justify-content-between">
+<header class="site-header">
+    <div class="content header-inner">
         <a class="header-logo" href="{{ path('app_home') }}">
             <img src="{{ asset('images/logo.webp')}}" alt="Logo Bestio">
         </a>
-        <a href="{{ path('app_forum') }}" class="btn btn-primary mr-10">Forum</a>
-        <a href="{{ path('app_classe') }}" class="btn btn-primary mr-10">Classes</a>
 
-        {% if is_granted('ROLE_ADMIN') %}
-             <a href="{{ path('app_admin') }}" class="btn btn-primary mr-10">Admin</a>
-        {% endif %}
-      
-        {%- if is_granted('ROLE_USER') -%}
-            <div class="d-flex flex-row-nowrap justify-content-center">
-                <a href="{{ path('current_user') }}">
-                    <img src="{{ app.user.photo ?? '/images/profil.webp' }}" class="avatar avatar-lg mr-10" alt="Image de profil">
+        <nav class="main-nav">
+            <a href="{{ path('app_home') }}" class="nav-link {{ app.current_route starts with 'app_home' ? 'active-nav' : '' }}">Accueil</a>
+            <a href="{{ path('app_classe') }}" class="nav-link {{ app.current_route starts with 'app_classe' ? 'active-nav' : '' }}">Classes</a>
+            <a href="{{ path('app_forum') }}" class="nav-link {{ app.current_route starts with 'app_forum' ? 'active-nav' : '' }}">Forum</a>
+            <a href="{{ path('app_about') }}" class="nav-link {{ app.current_route starts with 'app_about' ? 'active-nav' : '' }}">À propos</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_admin') }}" class="nav-link {{ app.current_route starts with 'app_admin' ? 'active-nav' : '' }}">Admin</a>
+            {% endif %}
+        </nav>
+
+        <div class="header-right">
+            {% if is_granted('ROLE_USER') %}
+                <a class="avatar-link" href="{{ path('current_user') }}">
+                    <img src="{{ app.user.photo ?? '/images/profil.webp' }}" class="avatar-img" alt="Profil">
                 </a>
-                <small class="d-flex flex-column justify-content-center">
-                    <a href="{{ path('deconnexion') }}">Déconnexion</a>
-                </small>
-            </div>
-        {% else %}
-            <div>
-                <a href="{{ path('app_register') }}" class="btn btn-primary mr-10">inscription</a>
-                <a href="{{ path('connexion') }}" class="btn btn-primary-stroke">connexion</a>
-            </div>
-        {%- endif -%}
+                <a href="{{ path('deconnexion') }}" class="btn-ghost">Déconnexion</a>
+            {% else %}
+                <a href="{{ path('app_register') }}" class="btn-primary-minor">Inscription</a>
+                <a href="{{ path('connexion') }}" class="btn-ghost">Connexion</a>
+            {% endif %}
+        </div>
     </div>
 </header>

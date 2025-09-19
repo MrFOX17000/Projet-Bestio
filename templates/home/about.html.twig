@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+{% block title %}À propos de Bestio{% endblock %}
+
+{% block body %}
+<section class="about-hero">
+    <div class="about-hero-inner">
+        <h1>Explorer. Comprendre. Préserver.</h1>
+        <p>Bestio relie passionnés, curieux et défenseurs du vivant autour d’une même mission.</p>
+        <a href="{{ path('app_forum') }}" class="cta-primary">Rejoindre la communauté</a>
+    </div>
+    {# Image décorative future #}
+    <div class="about-hero-illu">
+        {# Placeholder : <img src="{{ asset('images/hero-faune.jpg') }}" alt=""> #}
+    </div>
+</section>
+
+<section class="about-grid content-narrow">
+    <div class="about-card">
+        <h2>Notre mission</h2>
+        <p>Rendre la connaissance sur la biodiversité accessible, fiable et inspirante pour tous.</p>
+        <ul class="about-list">
+            <li>📚 Partage pédagogique</li>
+            <li>🦋 Valorisation des espèces</li>
+            <li>🌍 Sensibilisation & respect</li>
+        </ul>
+    </div>
+    <div class="about-card">
+        <h2>Pourquoi Bestio ?</h2>
+        <p>Inspiré du latin <em>bestia</em>, un nom qui rappelle que chaque forme de vie a une histoire.</p>
+        <p>Le projet évolue avec vos contributions: questions, fiches, retours.</p>
+    </div>
+    <div class="about-card highlight">
+        <h2>Ce que tu peux faire</h2>
+        <ul class="about-list">
+            <li>🔎 Explorer les classes</li>
+            <li>⁉️ Poser des questions</li>
+            <li>💬 Poster des commentaires</li>
+        </ul>
+    </div>
+</section>
+
+<section class="timeline-wrapper content-narrow">
+    <h2>Étapes du projet</h2>
+    <div class="timeline">
+        <div class="tl-item">
+            <div class="dot"></div>
+            <h3>Lancement</h3>
+            <p>Structure des classes & espèces.</p>
+        </div>
+        <div class="tl-item">
+            <div class="dot"></div>
+            <h3>Communauté</h3>
+            <p>Ajout du forum & profils.</p>
+        </div>
+        <div class="tl-item future">
+            <div class="dot"></div>
+            <h3>Prochaine étape</h3>
+            <p>Blog & likes questions et commentaires</p>
+        </div>
+    </div>
+</section>
+
+<section class="team-section content-narrow">
+    <h2>L’équipe</h2>
+    <div class="team-grid">
+        <div class="team-card">
+            <div class="team-avatar">
+            {# <img src="{{ asset('images/team1.jpg') }}" alt=""> #}</div>
+            <h3>Hajar</h3>
+            <p>Rôle / Bio courte</p>
+        </div>
+        <div class="team-card">
+            <div class="team-avatar">
+                <img src="{{ asset('images/bibiche.jpg') }}" alt="Image de chat">
+            </div>
+            <h3>Mathias</h3>
+            <p>Dev Backend</p>
+        </div>
+    </div>
+</section>
+
+<section class="cta-bottom">
+    <h2>Tu veux participer ?</h2>
+    <p>Pose une question, propose une amélioration ou partage une découverte.</p>
+    <a href="{{ path('app_forum') }}" class="cta-primary">Commencer</a>
+</section>
+{% endblock %}
