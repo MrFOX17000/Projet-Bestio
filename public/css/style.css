@@ -1061,9 +1061,7 @@ footer {
     justify-content: center;
 }
 
-.buttons-admin a {
-    color: black;
-}
+
 
 .buttons-admin {
     display: flex;
@@ -1221,10 +1219,49 @@ footer {
     color: green;
 }
 
+/***************************ADMIN*********************/
 
 .btn-validate-admin {
-background-color: var(--primary);
-color: var(--gray-dark);
-font-weight: 600;
+    border-radius: 20px;
+    padding: 10px 20px;
+    border: 0;
+    box-shadow: var(--box-shadow);
+    cursor: pointer;
+    background-color: var(--primary);
 }
 
+.users {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 150px;
+}
+
+.user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--gray-dark);
+    padding: 60Px;
+    border-radius: 20px;
+    gap: 20px;
+    background-color: white;
+}
+
+.user-info a {
+    font-size: 20px;
+
+}
+
+.user-info a:hover {
+    text-decoration: underline;
+}
+
+.unban-btn, .ban-btn {
+    padding: 5px;
+}
+
+.unban-btn:hover, .ban-btn:hover {
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}

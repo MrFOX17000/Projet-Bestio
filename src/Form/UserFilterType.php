@@ -22,12 +22,7 @@ class UserFilterType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Rechercher...',
                 ]
-            ])
-            ->add('Valider', SubmitType::class, [
-                'label' => 'Rechercher'
-            ])
-
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
