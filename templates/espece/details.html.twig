@@ -27,7 +27,7 @@
         {% endif %}
         <div class="separator"></div>
         <div class="d-flex flex-row justify-content-center mt-20">
-            <a href="{{ path('app_forum_show', {'nom_espece': espece.nomEspece}) }}" class="btn btn-primary-stroke">
+            <a href="{{ path('app_forum_show', {'nom_espece': espece.nomEspece}) }}" class="btn btn-primary-dark">
                 Voir les questions posées sur l'espèce : {{ espece.nomEspece }}
             </a>
         </div>
@@ -58,8 +58,9 @@
         {% endif %}
     {% else %}
         {# Utilisateur non connecté, message pour se connecter #}
-        <div class="d-flex flex-row justify-content-center lien-question border-radius">
-            <p>Vous avez une question ? <small><a href="{{ path('connexion') }}">Se connecter</a></small></p>
+        <div class="block">
+        <h2 class="d-flex pb-30 justify-content-center">Ajouter une question</h2>
+            <p class="d-flex justify-content-center gray-dark">Vous devez être connecté pour poser une question !<small class="d-flex align-items-end ml-10"><a href="{{ path('connexion') }}">Se connecter</a></small></p>
         </div>
     {% endif %}
 
