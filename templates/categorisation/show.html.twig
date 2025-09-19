@@ -3,6 +3,8 @@
 {% block title %}Catégorie : {{ categorie.nomCategorisation }}{% endblock %}
 
 {% block body %}
+
+<div class="categorie-header">
     <h1 class="d-flex justify-content-center">{{ categorie.nomCategorisation }}</h1>
     <p class="d-flex justify-content-center">{{ categorie.specificite }}</p>
     
@@ -21,6 +23,8 @@
         
         {{ form_end(form) }}
 
+</div>
+    
 
     <div class="separator"></div>
     <div class="d-flex flex-row-wrap justify-content-center gap-40">

@@ -3,7 +3,8 @@
 {% block title %}Liste des classes{% endblock %}
 
 {% block body %}
-<div>
+
+<div class="classe-header">
     <h1 class="d-flex justify-content-center">Liste des classes</h1>
     {{ form_start(form) }}
         {{ form_widget(form) }}
@@ -16,9 +17,10 @@
                 </a>
             </button>
         </div>
-        
+    {{ form_end(form) }}
+</div>
 
-        {{ form_end(form) }}
+        
     <div class="separator"></div>
     {% for categorie, classes in classesParCategorie %}
         <h2 class="d-flex justify-content-center underline pb-10">        

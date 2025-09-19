@@ -4,12 +4,11 @@
             <img src="{{ asset('images/logo.webp')}}" alt="Logo Bestio">
         </a>
         <a href="{{ path('app_forum') }}" class="btn btn-primary mr-10">Forum</a>
-        <a href="{{ path('app_admin') }}" class="btn btn-primary mr-10">Admin</a>
-        
-        <div class="header-search p-10 flex-fill">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text">
-        </div>
+
+        {% if is_granted('ROLE_ADMIN') %}
+             <a href="{{ path('app_admin') }}" class="btn btn-primary mr-10">Admin</a>
+        {% endif %}
+      
         {%- if is_granted('ROLE_USER') -%}
             <div class="d-flex flex-row-nowrap justify-content-center">
                 <a href="{{ path('current_user') }}">

@@ -1206,3 +1206,25 @@ footer {
     cursor: pointer;
     background-color: var(--gray-dark);
 }
+
+.categorie-header, .classe-header {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.fa-lock {
+    color: red;
+}
+
+.fa-unlock {
+    color: green;
+}
+
+
+.btn-validate-admin {
+background-color: var(--primary);
+color: var(--gray-dark);
+font-weight: 600;
+}
+

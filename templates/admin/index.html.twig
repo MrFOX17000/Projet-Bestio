@@ -12,7 +12,10 @@
             </div>
 
             <div class="buttons-admin">
-                {{ form_row(form.Valider) }}
+                <button class="btn-validate-admin" type="submit">
+                    {{ form_row(form.Valider) }}
+                </button>
+                
                 <button> <a href="{{ path('app_admin')}}"> Réinitialiser </a> </button>
             </div>
         {{ form_end(form) }}
