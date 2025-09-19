@@ -3,30 +3,67 @@
 {% block title %}{{ classe.nom }}{% endblock %}
 
 {% block body %}
-<h1 class="d-flex justify-content-center">{{ classe.nom }}</h1>
-<div class="separator"></div>
-<div id="wrapper-detail-classe">
-    <div class="detail-classe-img">
-        <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">
-    </div>
-    <div class="detail-classe-description">
-        <p> <strong>Appartient à la catégorisation :</strong> {{ classe.appartenir.nomCategorisation }}</p>
-        <p> <strong>Description :</strong>  {{ classe.specificite }}</p>
-    </div>
-</div>
-<h2 class="d-flex justify-content-center p-20">Espèces associées</h2>
-<div class="d-flex flex-row justify-content-center">
-    {% for espece in classe.dependre|slice(0, 3) %}
-        <a href="{{ path('app_show_espece', {'nom':classe.nom,'nom_espece':espece.nomEspece})}}" class="detail-classe-espece p-20">
-            <div class="espece-column">
-                <img src="{{ espece.image }}" alt="image-{{ espece.nomEspece }}">
-                <small>
-                    <a href="{{ path('app_show_espece', {'nom':classe.nom,'nom_espece':espece.nomEspece})}}" class="detail-classe-espece">{{ espece.nomEspece }}</a>
-                </small>
-            </div>
+<h1 class="d-flex justify-content-center">
+    {{ classe.nom }}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('edit_classe', {'id': classe.id}) }}" class="btn-edit-classe ml-20 gray-dark" title="Modifier">
+            <i class="fa-solid fa-pen-to-square"></i>
         </a>
+    {% endif %}
+</h1>
+<div class="separator"></div>
+
+{# Récupère toutes les sources (collection ou fallback) #}
+{% set rawPaths = classe.imagePaths|length > 0 ? classe.imagePaths : (classe.image ? [classe.image] : []) %}
+
+{# Déduplication #}
+{% set unique = [] %}
+{% for p in rawPaths %}
+    {% if p not in unique %}
+        {% set unique = unique|merge([p]) %}
+    {% endif %}
+{% endfor %}
+
+{# On limite à 3 (1 principale + 2) #}
+{% set paths = unique|slice(0,3) %}
+{% set main = paths|first %}
+
+{% if main %}
+<div class="classe-gallery">
+    <div class="gallery-main">
+        <img id="classe-main-image" src="{{ main }}" alt="{{ classe.nom }}">
+    </div>
+    {% if paths|length > 1 %}
+    <div class="gallery-thumbs">
+        {% for p in paths %}
+            <img class="thumb {{ loop.first ? 'thumb-active' : '' }}" src="{{ p }}" data-full="{{ p }}" alt="mini-{{ loop.index }}">
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+
+<div class="detail-classe-description block mb-30">
+    <p><strong>Appartient à la catégorisation :</strong> {{ classe.appartenir.nomCategorisation }}</p>
+    <p><strong>Description :</strong> {{ classe.specificite }}</p>
+</div>
+
+<h2 class="d-flex justify-content-center p-20">Espèces associées</h2>
+
+{% set dejaAffichees = [] %}
+<div class="d-flex flex-row justify-content-center flex-wrap gap-40">
+    {% for espece in classe.dependre %}
+        {% if espece.id not in dejaAffichees %}
+            <a href="{{ path('app_show_espece', {'nom':classe.nom,'nom_espece':espece.nomEspece})}}" class="detail-classe-espece p-20">
+                <div class="espece-column">
+                    <img src="{{ espece.image }}" alt="image-{{ espece.nomEspece }}">
+                    <small class="gray-dark">{{ espece.nomEspece }}</small>
+                </div>
+            </a>
+            {% set dejaAffichees = dejaAffichees|merge([espece.id]) %}
+        {% endif %}
     {% else %}
-        <p>Aucune espèce pour cette catégorie.</p>
+        <p>Aucune espèce pour cette classe.</p>
     {% endfor %}
 </div>
 {% endblock %}

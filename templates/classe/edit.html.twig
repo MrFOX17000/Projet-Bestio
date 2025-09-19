@@ -1,26 +1,24 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Modifier la classe{% endblock %}
 
 {% block body %}
-    {% if is_granted('ROLE_ADMIN') %}
-        <h1>Modifier la classe : {{ classe.nom }}</h1>
+<h1>Modifier la classe : {{ classe.nom }}</h1>
 
-        {{ form_start(formClasse) }}
-            {{ form_row(formClasse.nom) }}
-            {{ form_row(formClasse.specificite) }}
-            {{ form_row(formClasse.image) }}
-            {% if classe.image %}
-                <p>Image actuelle :</p>
-                <img src="{{ classe.image }}" alt="{{ classe.nom }}" style="max-width:200px;">
-            {% endif %}
-            {{ form_row(formClasse.appartenir) }}
+{{ form_start(formClasse) }}
+    {{ form_row(formClasse.nom) }}
+    {{ form_row(formClasse.specificite) }}
 
-            <button aria-label="Modifier" class="btn btn-primary-stroke">Modifier</button>
-        {{ form_end(formClasse) }}
-
-        <small><a href="{{ path('app_classe') }}">Retour à la liste des classes</a></small>
-    {% else %}
-        <p>Vous n'avez pas les droits pour accéder à cette page.</p>
+    {% if formClasse.image is defined %}
+        {{ form_row(formClasse.image) }}
+        {% if classe.image %}
+            <p>Image actuelle :</p>
+            <img src="{{ classe.image }}" alt="{{ classe.nom }}" style="max-width:200px;">
+        {% endif %}
     {% endif %}
+
+    {{ form_row(formClasse.newImages) }}
+    {{ form_row(formClasse.appartenir) }}
+
+    <button class="btn btn-primary-stroke mt-20">Enregistrer</button>
+{{ form_end(formClasse) }}
 {% endblock %}

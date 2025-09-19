@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Entity\ClasseImage;
 
 final class ClasseController extends AbstractController
 {
@@ -77,6 +79,46 @@ final class ClasseController extends AbstractController
                     }
                     $classe->setImage('/uploads/' . $newFilename); // On stocke le chemin relatif de l'image dans la base de données
             }
+
+            // Nouvelles images multiples
+            $files = $formClasse->get('newImages')->getData();
+            if ($files) {
+                // chemins déjà existants (pour ne pas dupliquer)
+                $existing = [];
+                foreach ($classe->getClasseImages() as $imgObj) {
+                    $existing[] = $imgObj->getPath();
+                }
+                // si image legacy principale existe et pas migrée dans la collection
+                if (method_exists($classe,'getImage') && $classe->getImage() && !in_array($classe->getImage(), $existing, true)) {
+                    $existing[] = $classe->getImage();
+                }
+
+                $currentCount = count($existing); // combien déjà
+                $maxTotal = 3;                    // 1 principale + 2 autres
+                $remainingSlots = max(0, $maxTotal - $currentCount);
+
+                if ($remainingSlots > 0) {
+                    foreach (array_slice($files, 0, $remainingSlots) as $file) {
+                        if (!$file instanceof UploadedFile) continue;
+                        $name = uniqid().'.'.$file->guessExtension();
+                        try {
+                            $file->move($this->getParameter('images_directory'), $name);
+                        } catch (\Exception $e) {
+                            $this->addFlash('error', 'Erreur upload image multiple : '.$e->getMessage());
+                            break;
+                        }
+                        $webPath = '/uploads/'.$name;
+                        if (in_array($webPath, $existing, true)) {
+                            continue; // évite doublon exact
+                        }
+                        $ci = new ClasseImage();
+                        $ci->setPath($webPath)->setPosition($classe->getClasseImages()->count());
+                        $classe->addClasseImage($ci);
+                        $existing[] = $webPath;
+                    }
+                }
+            }
+            
             $entityManager->persist($classe);
             $entityManager->flush();
             $this->addFlash('success', 'Classe ajoutée avec succès !');
@@ -205,7 +247,44 @@ public function editClasse(
                 return $this->redirectToRoute('edit_classe', ['id' => $id]);
             }
         }
-        // Si aucune image n'est uploadée, on garde l'image existante
+        // Images multiples
+            $files = $formClasse->get('newImages')->getData();
+            if ($files) {
+                // chemins déjà existants (pour ne pas dupliquer)
+                $existing = [];
+                foreach ($classe->getClasseImages() as $imgObj) {
+                    $existing[] = $imgObj->getPath();
+                }
+                // si image legacy principale existe et pas migrée dans la collection
+                if (method_exists($classe,'getImage') && $classe->getImage() && !in_array($classe->getImage(), $existing, true)) {
+                    $existing[] = $classe->getImage();
+                }
+
+                $currentCount = count($existing); // combien déjà
+                $maxTotal = 3;                    // 1 principale + 2 autres
+                $remainingSlots = max(0, $maxTotal - $currentCount);
+
+                if ($remainingSlots > 0) {
+                    foreach (array_slice($files, 0, $remainingSlots) as $file) {
+                        if (!$file instanceof UploadedFile) continue;
+                        $name = uniqid().'.'.$file->guessExtension();
+                        try {
+                            $file->move($this->getParameter('images_directory'), $name);
+                        } catch (\Exception $e) {
+                            $this->addFlash('error', 'Erreur upload image multiple : '.$e->getMessage());
+                            break;
+                        }
+                        $webPath = '/uploads/'.$name;
+                        if (in_array($webPath, $existing, true)) {
+                            continue; // évite doublon exact
+                        }
+                        $ci = new ClasseImage();
+                        $ci->setPath($webPath)->setPosition($classe->getClasseImages()->count());
+                        $classe->addClasseImage($ci);
+                        $existing[] = $webPath;
+                    }
+                }
+            }
 
         $entityManager->flush();
         $this->addFlash('success', 'Classe modifiée avec succès !');

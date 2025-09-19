@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ClasseRepository;
+use App\Entity\ClasseImage;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -35,9 +36,17 @@ class Classe
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
+    /**
+     * @var Collection<int, ClasseImage>
+     */
+    #[ORM\OneToMany(targetEntity: ClasseImage::class, mappedBy: 'classe', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['position' => 'ASC'])]
+    private Collection $classeImages;
+
     public function __construct()
     {
         $this->dependre = new ArrayCollection();
+        $this->classeImages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -122,5 +131,46 @@ class Classe
             $this->image = $image;
         }
         return $this;
+    }
+
+    /**
+     * @return Collection<int, ClasseImage>
+     */
+    public function getClasseImages(): Collection
+    {
+        return $this->classeImages;
+    }
+
+    // Alias plus court (ancienne habitude getImages())
+    public function getImages(): Collection
+    {
+        return $this->classeImages;
+    }
+
+    public function addClasseImage(ClasseImage $classeImage): static
+    {
+        if (!$this->classeImages->contains($classeImage)) {
+            $this->classeImages->add($classeImage);
+            $classeImage->setClasse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClasseImage(ClasseImage $classeImage): static
+    {
+        if ($this->classeImages->removeElement($classeImage)) {
+            // set the owning side to null (unless already changed)
+            if ($classeImage->getClasse() === $this) {
+                $classeImage->setClasse(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getImagePaths(): array
+    {
+        return array_map(fn(ClasseImage $ci) => $ci->getPath(), $this->classeImages->toArray());
     }
 }

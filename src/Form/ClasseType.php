@@ -29,13 +29,17 @@ class ClasseType extends AbstractType
                 ],
             ])
             ->add('image', FileType::class, [
-                'label' => 'Image :',
-                'attr' => [
-                    'placeholder' => 'Entrez le lien de l\'image',
-                ],
-                'data_class' => null,
+                'label' => 'Image principale',
+                'mapped' => false,
                 'required' => false,
-
+                'attr' => ['accept' => 'image/*']
+            ])
+            ->add('newImages', FileType::class, [
+                'label' => 'Images supplémentaires (max 2)',
+                'mapped' => false,
+                'multiple' => true,
+                'required' => false,
+                'attr' => ['accept' => 'image/*']
             ])
             ->add('appartenir', EntityType::class, [
                 'class' => Categorisation::class,
