@@ -12,8 +12,8 @@
             <p>Aucune espèce avec des questions pour le moment.<br> Lancez la première discussion depuis une fiche espèce !</p>
         </div>
         <div class="d-flex gap-40">
-            <a class="btn btn-primary-stroke" href="{{ path('app_classe') }}">Explorer les classes</a>
-            <a class="btn btn-primary-stroke" href="{{ path('app_home') }}">Retour à l’accueil</a>
+            <a class="btn btn-primary-dark" href="{{ path('app_classe') }}">Explorer les classes</a>
+            <a class="btn btn-primary-dark" href="{{ path('app_home') }}">Retour à l’accueil</a>
         </div>
     {% else %}
         <div class="d-flex flex-row-wrap justify-content-center gap-40" style="max-width: var(--max-width);">
@@ -28,7 +28,7 @@
                         {% set nbQuestions = counts[espece.id]|default(0) %}
                         <p class="text-small" style="color:#777; text-align:center;">{{ nbQuestions }} question{{ nbQuestions > 1 ? 's' : '' }} posée{{ nbQuestions > 1 ? 's' : '' }}</p>
                         <div class="d-flex justify-content-center mt-20">
-                            <a class="btn btn-primary-stroke" href="{{ path('app_forum_show', { nom_espece: espece.nomEspece }) }}">Voir les discussions</a>
+                            <a class="btn btn-primary-dark" href="{{ path('app_forum_show', { nom_espece: espece.nomEspece }) }}">Voir les discussions</a>
                         </div>
                     </div>
                 </div>

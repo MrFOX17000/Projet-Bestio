@@ -55,7 +55,7 @@
 {# Appel à l’action vers le forum #}
 <div class="lien-question d-flex flex-column align-items-center margin-auto mb-20">
     <p class="mb-10">Une question sur une espèce ? Discutez avec la communauté.</p>
-    <a href="{{ path('app_forum') }}" class="btn btn-primary-stroke">Accéder au forum</a>
+    <a href="{{ path('app_forum') }}" class="btn btn-primary-dark">Accéder au forum</a>
 </div>
 <div class="separator"></div>
 {% if animalDuJour %}
@@ -69,7 +69,7 @@
             'categorie': animalDuJour.classe.appartenir.nomCategorisation,
             'nom': animalDuJour.classe.nom,
             'nom_espece': animalDuJour.nomEspece
-        }) }}" class="btn btn-primary-stroke p-20">Découvrir</a>
+        }) }}" class="btn btn-primary-dark p-20">Découvrir</a>
     </div>
 </div>
 {% endif %}
