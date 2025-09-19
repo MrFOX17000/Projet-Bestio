@@ -4,6 +4,7 @@
             <img src="{{ asset('images/logo.webp')}}" alt="Logo Bestio">
         </a>
         <a href="{{ path('app_forum') }}" class="btn btn-primary mr-10">Forum</a>
+        <a href="{{ path('app_classe') }}" class="btn btn-primary mr-10">Classes</a>
 
         {% if is_granted('ROLE_ADMIN') %}
              <a href="{{ path('app_admin') }}" class="btn btn-primary mr-10">Admin</a>

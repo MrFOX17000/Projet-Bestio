@@ -18,13 +18,23 @@
             </button>
         </div>
     {{ form_end(form) }}
+
+    <div class="filter-categories text-center mb-4">
+    {% for categorie, classes in classesParCategorie %}
+        <label>
+            <input type="radio" name="categorie" onclick="location.href='#{{ categorie}}'">
+            {{ categorie }}
+        </label>
+    {% endfor %}
+    </div>
+
 </div>
 
         
     <div class="separator"></div>
     {% for categorie, classes in classesParCategorie %}
         <h2 class="d-flex justify-content-center underline pb-10">        
-            <a href="{{ path('app_categorie_show', {'categorie': categorie}) }}" class="underline" style="color:var(--gray-dark)">{{ categorie }}</a>
+            <a id = "{{ categorie }}" href="{{ path('app_categorie_show', {'categorie': categorie}) }}" class="underline" style="color:var(--gray-dark)">{{ categorie }}</a>
         </h2>
         <div class="d-flex flex-row-wrap justify-content-center gap-40">
             {% for classe in classes %}
