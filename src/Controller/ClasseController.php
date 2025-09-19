@@ -288,7 +288,9 @@ public function editClasse(
 
         $entityManager->flush();
         $this->addFlash('success', 'Classe modifiée avec succès !');
-        return $this->redirectToRoute('app_classe');
+        return $this->redirectToRoute('app_show_classe', [
+            'nom' => $classe->getNom()
+        ]);
     }
 
     return $this->render('classe/edit.html.twig', [
