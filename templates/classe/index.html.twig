@@ -7,12 +7,16 @@
     <h1 class="d-flex justify-content-center">Liste des classes</h1>
     {{ form_start(form) }}
         {{ form_widget(form) }}
-        <button class="btn btn-primary">Rechercher</button>
-        <button>
-            <a href="{{ path('app_classe')}}">
-                Réinitialiser
-            </a>
-        </button>
+
+        <div class="btn-filter-classes">
+            <button class="btn btn-primary">Rechercher</button>
+            <button class ="reset-classe">
+                <a href="{{ path('app_classe')}}">
+                    Réinitialiser
+                </a>
+            </button>
+        </div>
+        
 
         {{ form_end(form) }}
     <div class="separator"></div>

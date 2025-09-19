@@ -8,13 +8,17 @@
     
         {{ form_start(form) }}
         {{ form_widget(form) }}
-        <button class="btn btn-primary">Rechercher</button>
-        <button>
-            <a href="{{ path('app_categorie_show', { categorie: categorie.nomCategorisation }) }}">
-                Réinitialiser
-            </a>
-        </button>
 
+        <div class="btn-filter-categorie">
+            <button class="btn btn-primary">Rechercher</button>
+            <button class="reset-filter">
+                <a href="{{ path('app_categorie_show', { categorie: categorie.nomCategorisation }) }}">
+                    Réinitialiser
+                </a>
+            </button>
+
+        </div>
+        
         {{ form_end(form) }}
 
 
