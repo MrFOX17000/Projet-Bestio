@@ -1,8 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Administration{% endblock %}
 
 {% block body %}
+<h1 class="d-flex justify-content-center">Tableau de bord</h1>
+
+<div class="admin-stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.users_total|default(0) }}</div>
+        <div class="stat-label">Utilisateurs</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.users_admins|default(0) }}</div>
+        <div class="stat-label">Admins</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.users_banned|default(0) }}</div>
+        <div class="stat-label">Bannis</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.questions_total|default(0) }}</div>
+        <div class="stat-label">Questions</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.comments_total|default(0) }}</div>
+        <div class="stat-label">Commentaires</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.classes_total|default(0) }}</div>
+        <div class="stat-label">Classes</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.species_total|default(0) }}</div>
+        <div class="stat-label">Espèces</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.categories_total|default(0) }}</div>
+        <div class="stat-label">Catégories</div>
+    </div>
+</div>
+
+<div class="separator"></div>
 
 <div class="admin-wrapper">
      <div class="search-user">
@@ -13,36 +51,34 @@
 
             <div class="buttons-admin">
               <button class="btn btn-primary">Rechercher</button>
-                <button class="reset-filter"> <a href="{{ path('app_admin')}}"> Réinitialiser </a> </button>
+              <button class="reset-filter">
+                <a href="{{ path('app_admin')}}">Réinitialiser</a>
+              </button>
             </div>
         {{ form_end(form) }}
     </div>
 
     <div class="users">
         {% for user in users %}
-        {# On affiche seulement les pseudos des personnes n'ayant pas le rôle 'ROLE_ADMIN' #}
-        {% if 'ROLE_ADMIN' not in user.roles %}
+            {% if 'ROLE_ADMIN' not in user.roles %}
             <div class="user">
                 <div class="user-info">
                     <a href="{{ path('user', {'id': user.id}) }}"> {{ user.pseudo }} </a>
                 </div>
-            {% if user.banned == false %}
-                <div class="ban-btn">
-                    <a href="{{ path('ban_admin', {'id': user.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir bannir cet utilisateur ?');">Bannir</a>
-                </div>
-            {% else %}
-                <div class="unban-btn">
-                    <a href="{{ path('unban_admin', {'id': user.id}) }}"  onclick="return confirm('Êtes-vous sûr de vouloir débannir cet utilisateur ?');">Débannir</a>
-                </div>
+                {% if user.banned == false %}
+                    <div class="ban-btn">
+                        <a href="{{ path('ban_admin', {'id': user.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir bannir cet utilisateur ?');">Bannir</a>
+                    </div>
+                {% else %}
+                    <div class="unban-btn">
+                        <a href="{{ path('unban_admin', {'id': user.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir débannir cet utilisateur ?');">Débannir</a>
+                    </div>
+                {% endif %}
+            </div>
             {% endif %}
-        {% endif %}
-                </div>
-            
         {% else %}
             <p>Aucun utilisateur trouvé.</p>
         {% endfor %}
     </div>
-   
 </div>
-
 {% endblock %}

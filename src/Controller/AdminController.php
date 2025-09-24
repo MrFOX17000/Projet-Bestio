@@ -9,12 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\AdminStats;
+
 
 final class AdminController extends AbstractController
 {
 
      #[Route('/admin', name: 'app_admin')]
-    public function index(UserRepository $userRepository, Request $request): Response
+    public function index(UserRepository $userRepository, Request $request, AdminStats $adminStats): Response
     {
          if (!$this->isGranted('ROLE_ADMIN')) {
         $this->addFlash('warning', 'Accès réservé aux administrateurs.');
@@ -41,6 +43,7 @@ final class AdminController extends AbstractController
         return $this->render('admin/index.html.twig', [
             'users' => $users,
             'form' => $form->createView(),
+            'stats' => $adminStats->getStats(),
         ]);
     }
 

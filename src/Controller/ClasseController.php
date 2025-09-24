@@ -65,57 +65,71 @@ final class ClasseController extends AbstractController
         if ($formClasse->isSubmitted() && $formClasse->isValid()) {
             $image = $formClasse->get('image')->getData(); //On récupère le fichier uploadé depuis le formulaire
             if ($image) {
-                $imageDirectory = $this->getParameter('images_directory'); // On récupère le chemin du dossier d'upload depuis le fichier services.yaml
+                $imageDirectory = $this->getParameter('images_directory');
+                $newFilename = uniqid().'.'.$image->guessExtension();
 
-                $newFilename = uniqid().'.'.$image->guessExtension(); //On renomme chaque fichier pour éviter les conflits de noms
-                 try {
-                        $image->move($imageDirectory, $newFilename); //On déplace le fichier dans le dossier Public/Uploads
-                    } catch (FileException $e) {
-                      // Si l'upload rencontre un problème on affiche un message d'erreur
+                try {
+                    $image->move($imageDirectory, $newFilename);
+                    $classe->setImage('/uploads/' . $newFilename);
+                } catch (FileException $e) {
                     $this->addFlash('error', 'Erreur lors de l\'upload de l\'image : ' . $e->getMessage());
-
-                      //Et on redirige vers le formulaire
                     return $this->redirectToRoute('app_add_classe');
+                }
+
+                // Synchronise l'image principale -> ClasseImage (position 0)
+                $webPath = '/uploads/' . $newFilename;
+                $primary = null;
+                foreach ($classe->getClasseImages() as $img) {
+                    if ($img->getPosition() === 0) { $primary = $img; break; }
+                }
+                if (!$primary) {
+                    $primary = new ClasseImage();
+                    $primary->setPosition(0);
+                    $classe->addClasseImage($primary);
+                }
+                $primary->setPath($webPath);
+
+                // Supprime doublon exact éventuel dans la collection
+                foreach ($classe->getClasseImages() as $img) {
+                    if ($img !== $primary && $img->getPath() === $webPath) {
+                        $classe->removeClasseImage($img);
                     }
-                    $classe->setImage('/uploads/' . $newFilename); // On stocke le chemin relatif de l'image dans la base de données
+                }
             }
 
             // Nouvelles images multiples
             $files = $formClasse->get('newImages')->getData();
             if ($files) {
-                // chemins déjà existants (pour ne pas dupliquer)
+                // chemins déjà existants (éviter doublons)
                 $existing = [];
-                foreach ($classe->getClasseImages() as $imgObj) {
-                    $existing[] = $imgObj->getPath();
-                }
-                // si image legacy principale existe et pas migrée dans la collection
-                if (method_exists($classe,'getImage') && $classe->getImage() && !in_array($classe->getImage(), $existing, true)) {
-                    $existing[] = $classe->getImage();
-                }
+                foreach ($classe->getClasseImages() as $imgObj) { $existing[] = $imgObj->getPath(); }
+                if ($classe->getImage() && !in_array($classe->getImage(), $existing, true)) { $existing[] = $classe->getImage(); }
 
-                $currentCount = count($existing); // combien déjà
-                $maxTotal = 3;                    // 1 principale + 2 autres
+                $maxTotal = 3; // principale + 2
+                $currentCount = count($existing);
                 $remainingSlots = max(0, $maxTotal - $currentCount);
 
-                if ($remainingSlots > 0) {
-                    foreach (array_slice($files, 0, $remainingSlots) as $file) {
-                        if (!$file instanceof UploadedFile) continue;
-                        $name = uniqid().'.'.$file->guessExtension();
-                        try {
-                            $file->move($this->getParameter('images_directory'), $name);
-                        } catch (\Exception $e) {
-                            $this->addFlash('error', 'Erreur upload image multiple : '.$e->getMessage());
-                            break;
-                        }
-                        $webPath = '/uploads/'.$name;
-                        if (in_array($webPath, $existing, true)) {
-                            continue; // évite doublon exact
-                        }
-                        $ci = new ClasseImage();
-                        $ci->setPath($webPath)->setPosition($classe->getClasseImages()->count());
-                        $classe->addClasseImage($ci);
-                        $existing[] = $webPath;
+                // prochaine position disponible
+                $maxPos = -1;
+                foreach ($classe->getClasseImages() as $img) { $maxPos = max($maxPos, $img->getPosition()); }
+                $nextPos = $maxPos + 1;
+
+                foreach (array_slice($files, 0, $remainingSlots) as $file) {
+                    if (!$file instanceof UploadedFile) continue;
+                    $name = uniqid().'.'.$file->guessExtension();
+                    try {
+                        $file->move($this->getParameter('images_directory'), $name);
+                    } catch (\Exception $e) {
+                        $this->addFlash('error', 'Erreur upload image multiple : '.$e->getMessage());
+                        break;
                     }
+                    $webPath = '/uploads/'.$name;
+                    if (in_array($webPath, $existing, true)) continue; // évite doublon exact
+
+                    $ci = new ClasseImage();
+                    $ci->setPath($webPath)->setPosition($nextPos++);
+                    $classe->addClasseImage($ci);
+                    $existing[] = $webPath;
                 }
             }
             
@@ -206,98 +220,138 @@ final class ClasseController extends AbstractController
 
 
     #[Route('/edit/classe/{id}', name: 'edit_classe')]
-public function editClasse(
-    int $id,
-    Request $request,
-    EntityManagerInterface $entityManager,
-    ClasseRepository $classeRepository
-): Response
-{
-    if (!$this->isGranted('ROLE_ADMIN')) {
-        $this->addFlash('error', 'Accès réservé aux administrateurs.');
-        return $this->redirectToRoute('app_home');
-        }
-
-    // On récupère la classe existante
-    $classe = $classeRepository->find($id);
-
-    if (!$classe) {
-        $this->addFlash('error', 'Cette classe n\'existe pas.');
-        return $this->redirectToRoute('app_classe');
-    }
-
-    // On crée le formulaire en injectant l'entité existante
-    $formClasse = $this->createForm(ClasseType::class, $classe, [
-        'method' => 'POST',
-    ]);
-    $formClasse->handleRequest($request);
-
-    if ($formClasse->isSubmitted() && $formClasse->isValid()) {
-        // Gestion de l'image si un nouveau fichier est uploadé
-        $image = $formClasse->get('image')->getData();
-        if ($image) {
-            $imageDirectory = $this->getParameter('images_directory');
-            $newFilename = uniqid() . '.' . $image->guessExtension();
-
-            try {
-                $image->move($imageDirectory, $newFilename);
-                $classe->setImage('/uploads/' . $newFilename);
-            } catch (FileException $e) {
-                $this->addFlash('error', 'Erreur lors de l\'upload de l\'image : ' . $e->getMessage());
-                return $this->redirectToRoute('edit_classe', ['id' => $id]);
+    public function editClasse(
+        int $id,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        ClasseRepository $classeRepository
+    ): Response
+    {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Accès réservé aux administrateurs.');
+            return $this->redirectToRoute('app_home');
             }
+
+        // On récupère la classe existante
+        $classe = $classeRepository->find($id);
+
+        if (!$classe) {
+            $this->addFlash('error', 'Cette classe n\'existe pas.');
+            return $this->redirectToRoute('app_classe');
         }
-        // Images multiples
-            $files = $formClasse->get('newImages')->getData();
-            if ($files) {
-                // chemins déjà existants (pour ne pas dupliquer)
-                $existing = [];
-                foreach ($classe->getClasseImages() as $imgObj) {
-                    $existing[] = $imgObj->getPath();
-                }
-                // si image legacy principale existe et pas migrée dans la collection
-                if (method_exists($classe,'getImage') && $classe->getImage() && !in_array($classe->getImage(), $existing, true)) {
-                    $existing[] = $classe->getImage();
+
+        // On crée le formulaire en injectant l'entité existante
+        $formClasse = $this->createForm(ClasseType::class, $classe, [
+            'method' => 'POST',
+        ]);
+        $formClasse->handleRequest($request);
+
+        if ($formClasse->isSubmitted() && $formClasse->isValid()) {
+
+            // Mémorise l’ancienne principale (pour suppression éventuelle)
+            $oldPrimaryPath = $classe->getImage();
+
+            // 1) Image principale (si changée)
+            $image = $formClasse->get('image')->getData();
+            if ($image) {
+                $imageDirectory = $this->getParameter('images_directory');
+                $newFilename = uniqid() . '.' . $image->guessExtension();
+
+                try {
+                    $image->move($imageDirectory, $newFilename);
+                    $classe->setImage('/uploads/' . $newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Erreur lors de l\'upload de l\'image : ' . $e->getMessage());
+                    return $this->redirectToRoute('edit_classe', ['id' => $id]);
                 }
 
-                $currentCount = count($existing); // combien déjà
-                $maxTotal = 3;                    // 1 principale + 2 autres
-                $remainingSlots = max(0, $maxTotal - $currentCount);
+                // Synchronise la principale -> ClasseImage (position 0)
+                $webPath = '/uploads/' . $newFilename;
+                $primary = null;
+                foreach ($classe->getClasseImages() as $img) {
+                    if ($img->getPosition() === 0) { $primary = $img; break; }
+                }
+                if (!$primary) {
+                    $primary = new ClasseImage();
+                    $primary->setPosition(0);
+                    $classe->addClasseImage($primary);
+                }
+                $primary->setPath($webPath);
 
-                if ($remainingSlots > 0) {
-                    foreach (array_slice($files, 0, $remainingSlots) as $file) {
-                        if (!$file instanceof UploadedFile) continue;
-                        $name = uniqid().'.'.$file->guessExtension();
-                        try {
-                            $file->move($this->getParameter('images_directory'), $name);
-                        } catch (\Exception $e) {
-                            $this->addFlash('error', 'Erreur upload image multiple : '.$e->getMessage());
-                            break;
-                        }
-                        $webPath = '/uploads/'.$name;
-                        if (in_array($webPath, $existing, true)) {
-                            continue; // évite doublon exact
-                        }
-                        $ci = new ClasseImage();
-                        $ci->setPath($webPath)->setPosition($classe->getClasseImages()->count());
-                        $classe->addClasseImage($ci);
-                        $existing[] = $webPath;
+                // Anti-doublon exact
+                foreach ($classe->getClasseImages() as $img) {
+                    if ($img !== $primary && $img->getPath() === $webPath) {
+                        $classe->removeClasseImage($img);
                     }
                 }
             }
 
-        $entityManager->flush();
-        $this->addFlash('success', 'Classe modifiée avec succès !');
-        return $this->redirectToRoute('app_show_classe', [
-            'nom' => $classe->getNom()
+            // 2) Images secondaires: si des fichiers sont fournis, on REMPLACE pos 1 et 2
+            $files = $formClasse->get('newImages')->getData();
+            if ($files) {
+                // a) supprimer les anciennes secondaires (pos >= 1)
+                $toDeletePaths = [];
+                foreach ($classe->getClasseImages() as $img) {
+                    if ($img->getPosition() >= 1) {
+                        $toDeletePaths[] = $img->getPath();
+                        $classe->removeClasseImage($img); // orphanRemoval => delete DB au flush
+                    }
+                }
+
+                // b) ajouter les nouvelles (max 2) aux positions 1 et 2
+                $pos = 1;
+                foreach (array_slice($files, 0, 2) as $file) {
+                    if (!$file instanceof UploadedFile) continue;
+                    $name = uniqid() . '.' . $file->guessExtension();
+                    try {
+                        $file->move($this->getParameter('images_directory'), $name);
+                    } catch (\Throwable $e) {
+                        $this->addFlash('error', 'Erreur upload image multiple : ' . $e->getMessage());
+                        break;
+                    }
+                    $ci = new ClasseImage();
+                    $ci->setPath('/uploads/' . $name)->setPosition($pos++);
+                    $classe->addClasseImage($ci);
+                }
+
+                // c) suppression physique des anciennes secondaires remplacées (si non réutilisées)
+                $usedPaths = array_map(fn($ci) => $ci->getPath(), $classe->getClasseImages()->toArray());
+                foreach ($toDeletePaths as $p) {
+                    if (!in_array($p, $usedPaths, true)) {
+                        $this->deleteWebFile($p);
+                    }
+                }
+            }
+
+            // 3) si la principale a changé, supprimer l’ancienne du disque si non utilisée
+            if ($oldPrimaryPath && $oldPrimaryPath !== $classe->getImage()) {
+                $usedPaths = array_map(fn($ci) => $ci->getPath(), $classe->getClasseImages()->toArray());
+                if (!in_array($oldPrimaryPath, $usedPaths, true)) {
+                    $this->deleteWebFile($oldPrimaryPath);
+                }
+            }
+
+            $entityManager->flush();
+            $this->addFlash('success', 'Classe modifiée avec succès !');
+
+            return $this->redirectToRoute('app_show_classe', [
+                'nom' => $classe->getNom()
+            ]);
+        }
+
+        return $this->render('classe/edit.html.twig', [
+            'formClasse' => $formClasse->createView(),
+            'classe' => $classe
         ]);
     }
 
-    return $this->render('classe/edit.html.twig', [
-        'formClasse' => $formClasse->createView(),
-        'classe' => $classe
-    ]);
-}
+    // Helper pour supprimer un fichier du dossier uploads
+    private function deleteWebFile(?string $webPath): void
+    {
+        if (!$webPath || !str_starts_with($webPath, '/uploads/')) return;
+        $abs = $this->getParameter('kernel.project_dir') . '/public' . $webPath;
+        if (is_file($abs)) { @unlink($abs); }
+    }
 
     #[Route('/delete/classe/{id}', name: 'delete_classe')]
     public function deleteClasse(EntityManagerInterface $entityManager, ClasseRepository $classeRepository, int $id): Response
