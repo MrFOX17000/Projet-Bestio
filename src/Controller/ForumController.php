@@ -30,7 +30,7 @@ final class ForumController extends AbstractController
                 (
                 $data,
                 $request->query->getInt('page', 1),
-                8 // Nombre d'éléments par page
+                6 // Nombre d'éléments par page
                 );
 
         // Récupère tous les compteurs en une seule requête groupée

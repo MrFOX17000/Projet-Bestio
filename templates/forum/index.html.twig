@@ -16,7 +16,7 @@
             <a class="btn btn-primary-dark" href="{{ path('app_home') }}">Retour à l’accueil</a>
         </div>
     {% else %}
-        <div class="d-flex flex-row-wrap justify-content-center gap-40" style="max-width: var(--max-width);">
+        <div class="d-flex flex-row-wrap justify-content-center gap-40 mb-20" style="max-width: var(--max-width);">
             {% for espece in especes %}
                 <div class="block question-card" style="max-width:320px; width:100%; padding:0; overflow:hidden;">
                     {% set image = espece.image is defined and espece.image ? espece.image : asset('images/patte.png') %}

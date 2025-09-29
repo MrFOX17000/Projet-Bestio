@@ -197,10 +197,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->photo;
     }
 
-    public function setPhoto(string $photo): static
+    public function setPhoto(?string $photo): static
     {
-        $this->photo = $photo;
-
+        $this->photo = ($photo === '' ? null : $photo);
         return $this;
     }
 

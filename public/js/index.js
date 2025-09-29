@@ -20,6 +20,26 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Radios "catégorie": scroll vers l’ancre
+    document
+        .querySelectorAll('input[name="categorie"][data-target]')
+        .forEach((radio) => {
+            radio.addEventListener("change", () => {
+                const target = radio.getAttribute("data-target");
+                if (!target) return;
+                const el = document.querySelector(target);
+                if (el) {
+                    el.scrollIntoView({ behavior: "smooth", block: "start" });
+                    // Met à jour l’URL (sans recharger)
+                    history.replaceState(
+                        null,
+                        "",
+                        `${location.pathname}${target}`
+                    );
+                }
+            });
+        });
+
     // Bouton back-to-top
     const backToTop = document.getElementById("backToTop");
     if (backToTop) {

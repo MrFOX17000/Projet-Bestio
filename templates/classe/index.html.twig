@@ -21,31 +21,35 @@
 
     <div class="filter-categories text-center mb-4">
     {% for categorie, classes in classesParCategorie %}
-        <label>
-            <input type="radio" name="categorie" onclick="location.href='#{{ categorie}}'">
-            {{ categorie }}
+        <label class="radio-pill">
+            <input
+                type="radio"
+                name="categorie"
+                value="{{ categorie }}"
+                onclick="location.href='#{{ categorie}}'"
+            >
+            <span>{{ categorie }}</span>
         </label>
     {% endfor %}
     </div>
 
 </div>
 
-        
-    <div class="separator"></div>
-    {% for categorie, classes in classesParCategorie %}
-        <h2 class="d-flex justify-content-center underline pb-10">        
-            <a id = "{{ categorie }}" href="{{ path('app_categorie_show', {'categorie': categorie}) }}" class="underline" style="color:var(--gray-dark)">{{ categorie }}</a>
-        </h2>
-        <div class="d-flex flex-row-wrap justify-content-center gap-40">
-            {% for classe in classes %}
-            <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}" class="detail-classe-espece p-20">
-                <div class="espece-column">
-                    <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">
-                    <small>
-                        <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}" class="detail-classe-espece">{{ classe.nom }}</a>
-                    </small>
-                </div>
-            </a>
+        <div class="separator"></div>
+        {% for categorie, classes in classesParCategorie %}
+            <h2 class="d-flex justify-content-center underline pb-10">        
+                <a id = "{{ categorie }}" href="{{ path('app_categorie_show', {'categorie': categorie}) }}" class="underline" style="color:var(--gray-dark)">{{ categorie }}</a>
+            </h2>
+            <div class="d-flex flex-row-wrap justify-content-center gap-40">
+                {% for classe in classes %}
+                <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}" class="detail-classe-espece p-20">
+                    <div class="espece-column">
+                        <img src="{{ classe.image }}" alt="image-{{ classe.nom }}">
+                        <small>
+                            <a href="{{ path('app_show_classe', {'nom': classe.nom}) }}" class="detail-classe-espece">{{ classe.nom }}</a>
+                        </small>
+                    </div>
+                </a>
             {% endfor %}
         </div>
         <div class="separator"></div>

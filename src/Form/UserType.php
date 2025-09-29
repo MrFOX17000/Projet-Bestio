@@ -35,7 +35,7 @@ class UserType extends AbstractType
      ->add('photo', FileType::class, [ //on utilise un FileType pour pouvoir upload des fichiers
                 'label' => 'Votre image (JPG/JPEG/PNG)', // On précise à l'utilisateur quels types de fichiers sont acceptés
                 'mapped' => false, // Ce champs n'est relié à aucune entité donc mapped = false
-                'required' => true,
+                'required' => false,
                 'constraints' => [ // On applique des contraintes pour se protéger des failles d'upload
                     new File([
                         'maxSize' => '1024k', //On limite la taille du fichier

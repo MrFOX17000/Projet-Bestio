@@ -40,6 +40,30 @@
     </div>
 </div>
 
+<div class="admin-actions-section">
+    <h2 class="d-flex justify-content-center">Actions rapides</h2>
+    
+    <div class="admin-actions-grid">
+        <div class="action-group">
+            <h3>Gestion des Classes</h3>
+            <div class="action-buttons">
+                <a href="{{ path('app_add_classe') }}" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Ajouter une Classe
+                </a>
+            </div>
+        </div>
+        
+        <div class="action-group">
+            <h3>Gestion des Espèces</h3>
+            <div class="action-buttons">
+                <a href="{{ path('add_espece') }}" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Ajouter une Espèce
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="separator"></div>
 
 <div class="admin-wrapper">
@@ -62,23 +86,31 @@
         {% for user in users %}
             {% if 'ROLE_ADMIN' not in user.roles %}
             <div class="user">
+                {% if user.isVerified is defined and user.isVerified %}
+                    <p class="badge-verified" title="Email vérifié">✔ Vérifié</p>
+                {% else %}
+                    <p class="badge-unverified" title="Email non vérifié">✖ Non vérifié</p>
+                {% endif %}
                 <div class="user-info">
-                    <a href="{{ path('user', {'id': user.id}) }}"> {{ user.pseudo }} </a>
+                    <a href="{{ path('user', {'id': user.id}) }}">{{ user.pseudo }}</a>
+                </div>
+                <div class="user-info gray-dark">
+                    <p>{{ user.email }}</p>
                 </div>
                 {% if user.banned == false %}
-                    <div class="ban-btn">
-                        <a href="{{ path('ban_admin', {'id': user.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir bannir cet utilisateur ?');">Bannir</a>
-                    </div>
+                    <div class="ban-btn"><a href="{{ path('ban_admin', {'id': user.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir bannir cet utilisateur ?');">Bannir</a></div>
                 {% else %}
-                    <div class="unban-btn">
-                        <a href="{{ path('unban_admin', {'id': user.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir débannir cet utilisateur ?');">Débannir</a>
-                    </div>
+                    <div class="unban-btn"><a href="{{ path('unban_admin', {'id': user.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir débannir cet utilisateur ?');">Débannir</a></div>
                 {% endif %}
             </div>
             {% endif %}
         {% else %}
             <p>Aucun utilisateur trouvé.</p>
         {% endfor %}
+    </div>
+
+    <div class="pagination mt-20">
+        {{ knp_pagination_render(users) }}
     </div>
 </div>
 {% endblock %}

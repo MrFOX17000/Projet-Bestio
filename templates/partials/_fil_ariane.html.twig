@@ -53,6 +53,11 @@
             / <span class="gray-dark bold">{{ question.titreQuestion ?? question.titre ?? 'Question' }}</span>
         {% endif %}
 
+        {# A propos #}
+        {% if route == 'app_about' %}
+            / <a href="{{ path('app_about') }}" class="gray-dark bold">À propos</a>
+        {% endif %}
+
         {# Inscription / Connexion #}
         {% if route == 'app_register' %}
             / <a href="{{ path('app_register') }}">Inscription</a>
@@ -71,6 +76,11 @@
             / <a href="{{ path('user', {'id': user.id}) }}">Profil de {{ user.pseudo ?? user.email }}</a>
         {% elseif route == 'app_user_show' and user is defined %}
             / <a href="{{ path('app_user_show', {'id': user.id}) }}">Profil de {{ user.pseudo ?? user.email }}</a>
+        {% endif %}
+
+        {# Admin #}
+        {% if route == 'app_admin' %}
+            / <a href="{{ path('app_admin') }}">Admin</a>
         {% endif %}
     </small>
 </div>

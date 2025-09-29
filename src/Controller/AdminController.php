@@ -9,73 +9,79 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
 use App\Service\AdminStats;
 
 
 final class AdminController extends AbstractController
 {
 
-     #[Route('/admin', name: 'app_admin')]
-    public function index(UserRepository $userRepository, Request $request, AdminStats $adminStats): Response
-    {
-         if (!$this->isGranted('ROLE_ADMIN')) {
-        $this->addFlash('warning', 'Accès réservé aux administrateurs.');
-        return $this->redirectToRoute('app_home');
+    #[Route('/admin', name: 'app_admin')]
+    public function index(
+        UserRepository $userRepository,
+        Request $request,
+        AdminStats $stats,
+        PaginatorInterface $paginator
+    ): Response {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('warning', 'Accès réservé aux administrateurs.');
+            return $this->redirectToRoute('app_home');
         }
 
-        $userLogin = $this->getUser();
-        
         $form = $this->createForm(UserFilterType::class);
-
         $form->handleRequest($request);
 
-        $users = [];
+        // Query de base
+        $qb = $userRepository->createQueryBuilder('u')->orderBy('u.pseudo', 'DESC');
 
+        // Filtre recherche
         if ($form->isSubmitted() && $form->isValid()) {
-            $filters = $form->getData();
-            $pseudo = $filters['pseudo'];
-
-            $users = $userRepository->findUserPseudo($pseudo);
-        } else {
-            $users = $userRepository->findBy([], ["pseudo" => "DESC"]);
+            $pseudo = $form->get('pseudo')->getData();
+            if ($pseudo) {
+                $qb->andWhere('u.pseudo LIKE :q OR u.email LIKE :q')
+                ->setParameter('q', '%'.$pseudo.'%');
+            }
         }
+
+        // Pagination (16 par page)
+        $page = $request->query->getInt('page', 1);
+        $users = $paginator->paginate($qb, $page, 15);
 
         return $this->render('admin/index.html.twig', [
             'users' => $users,
-            'form' => $form->createView(),
-            'stats' => $adminStats->getStats(),
+            'form'  => $form->createView(),
+            'stats' => $stats->getStats(),
         ]);
     }
 
-    
-        #[Route('/admin/ban/{id}', name: 'ban_admin')]
-        public function ban(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
-        {
-            $userLogin = $this->getUser(); 
+    #[Route('/admin/ban/{id}', name: 'ban_admin')]
+    public function ban(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
+        $userLogin = $this->getUser(); 
 
-            if (!$this->isGranted('ROLE_ADMIN')) {
-                $this->addFlash('warning', 'Accès réservé aux administrateurs.');
-                return $this->redirectToRoute('app_home');
-            }
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('warning', 'Accès réservé aux administrateurs.');
+            return $this->redirectToRoute('app_home');
+        }
 
-            $roles = $userLogin->getRoles();
+        $roles = $userLogin->getRoles();
 
-            $user = $userRepository->find($id);
+        $user = $userRepository->find($id);
 
-            if (!$user) {
-                $this->addFlash('warning', 'Utilisateur introuvable.');
-                return $this->redirectToRoute('app_admin');
-            }
-
-            if (in_array("ROLE_ADMIN", $roles)) {
-                $user->setBanned(true);
-                $entityManager->flush();
-
-                $this->addFlash('success', 'L\'utilisateur a bien été banni.');
-            }
-
+        if (!$user) {
+            $this->addFlash('warning', 'Utilisateur introuvable.');
             return $this->redirectToRoute('app_admin');
         }
+
+        if (in_array("ROLE_ADMIN", $roles)) {
+            $user->setBanned(true);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'L\'utilisateur a bien été banni.');
+        }
+
+        return $this->redirectToRoute('app_admin');
+    }
 
 
     #[Route('/admin/unban/{id}', name: 'unban_admin')]

@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 final class EspeceController extends AbstractController
 {
     #[Route('/add/espece', name: 'add_espece')]
-    public function add(Request $request, EntityManagerInterface $entityManager): Response
+    public function add(Request $request, EntityManagerInterface $entityManager, EspeceRepository $especeRepository): Response
     {
         if (!$this->isGranted('ROLE_ADMIN')) {
         $this->addFlash('error', 'Accès réservé aux administrateurs.');
@@ -52,8 +52,10 @@ final class EspeceController extends AbstractController
 
     }
 
+        $especes = $especeRepository->findAll();
         return $this->render('espece/add.html.twig', [
             'form' => $form->createView(),
+            'especes' => $especes,
         ]);
     }
 
