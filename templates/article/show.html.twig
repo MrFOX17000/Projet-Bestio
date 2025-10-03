@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.titreArticle }}{% endblock %}
+
+{% block body %}
+<div class="btn-article-back">
+    <a href="{{ path('app_article') }}">Retour aux articles <i class="fa-solid fa-arrow-right"></i> </a>
+</div>
+
+<h1>{{ article.titreArticle }}</h1>
+<p>Publié par {{ article.redacteur.pseudo }} le {{ article.dateArticle|date('d/m/Y H:i') }}</p>
+<p>{{ article.contenuArticle }}</p>
+    <img src="{{ article.image }}" alt="{{ article.titreArticle }}">
+
+
+{% endblock %}

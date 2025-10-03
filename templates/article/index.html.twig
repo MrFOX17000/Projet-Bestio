@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue sur le blog !{% endblock %}
+
+{% block body %}
+<h1>Liste des articles</h1>
+
+{% for article in articles %}
+    <h2>{{ article.titreArticle }}</h2>
+    <p>Publié par {{ article.redacteur.pseudo }} le {{ article.dateArticle|date('d/m/Y H:i') }}</p>
+    <p>{{ article.contenuArticle|slice(0, 200) ~ '...' }}</p>
+    <div class="btn-article">
+        <a href="{{ path('show_article', {'id': article.id}) }}">Lire la suite</a>
+    </div>
+
+    <hr>
+{% else %}
+    <p>Aucun article pour le moment.</p>
+{% endfor %}
+
+{% endblock %}
