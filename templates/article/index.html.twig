@@ -1,21 +1,91 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bienvenue sur le blog !{% endblock %}
+{% block title %}Blog - Bestio{% endblock %}
 
 {% block body %}
-<h1>Liste des articles</h1>
+<div class="app-content">
+    <div class="content">
+        <!-- En-tête de la page blog -->
+        <div class="blog-header block p-20 mb-20">
+            <h1 class="d-flex justify-content-center mb-10">Blog Bestio</h1>
+            <p class="d-flex justify-content-center text-small gray-dark">Découvrez nos articles sur le monde fascinant des animaux</p>
+        </div>
 
-{% for article in articles %}
-    <h2>{{ article.titreArticle }}</h2>
-    <p>Publié par {{ article.redacteur.pseudo }} le {{ article.dateArticle|date('d/m/Y H:i') }}</p>
-    <p>{{ article.contenuArticle|slice(0, 200) ~ '...' }}</p>
-    <div class="btn-article">
-        <a href="{{ path('show_article', {'id': article.id}) }}">Lire la suite</a>
+        <!-- Grille d'articles -->
+        <div class="blog-grid mt-20">
+            {% for article in articles %}
+                <article class="article-card">
+                    <!-- Image de l'article -->
+                    <div class="article-image">
+                        {% if article.image %}
+                            <img src="{{ article.image }}" alt="{{ article.titreArticle }}">
+                        {% else %}
+                            <div class="article-placeholder">
+                                <i class="fas fa-image"></i>
+                            </div>
+                        {% endif %}
+                        <div class="article-category">
+                            <span class="category-tag">Article</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Contenu de l'article -->
+                    <div class="article-content p-20">
+                        <h2 class="article-title">{{ article.titreArticle }}</h2>
+                        
+                        <!-- Méta-informations -->
+                        <div class="article-meta d-flex align-items-center justify-content-between mb-10">
+                            <div class="author-info d-flex align-items-center">
+                                <div class="avatar avatar-sm mr-10">
+                                    {% if article.redacteur.photo %}
+                                        {% set avatarUrl = article.redacteur.photo starts with('/') ? asset(article.redacteur.photo) : asset('uploads/avatar/' ~ article.redacteur.photo) %}
+                                        <img src="{{ avatarUrl }}" alt="{{ article.redacteur.pseudo }}">
+                                    {% else %}
+                                        <img src="{{ asset('images/profil.webp') }}" alt="{{ article.redacteur.pseudo }}">
+                                    {% endif %}
+                                </div>
+                                <span class="text-small bold">{{ article.redacteur.pseudo }}</span>
+                            </div>
+                            <div class="date-info text-small gray-dark">
+                                {{ article.dateArticle|date('d/m/Y') }}
+                            </div>
+                        </div>
+                        
+                        <div class="article-body">
+                            <!-- Extrait de l'article -->
+                            <p class="article-excerpt">{{ article.contenuArticle|slice(0, 150) }}{% if article.contenuArticle|length > 150 %}...{% endif %}</p>
+                        </div>
+                        
+                        <!-- Bouton de lecture -->
+                        <div class="article-footer d-flex justify-content-between align-items-center">
+                            <a href="{{ path('show_article', {'id': article.id}) }}" class="btn btn-primary-stroke">
+                                Lire l'article
+                                <i class="fas fa-arrow-right ml-5"></i>
+                            </a>
+                            <span class="reading-time text-small gray-dark">
+                                <i class="fas fa-clock mr-5"></i>
+                                ~{{ (article.contenuArticle|length / 200)|round }} min
+                            </span>
+                        </div>
+                    </div>
+                </article>
+            {% else %}
+                <div class="empty-state block p-20">
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="fas fa-newspaper" style="font-size: 3rem; color: var(--gray-light); margin-bottom: 1rem;"></i>
+                        <h3 class="gray-dark mb-10">Aucun article disponible</h3>
+                        <p class="text-small">Les articles du blog apparaîtront bientôt ici.</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if articles.getTotalItemCount > articles.getItemNumberPerPage %}
+            <div class="blog-pagination d-flex justify-content-center mt-20">
+                {{ knp_pagination_render(articles) }}
+            </div>
+        {% endif %}
     </div>
-
-    <hr>
-{% else %}
-    <p>Aucun article pour le moment.</p>
-{% endfor %}
-
+</div>
 {% endblock %}

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 final class ArticleController extends AbstractController
 {
@@ -24,7 +25,7 @@ final class ArticleController extends AbstractController
                 (
                 $data,
                 $request->query->getInt('page', 1),
-                8 // Nombre d'éléments par page
+                6 // Nombre d'éléments par page
                 );
 
         return $this->render('article/index.html.twig', [

@@ -297,9 +297,8 @@ class CommentaireFixtures extends Fixture implements DependentFixtureInterface
 
     public function getDependencies(): array
     {
-         return [
-        //     UserFixtures::class,
-        //     QuestionFixtures::class,
-         ];
+        return [
+            UserFixtures::class,
+        ];
     }
 }
