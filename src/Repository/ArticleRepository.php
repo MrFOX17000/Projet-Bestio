@@ -16,6 +16,23 @@ class ArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, Article::class);
     }
 
+    /**
+     * Trouve les articles récents pour la newsletter
+     */
+    public function findRecentArticles(int $days = 7, int $limit = 5): array
+    {
+        $date = new \DateTime();
+        $date->modify("-$days days");
+
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.dateArticle >= :date')
+            ->setParameter('date', $date)
+            ->orderBy('a.dateArticle', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Article[] Returns an array of Article objects
 //     */

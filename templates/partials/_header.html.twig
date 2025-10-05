@@ -10,6 +10,7 @@
             <a href="{{ path('app_classe') }}" class="nav-link {{ app.current_route starts with 'app_classe' ? 'active-nav' : '' }}">Classes</a>
             <a href="{{ path('app_forum') }}" class="nav-link {{ app.current_route starts with 'app_forum' ? 'active-nav' : '' }}">Forum</a>
             <a href="{{ path('app_article') }}" class="nav-link {{ app.current_route starts with 'app_article' ? 'active-nav' : '' }}">Articles</a>
+            <a href="{{ path('newsletter_subscribe') }}" class="nav-link {{ app.current_route starts with 'newsletter_' ? 'active-nav' : '' }}">Newsletter</a>
             {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('app_admin') }}" class="nav-link {{ app.current_route starts with 'app_admin' ? 'active-nav' : '' }}">Admin</a>
             {% endif %}

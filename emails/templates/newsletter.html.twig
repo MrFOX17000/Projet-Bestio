@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Bestio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #8B5A3C, #A0522D);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+        .section:last-child {
+            border-bottom: none;
+        }
+        .section-title {
+            color: #8B5A3C;
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .section-icon {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+        .article-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #8B5A3C;
+        }
+        .article-title {
+            font-weight: bold;
+            color: #8B5A3C;
+            margin-bottom: 5px;
+        }
+        .article-excerpt {
+            color: #666;
+            font-size: 14px;
+        }
+        .featured-species {
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stats-grid {
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #8B5A3C;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        .btn {
+            background: #8B5A3C;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+        }
+        .footer a {
+            color: #8B5A3C;
+        }
+        .unsubscribe {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- En-tête -->
+        <div class="header">
+            <h1>🐾 Newsletter Bestio</h1>
+            <p>Découvertes de la {{ content.date|date('W') }}ème semaine de {{ content.date|date('Y') }}</p>
+        </div>
+
+        <div class="content">
+            <!-- Articles récents -->
+            {% if content.recentArticles %}
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">📝</span>
+                    Articles récents
+                </h2>
+                {% for article in content.recentArticles %}
+                <div class="article-item">
+                    <div class="article-title">{{ article.titreArticle }}</div>
+                    <div class="article-excerpt">
+                        {{ article.contenuArticle|slice(0, 150) }}{% if article.contenuArticle|length > 150 %}...{% endif %}
+                    </div>
+                    <a href="https://bestio.com/article/{{ article.id }}" class="btn">Lire la suite</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Espèce mise en avant -->
+            {% if content.featuredSpecies %}
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">🦎</span>
+                    Espèce mise en avant
+                </h2>
+                <div class="featured-species">
+                    <h3>{{ content.featuredSpecies.nomCommun }}</h3>
+                    <p><em>{{ content.featuredSpecies.nomScientifique }}</em></p>
+                    <p>{{ content.featuredSpecies.description|slice(0, 200) }}...</p>
+                    <a href="https://bestio.com/espece/{{ content.featuredSpecies.id }}" class="btn">Découvrir cette espèce</a>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Questions populaires -->
+            {% if content.popularQuestions %}
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">💬</span>
+                    Questions populaires
+                </h2>
+                {% for question in content.popularQuestions %}
+                <div class="article-item">
+                    <div class="article-title">{{ question.titre }}</div>
+                    <div class="article-excerpt">Par {{ question.auteur.pseudo }} • {{ question.dateQuestion|date('d/m/Y') }}</div>
+                    <a href="https://bestio.com/forum/question/{{ question.id }}" class="btn">Voir la discussion</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Statistiques -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">📊</span>
+                    Bestio en chiffres
+                </h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">{{ content.stats.totalSpecies }}</div>
+                        <div class="stat-label">Espèces</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ content.stats.totalArticles }}</div>
+                        <div class="stat-label">Articles</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ content.stats.totalQuestions }}</div>
+                        <div class="stat-label">Questions</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">{{ content.stats.subscribers }}</div>
+                        <div class="stat-label">Abonnés</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pied de page -->
+        <div class="footer">
+            <p>
+                <strong>Bestio</strong> - Votre communauté passionnée d'animaux<br>
+                <a href="https://bestio.com">Visiter le site</a> • 
+                <a href="https://bestio.com/forum">Rejoindre le forum</a>
+            </p>
+            
+            <div class="unsubscribe">
+                <p>
+                    Vous recevez cet email car vous êtes abonné(e) à notre newsletter.<br>
+                    <a href="{{ unsubscribeUrl }}">Se désabonner</a> • 
+                    <a href="https://bestio.com/newsletter/subscribe">Modifier mes préférences</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

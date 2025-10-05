@@ -49,6 +49,27 @@ class QuestionRepository extends ServiceEntityRepository
     }
 
     /**
+     * Trouve les questions populaires pour la newsletter
+     */
+    public function findPopularQuestions(int $days = 7, int $limit = 3): array
+    {
+        $date = new \DateTime();
+        $date->modify("-$days days");
+
+        return $this->createQueryBuilder('q')
+            ->addSelect('author', 'commentaires', 'espece')
+            ->leftJoin('q.author', 'author')
+            ->leftJoin('q.posseder', 'commentaires')
+            ->leftJoin('q.espece', 'espece')
+            ->andWhere('q.createdAt >= :date')
+            ->setParameter('date', $date)
+            ->orderBy('q.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Retourne une question par id avec son auteur et son espèce (fetch join)
      */
     public function findOneWithAuthorAndEspece(int $id): ?Question

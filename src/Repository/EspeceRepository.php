@@ -25,5 +25,30 @@ public function findEspecesWithQuestions(): array
         ->getResult();
 }
 
+/**
+ * Trouve des espèces aléatoires pour la newsletter
+ */
+public function findRandomSpecies(int $limit = 1): array
+{
+    $totalCount = $this->createQueryBuilder('e')
+        ->select('COUNT(e.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+    
+    if ($totalCount == 0) {
+        return [];
+    }
+    
+    $offset = max(0, rand(0, $totalCount - $limit));
+    
+    return $this->createQueryBuilder('e')
+        ->addSelect('c')
+        ->leftJoin('e.classe', 'c')
+        ->setMaxResults($limit)
+        ->setFirstResult($offset)
+        ->getQuery()
+        ->getResult();
+}
+
 
 }

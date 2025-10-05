@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[TEST] Newsletter Bestio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .test-banner {
+            background: #ff6b6b;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .header {
+            background: linear-gradient(135deg, #8B5A3C, #A0522D);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+        .section:last-child {
+            border-bottom: none;
+        }
+        .section-title {
+            color: #8B5A3C;
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .section-icon {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+        .article-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #8B5A3C;
+        }
+        .article-title {
+            font-weight: bold;
+            color: #8B5A3C;
+            margin-bottom: 5px;
+        }
+        .article-excerpt {
+            color: #666;
+            font-size: 14px;
+        }
+        .featured-species {
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stats-grid {
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #8B5A3C;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        .btn {
+            background: #8B5A3C;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+        }
+        .footer a {
+            color: #8B5A3C;
+        }
+        .unsubscribe {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Bannière de test -->
+        <div class="test-banner">
+            🧪 EMAIL DE TEST - Envoyé le {{ testDate|date('d/m/Y à H:i') }} à {{ recipientEmail }}
+        </div>
+
+        <!-- En-tête -->
+        <div class="header">
+            <h1>🐾 Newsletter Bestio</h1>
+            <p>Découvertes de la {{ testDate|date('W') }}ème semaine de {{ testDate|date('Y') }}</p>
+        </div>
+
+        <div class="content">
+            <!-- Articles récents -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">📝</span>
+                    Articles récents
+                </h2>
+                <div class="article-item">
+                    <div class="article-title">Les secrets de la communication chez les dauphins</div>
+                    <div class="article-excerpt">
+                        Les dauphins possèdent un système de communication complexe qui fascine les scientifiques. Découvrez comment ces mammifères marins utilisent les ultrasons pour communiquer entre eux et naviguer dans leur environnement aquatique.
+                    </div>
+                    <a href="https://bestio.com/article/1" class="btn">Lire la suite</a>
+                </div>
+                <div class="article-item">
+                    <div class="article-title">Migration des oiseaux : un phénomène extraordinaire</div>
+                    <div class="article-excerpt">
+                        Chaque année, des milliards d'oiseaux parcourent des milliers de kilomètres. Comment s'orientent-ils ? Quels sont les défis qu'ils rencontrent lors de ces voyages épiques ?
+                    </div>
+                    <a href="https://bestio.com/article/2" class="btn">Lire la suite</a>
+                </div>
+            </div>
+
+            <!-- Espèce mise en avant -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">🦎</span>
+                    Espèce mise en avant
+                </h2>
+                <div class="featured-species">
+                    <h3>Gecko Léopard</h3>
+                    <p><em>Eublepharis macularius</em></p>
+                    <p>Ce petit reptile nocturne originaire d'Afghanistan et du Pakistan est devenu l'un des lézards les plus populaires en terrariophilie grâce à son tempérament docile et ses magnifiques motifs.</p>
+                    <a href="https://bestio.com/espece/1" class="btn">Découvrir cette espèce</a>
+                </div>
+            </div>
+
+            <!-- Questions populaires -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">💬</span>
+                    Questions populaires
+                </h2>
+                <div class="article-item">
+                    <div class="article-title">Comment identifier un serpent venimeux ?</div>
+                    <div class="article-excerpt">Par naturelover42 • 02/10/2025</div>
+                    <a href="https://bestio.com/forum/question/1" class="btn">Voir la discussion</a>
+                </div>
+                <div class="article-item">
+                    <div class="article-title">Pourquoi les chats ronronnent-ils ?</div>
+                    <div class="article-excerpt">Par félinophile • 30/09/2025</div>
+                    <a href="https://bestio.com/forum/question/2" class="btn">Voir la discussion</a>
+                </div>
+            </div>
+
+            <!-- Statistiques -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="section-icon">📊</span>
+                    Bestio en chiffres
+                </h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">1,247</div>
+                        <div class="stat-label">Espèces</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">89</div>
+                        <div class="stat-label">Articles</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">342</div>
+                        <div class="stat-label">Questions</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">156</div>
+                        <div class="stat-label">Abonnés</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pied de page -->
+        <div class="footer">
+            <p>
+                <strong>Bestio</strong> - Votre communauté passionnée d'animaux<br>
+                <a href="https://bestio.com">Visiter le site</a> • 
+                <a href="https://bestio.com/forum">Rejoindre le forum</a>
+            </p>
+            
+            <div class="unsubscribe">
+                <p>
+                    <strong>Ceci est un email de test.</strong> L'email réel contiendra des données dynamiques.<br>
+                    <a href="{{ unsubscribeUrl }}">Se désabonner</a> • 
+                    <a href="https://bestio.com/newsletter/subscribe">Modifier mes préférences</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -5,16 +5,19 @@
 {% block body %}
 <div class="app-content">
     <div class="content">
+    <!-- Bouton retour original -->
+        <div class="article-footer d-flex justify-content-between align-items-center">
+                            <a href="{{ path('app_article') }}" class="btn btn-primary-stroke">
+                                Retour aux articles
+                                <i class="fas fa-arrow-right ml-5"></i>
+                            </a>
+                            <span class="reading-time text-small gray-dark">
+                                <i class="fas fa-clock mr-5"></i>
+                                ~{{ (article.contenuArticle|length / 200)|round }} min
+                            </span>
+                        </div>
         <!-- Article principal -->
         <article class="article-detail">
-            <!-- Bouton retour en haut -->
-            <div class="article-navigation mb-20">
-                <a href="{{ path('app_article') }}" class="btn btn-primary-stroke">
-                    <i class="fas fa-arrow-left mr-5"></i>
-                    Retour aux articles
-                </a>
-            </div>
-            
             <!-- En-tête de l'article -->
             <header class="article-header mb-20">
                 <h1 class="article-main-title mb-15">{{ article.titreArticle }}</h1>

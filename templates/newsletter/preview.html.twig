@@ -1,0 +1,153 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Aperçu Newsletter Bestio{% endblock %}
+
+{% block body %}
+<div class="app-content">
+    <div class="content">
+        <!-- Navigation retour -->
+        <div class="mb-20">
+            <a href="{{ path('newsletter_subscribe') }}" class="btn btn-primary-stroke">
+                <i class="fas fa-arrow-left mr-5"></i>
+                Retour à l'abonnement
+            </a>
+        </div>
+
+        <!-- Aperçu de la newsletter -->
+        <div class="newsletter-preview-container">
+            <div class="preview-header text-center mb-30">
+                <h1>📧 Aperçu de la Newsletter Bestio</h1>
+                <p class="gray-dark">Voici à quoi ressemble notre newsletter hebdomadaire</p>
+            </div>
+
+            <!-- Simulation d'un email -->
+            <div class="email-preview">
+                <div class="email-header">
+                    <div class="email-from">
+                        <strong>De :</strong> Newsletter Bestio &lt;newsletter@bestio.com&gt;
+                    </div>
+                    <div class="email-subject">
+                        <strong>Objet :</strong> 🐾 Newsletter Bestio - Découvertes de la semaine
+                    </div>
+                </div>
+
+                <div class="email-content">
+                    <!-- En-tête email -->
+                    <div class="email-newsletter-header">
+                        <h1>🐾 Newsletter Bestio</h1>
+                        <p>Découvertes de la {{ 'now'|date('W') }}ème semaine de {{ 'now'|date('Y') }}</p>
+                    </div>
+
+                    <!-- Section Articles -->
+                    <div class="newsletter-section">
+                        <h2 class="section-title">
+                            📝 Articles récents
+                        </h2>
+                        <div class="sample-article">
+                            <h3>Les secrets de la communication chez les dauphins</h3>
+                            <p>Les dauphins possèdent un système de communication complexe qui fascine les scientifiques. Découvrez comment ces mammifères marins utilisent les ultrasons...</p>
+                            <a href="#" class="email-btn">Lire la suite</a>
+                        </div>
+                        <div class="sample-article">
+                            <h3>Migration des oiseaux : un phénomène extraordinaire</h3>
+                            <p>Chaque année, des milliards d'oiseaux parcourent des milliers de kilomètres. Comment s'orientent-ils ? Quels sont les défis qu'ils rencontrent ?</p>
+                            <a href="#" class="email-btn">Lire la suite</a>
+                        </div>
+                    </div>
+
+                    <!-- Section Espèce mise en avant -->
+                    <div class="newsletter-section">
+                        <h2 class="section-title">
+                            🦎 Espèce mise en avant
+                        </h2>
+                        <div class="featured-species-preview">
+                            <h3>Le Gecko Léopard</h3>
+                            <p><em>Eublepharis macularius</em></p>
+                            <p>Ce petit reptile nocturne originaire d'Afghanistan et du Pakistan est devenu l'un des lézards les plus populaires en terrariophilie...</p>
+                            <a href="#" class="email-btn">Découvrir cette espèce</a>
+                        </div>
+                    </div>
+
+                    <!-- Section Questions populaires -->
+                    <div class="newsletter-section">
+                        <h2 class="section-title">
+                            💬 Questions populaires
+                        </h2>
+                        <div class="sample-question">
+                            <h4>Comment identifier un serpent venimeux ?</h4>
+                            <p>Par naturelover42 • 2 octobre 2025</p>
+                            <a href="#" class="email-btn">Voir la discussion</a>
+                        </div>
+                        <div class="sample-question">
+                            <h4>Pourquoi les chats ronronnent-ils ?</h4>
+                            <p>Par félinophile • 30 septembre 2025</p>
+                            <a href="#" class="email-btn">Voir la discussion</a>
+                        </div>
+                    </div>
+
+                    <!-- Statistiques -->
+                    <div class="newsletter-section">
+                        <h2 class="section-title">
+                            📊 Bestio en chiffres
+                        </h2>
+                        <div class="stats-preview">
+                            <div class="stat-item">
+                                <div class="stat-number">1,247</div>
+                                <div class="stat-label">Espèces</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">89</div>
+                                <div class="stat-label">Articles</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">342</div>
+                                <div class="stat-label">Questions</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">156</div>
+                                <div class="stat-label">Abonnés</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pied de page email -->
+                    <div class="email-footer">
+                        <p>
+                            <strong>Bestio</strong> - Votre communauté passionnée d'animaux<br>
+                            Visiter le site • Rejoindre le forum
+                        </p>
+                        <div class="unsubscribe-info">
+                            <p>
+                                Vous recevez cet email car vous êtes abonné(e) à notre newsletter.<br>
+                                Se désabonner • Modifier mes préférences
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action -->
+            <div class="preview-actions text-center mt-30">
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="admin-test-section mb-20 p-15" style="background: #f0f8ff; border-radius: 8px; border: 2px solid #007bff;">
+                        <h4 style="color: #007bff; margin-bottom: 10px;">🔧 Zone Admin - Test Email</h4>
+                        <p class="text-small mb-20">Envoyez un email de test directement sur Mailtrap</p>
+                    </div>
+                    <a href="{{ path('newsletter_test_email') }}" class="btn btn-primary-dark d-flex justify-content-center margin-auto mb-20">
+                        <i class="fas fa-paper-plane mr-5"></i>
+                        Envoyer un test sur Mailtrap
+                    </a>
+                {% endif %}
+                
+                <a href="{{ path('newsletter_subscribe') }}" class="btn btn-primary-dark d-flex justify-content-center margin-auto">
+                    <i class="fas fa-envelope mr-5"></i>
+                    Recevoir cette newsletter
+                </a>
+                <p class="text-small gray-dark mt-10 justify-content-center margin-auto d-flex">
+                    Rejoignez notre communauté et ne manquez plus aucune découverte !
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
