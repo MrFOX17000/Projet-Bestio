@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Bienvenue sur le blog !{% endblock %}
+
+{% block body %}
+
+
+<div class="new-article-wrapper">
+    {{ form_start(formArticle) }}
+    {{ form_widget(formArticle) }}
+    <button type="submit" class="btn btn-primary">Publier</button>
+    {{ form_end(formArticle) }}
+
+</div>
+{% endblock %}

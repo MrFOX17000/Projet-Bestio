@@ -1952,6 +1952,27 @@ footer {
     transform: scale(1);
 }
 
+.btn-article a {
+    color: var(--gray-dark);
+    transition: 0.3s;
+}
+
+.btn-article a:hover {
+    text-decoration: underline;
+}
+*
+.btn-article-back a {
+    color: var(--primary);
+}
+
+.btn-article-back{
+    text-align: center;
+    background-color: var(--gray-dark);
+    border-radius: 20px;
+    padding: 10px 20px;
+    width: 200px;
+}
+
 @media (max-width: 768px) {
     .back-to-top {
         right: 16px;
