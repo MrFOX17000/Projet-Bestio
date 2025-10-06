@@ -76,16 +76,18 @@ final class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin');
         }
 
-        $duration = $request->query->get('duration', 'permanent'); 
+        $duration = $request->query->get('duration', 'permanent'); //on récupère la durée du ban depuis le formulaire, si aucune valeur alors on met "permanent" par défaut
 
+        //ban permanent
         if ($duration === 'permanent') {
             $user->setBanned(true);
             $user->setBannedUntil(null);
             $this->addFlash('success', 'Utilisateur banni définitivement.');
         } else {
        
-            $interval = \DateInterval::createFromDateString($duration);
-            $banUntil = (new \DateTime())->add($interval);
+            // ban temporaire
+            $interval = \DateInterval::createFromDateString($duration); // crée un intervalle de temps à partir de la chaîne (ex: '1 day', '2 hours')
+            $banUntil = (new \DateTime())->add($interval); // on créer la date de fin de ban =  date actuelle + intervalle
             $user->setBanned(true);
             $user->setBannedUntil($banUntil);
             $this->addFlash('success', "Utilisateur banni jusqu'au " . $banUntil->format('d/m/Y H:i'));

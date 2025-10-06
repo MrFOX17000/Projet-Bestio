@@ -2,32 +2,33 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\UserType;
+use DateTimeImmutable;
+use App\Service\BanManager;
+use App\Entity\ResetPassword;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ResetPasswordRepository;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Form\UserType;
-use App\Repository\UserRepository;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use App\Entity\ResetPassword;
-use DateTimeImmutable;
-use App\Repository\ResetPasswordRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\RateLimiter\RateLimiterFactory;
-use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class SecurityController extends AbstractController
 {
 
     #[Route('/connexion', name: 'connexion')]
-    public function connexion(AuthenticationUtils $authenticationUtils): Response
+    public function connexion(AuthenticationUtils $authenticationUtils, BanManager $banManager): Response
     {
         $user = $this->getUser();
         if ($this->getUser()) {

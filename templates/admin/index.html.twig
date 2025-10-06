@@ -113,9 +113,8 @@
                     <p>{{ user.email }}</p>
                 </div>
                 {% if user.banned == false %}
-                 {# Bannissement temporaire #}
-                    <form action="{{ path('ban_admin', { id: user.id }) }}" method="get" style="display:inline;">
-                        <select name="duration">
+                    <form action="{{ path('ban_admin', { id: user.id }) }}" method="get">
+                        <select name="duration" class="ban-select">
                             <option value="1day">1 jour</option>
                             <option value="3days">3 jours</option>
                             <option value="7days">7 jours</option>

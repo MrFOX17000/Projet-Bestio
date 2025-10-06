@@ -1042,6 +1042,8 @@ footer {
     border-radius: 20px;
     display: flex;
     justify-content: center;
+    border: none;
+    color: white;
 }
 
 .unban-btn {
@@ -1056,6 +1058,14 @@ footer {
     display: flex;
     gap: 30px;
     margin-bottom: 50px;
+}
+
+.ban-select {
+    display: flex;
+    text-align: center;
+    border-radius: 20px;
+    padding: 10px 20px;
+    border: 0;
 }
 
 /* Admin: cartes de statistiques */
