@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommentaireVoteRepository::class)]
 #[ORM\Table(name: 'commentaire_vote', uniqueConstraints: [
-    new ORM\UniqueConstraint(name: 'uniq_comment_user', columns: ['commentaire_id','user_id'])
+    new ORM\UniqueConstraint(name: 'uniq_commentaire_user', columns: ['commentaire_id','user_id'])
 ])]
 class CommentaireVote
 {
@@ -19,7 +19,7 @@ class CommentaireVote
     private ?User $user = null;
 
     #[ORM\Column(type: 'smallint')]
-    private int $value = 0;
+    private int $value = 1;
 
     public function getId(): ?int { return $this->id; }
     public function getCommentaire(): ?Commentaire { return $this->commentaire; }
@@ -27,5 +27,5 @@ class CommentaireVote
     public function getUser(): ?User { return $this->user; }
     public function setUser(User $u): self { $this->user = $u; return $this; }
     public function getValue(): int { return $this->value; }
-    public function setValue(int $v): self { $this->value = $v; return $this; }
+    public function setValue(int $v): self { $this->value = $v > 0 ? 1 : -1; return $this; }
 }

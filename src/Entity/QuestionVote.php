@@ -18,9 +18,8 @@ class QuestionVote
     #[ORM\ManyToOne] #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    // +1 ou -1
     #[ORM\Column(type: 'smallint')]
-    private int $value = 0;
+    private int $value = 1; // valeur par défaut cohérente
 
     public function getId(): ?int { return $this->id; }
     public function getQuestion(): ?Question { return $this->question; }
@@ -28,5 +27,8 @@ class QuestionVote
     public function getUser(): ?User { return $this->user; }
     public function setUser(User $u): self { $this->user = $u; return $this; }
     public function getValue(): int { return $this->value; }
-    public function setValue(int $v): self { $this->value = $v; return $this; }
+    public function setValue(int $v): self {
+        $this->value = $v > 0 ? 1 : -1;
+        return $this;
+    }
 }
