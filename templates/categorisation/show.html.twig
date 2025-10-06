@@ -5,8 +5,13 @@
 {% block body %}
 
 <div class="categorie-header">
-    <h1 class="d-flex justify-content-center">{{ categorie.nomCategorisation }}</h1>
-    <p class="d-flex justify-content-center">{{ categorie.specificite }}</p>
+    <div class="newsletter-hero">
+        <div class="newsletter-hero-content gap-40 d-flex flex-column align-items-center">
+            <div class="hero-icon">🐾</div>
+            <h1>{{ categorie.nomCategorisation }}</h1>
+            <p>{{ categorie.specificite }}</p>
+        </div>
+    </div>
     
         {{ form_start(form) }}
         {{ form_widget(form) }}

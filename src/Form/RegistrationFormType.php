@@ -38,7 +38,7 @@ class RegistrationFormType extends AbstractType
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
                 'first_options'  => [
-                    'label' => 'Mot de passe',
+                    'label' => 'Mot de passe :',
                     'attr' => ['placeholder' => 'Votre mot de passe'],
                     'constraints' => [
                         new NotBlank([
@@ -51,7 +51,7 @@ class RegistrationFormType extends AbstractType
                     ],
                 ],
                 'second_options' => [
-                    'label' => 'Confirmer le mot de passe',
+                    'label' => 'Confirmer le mot de passe :',
                     'attr' => ['placeholder' => 'Confirmez votre mot de passe'],
                 ],
                 'mapped' => false,

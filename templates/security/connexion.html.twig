@@ -5,35 +5,54 @@
 
 {% block body %}
     <div class="fill">
-        <div class="block">
-            <h2 class="d-flex pb-30 justify-content-center">Se connecter</h2>
-            <form action="{{ path('connexion') }}" method="post">
-                <div class="form-row">
-                    <label for="email">Adresse email :</label>
-                    <input class="mb-20" type="email" id="email" name="_username" value="{{ last_username }}" placeholder="Votre adresse e-mail" required autofocus>
-                </div>
-                <div class="form-row">
-                    <label for="password">Mot de passe :</label>
-                    <input class="mb-20" type="password" id="password" name="_password" placeholder="Votre mot de passe" required>
-                </div>
-                <div class="d-flex form-row flex-row-nowrap">
-                    <input class="form-check-input mr-10" type="checkbox" id="_remember_me" name="_remember_me">
-                    <label class="form-check-label" for="_remember_me">
-                        Se souvenir de moi
-                    </label>
-                </div>    
-                <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
-                <button aria-label="Connexion" type="submit" class="d-flex btn btn-primary-dark justify-content-center margin-auto">Connexion</button>
-                <small class="d-flex justify-content-center mt-10"><a href="{{ path('app_register') }}">Vous n'avez pas encore de compte ?</a></small> 
-                <small class="d-flex justify-content-center mt-10">
-                    <a href="{{ path('reset-password-request') }}">Mot de passe oublié ?</a>
-                </small>   
-            </form>
+        <!-- Section héros avec gradient -->
+        <div class="form-hero">
+            <div class="form-hero-content">
+                <span class="form-icon">🐾</span>
+                <h1>Connexion</h1>
+                <p>Accédez à votre espace personnel Bestio</p>
+            </div>
+        </div>
+
+        <!-- Formulaire avec le nouveau style -->
+        <div class="form-container">
             {% if error %}
-                <div class="alert alert-danger mt-20" role="alert">
-                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                <div class="form-errors">
+                    <ul>
+                        <li>{{ error.messageKey|trans(error.messageData, 'security') }}</li>
+                    </ul>
                 </div>
             {% endif %}
+
+            <form action="{{ path('connexion') }}" method="post">
+                <div class="form-row">
+                    <label for="email">Adresse email</label>
+                    <input type="email" id="email" name="_username" value="{{ last_username }}" placeholder="votre@email.com" required autofocus>
+                </div>
+                
+                <div class="form-row">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="_password" placeholder="Votre mot de passe" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="d-flex align-items-center">
+                        <input type="checkbox" id="_remember_me" name="_remember_me" class="d-flex align-items-center mr-10">
+                        <label for="_remember_me" class="mb-0 d-flex align-items-center">Se souvenir de moi</label>
+                    </div>
+                </div>
+                
+                <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+                
+                <button type="submit" class="btn btn-primary" aria-label="Se connecter">
+                    Se connecter
+                </button>
+            </form>
+
+            <div class="form-links">
+                <div><a href="{{ path('app_register') }}">Créer un compte</a></div>
+                <div class="mt-10"><a href="{{ path('reset-password-request') }}">Mot de passe oublié ?</a></div>
+            </div>
         </div>
     </div>
 {% endblock %}

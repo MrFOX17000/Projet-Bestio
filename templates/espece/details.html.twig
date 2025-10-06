@@ -3,7 +3,13 @@
 {% block title %}Détails - {{ espece.nomEspece }}{% endblock %}
 
 {% block body %}
-    <h1 class="d-flex justify-content-center">{{ espece.nomEspece }}</h1>
+    <div class="newsletter-hero">
+        <div class="newsletter-hero-content gap-40 d-flex flex-column align-items-center">
+            <div class="hero-icon">🐾</div>
+            <h1>{{ espece.nomEspece }}</h1>
+            <p>Découvrez cette espèce fascinante.</p>
+        </div>
+    </div>
     <div class="separator"></div>
     <div id="wrapper-details">
 
@@ -36,31 +42,46 @@
 
        {% if app.user %}
         {% if not app.user.banned %}
-            {# Affiche le formulaire #}
-            <div class="fill" id="form-question">
-                <div class="block">
-                    <h2 class="d-flex pb-30 justify-content-center">Poser une question</h2>
+            {# Affiche le formulaire avec le nouveau style #}
+            <div class="fill">
+                <div class="form-hero">
+                    <div class="form-hero-content gap-40 d-flex flex-column align-items-center">
+                        <span class="form-icon">🐾</span>
+                        <h2>Poser une question</h2>
+                        <p>Partagez vos interrogations sur cette espèce.</p>
+                    </div>
+                </div>
+
+                <!-- Formulaire avec le nouveau style -->
+                <div class="form-container">
                     {{ form_start(formQuestion) }}
                         <div class="form-row">
                             {{ form_label(formQuestion.titreQuestion) }}
-                            {{ form_widget(formQuestion.titreQuestion, {'attr': {'class': 'mb-20'}}) }}
+                            {{ form_widget(formQuestion.titreQuestion, {'attr': {'placeholder': 'Quel est le titre de votre question ?'}}) }}
                             {{ form_errors(formQuestion.titreQuestion) }}
                         </div>
                         <div class="form-row">
                             {{ form_label(formQuestion.description) }}
-                            {{ form_widget(formQuestion.description, {'attr': {'class': 'mb-20'}}) }}
+                            {{ form_widget(formQuestion.description, {'attr': {'rows': 6, 'placeholder': 'Décrivez votre question en détail...'}}) }}
                             {{ form_errors(formQuestion.description) }}
                         </div>     
-                        <button class="d-flex btn btn-primary-dark justify-content-center margin-auto" type="submit">Envoyer</button> 
+                        <button class="btn btn-primary" type="submit">Publier ma question</button> 
                     {{ form_end(formQuestion) }}
                 </div>
             </div>
         {% endif %}
     {% else %}
         {# Utilisateur non connecté, message pour se connecter #}
-        <div class="block">
-        <h2 class="d-flex pb-30 justify-content-center">Ajouter une question</h2>
-            <p class="d-flex justify-content-center gray-dark">Vous devez être connecté pour poser une question !<small class="d-flex align-items-end ml-10"><a href="{{ path('connexion') }}">Se connecter</a></small></p>
+        <div class="newsletter-hero">
+            <div class="newsletter-hero-content gap-40 d-flex flex-column align-items-center">
+                <div class="hero-icon">🐾</div>
+                <h1>Posez vos questions</h1>
+                <p>Connectez-vous pour partager vos interrogations</p>
+                <div class="d-flex gap-40">
+                    <a href="{{ path('connexion') }}" class="cta-primary">Se connecter</a>
+                    <a href="{{ path('app_register') }}" class="cta-primary">Créer un compte</a>
+                </div>
+            </div>
         </div>
     {% endif %}
 

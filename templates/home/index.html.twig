@@ -3,7 +3,14 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-<h1 class="d-flex justify-content-center border-radius margin-auto">Bienvenue sur Bestio !</h1>
+<div class="newsletter-hero">
+    <div class="newsletter-hero-content gap-40 d-flex flex-column align-items-center">
+        <div class="hero-icon">🐾</div>
+        <h1>Bienvenue sur Bestio !</h1>
+        <p>Bestio relie passionnés, curieux et défenseurs du vivant autour d’une même mission.</p>
+        <a href="{{ path('app_classe') }}" class="cta-primary">Découvrir la faune</a>
+    </div>
+</div>
 <div class="separator"></div>
 <div class="d-flex flex-row-nowrap align-items-center justify-content-around">
     {% for categorie in categories %}

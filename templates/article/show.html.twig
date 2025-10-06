@@ -11,10 +11,6 @@
                                 Retour aux articles
                                 <i class="fas fa-arrow-right ml-5"></i>
                             </a>
-                            <span class="reading-time text-small gray-dark">
-                                <i class="fas fa-clock mr-5"></i>
-                                ~{{ (article.contenuArticle|length / 200)|round }} min
-                            </span>
                         </div>
         <!-- Article principal -->
         <article class="article-detail">
@@ -44,7 +40,7 @@
                     
                     <div class="reading-meta text-small gray-dark mr-20">
                         <i class="fas fa-clock mr-5"></i>
-                        ~{{ (article.contenuArticle|length / 200)|round }} min de lecture
+                        ~ {{ (article.contenuArticle|length / 800)|round }} min de lecture
                     </div>
                 </div>
             </header>

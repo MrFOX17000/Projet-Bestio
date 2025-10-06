@@ -1105,7 +1105,7 @@ footer {
 }
 
 .admin-actions-section h2 {
-    color: var(--color-primary);
+    color: var(--gray-dark);
     margin-bottom: 30px;
     font-size: 24px;
 }
@@ -1116,6 +1116,7 @@ footer {
     gap: 30px;
     max-width: 800px;
     margin: 0 auto;
+    color: var(--gray-dark);
 }
 
 .action-group {
@@ -3047,4 +3048,223 @@ footer {
     .stat-item {
         flex: 1 1 45%;
     }
+}
+
+/*************************************************************************************************************************************************************************
+*************************************************************************************FORM HERO STYLES***********************************************************************************************
+******************************************************************************************************************************************************************************************/
+
+/* Style héros pour les formulaires - reprend le design de la newsletter */
+.form-hero {
+    background: linear-gradient(135deg, var(--primary) 0%, #a0522d 100%);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    text-align: center;
+    color: white;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-hero::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>')
+        repeat;
+    animation: float 20s infinite linear;
+}
+
+.form-hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.form-hero .form-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.form-hero h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.form-hero p {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+    opacity: 0.9;
+}
+
+/* Container pour les formulaires avec le style héros */
+.form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Styles des champs de formulaire dans le container héros */
+.form-container .form-row {
+    margin-bottom: 1.5rem;
+}
+
+.form-container .form-row label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--gray-dark);
+}
+
+.form-container .form-row input,
+.form-container .form-row textarea,
+.form-container .form-row select {
+    padding: 0.75rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.form-container .form-row input:focus,
+.form-container .form-row textarea:focus,
+.form-container .form-row select:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(139, 90, 60, 0.1);
+}
+
+.form-container .form-row textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Boutons dans les formulaires héros */
+.form-container .btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+
+.form-container .btn-primary {
+    background: linear-gradient(135deg, var(--primary), #a0522d);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 15px rgba(139, 90, 60, 0.3);
+}
+
+.form-container .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 90, 60, 0.4);
+}
+
+/* Messages d'erreur stylisés */
+.form-container .form-errors {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #dc3545;
+    margin-bottom: 1rem;
+}
+
+.form-container .form-errors ul {
+    margin: 0;
+    padding-left: 1rem;
+}
+
+/* Liens dans les formulaires */
+.form-links {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.form-links a {
+    color: var(--gray-dark);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.form-links a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive pour les formulaires héros */
+@media (max-width: 768px) {
+    .form-hero {
+        padding: 2rem 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .form-hero h1 {
+        font-size: 2rem;
+    }
+
+    .form-hero .form-icon {
+        font-size: 3rem;
+    }
+
+    .form-container {
+        padding: 1.5rem;
+        top: -30px;
+        margin: 0 1rem;
+    }
+}
+
+/* Animation pour les formulaires */
+.form-container {
+    animation: slideUpFadeIn 0.6s ease-out;
+}
+
+.form-hero-content {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes slideUpFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-50px);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Amélioration des états de focus */
+.form-container .form-row input:focus,
+.form-container .form-row textarea:focus,
+.form-container .form-row select:focus {
+    transform: scale(1.02);
+}
+
+/* Effet hover sur les boutons */
+.form-container .btn:hover {
+    transform: translateY(-2px) scale(1.05);
 }
