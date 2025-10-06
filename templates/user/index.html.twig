@@ -3,7 +3,8 @@
 {% block title %}Mon profil{% endblock %}
 
 {% block body %}
-	<div class="fill">
+<div id="wrapper-profil">
+<div class="fill">
 			<h2 class="d-flex pb-30 justify-content-center">Mon profil
 				{% if isVerified %}
 					<span class="badge-verified ml-10" title="Email vérifié">✔ Vérifié</span>
@@ -64,4 +65,6 @@
 	</div>
 
 	<small class="d-flex justify-content-center mt-10"><a href="{{ path('deconnexion') }}">Déconnexion</a></small>
+</div>
+	
 {% endblock %}

@@ -12,7 +12,8 @@
     </div>
 </div>
 <div class="separator"></div>
-<div class="d-flex flex-row-nowrap align-items-center justify-content-around">
+<div class="d-flex flex-row align-items-center justify-content-around flex-wrap">
+
     {% for categorie in categories %}
         <a href="{{ path('app_categorie_show', {'categorie': categorie.nomCategorisation}) }}">
             <div class="categorie-flip">

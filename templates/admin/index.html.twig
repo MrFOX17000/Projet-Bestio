@@ -3,7 +3,8 @@
 {% block title %}Administration{% endblock %}
 
 {% block body %}
-<h1 class="d-flex justify-content-center">Tableau de bord</h1>
+<div id="wrapper-admin">
+    <h1 class="d-flex justify-content-center">Tableau de bord</h1>
 
 <div class="admin-stats-grid">
     <div class="stat-card">
@@ -137,4 +138,6 @@
         {{ knp_pagination_render(users) }}
     </div>
 </div>
+</div>
+
 {% endblock %}

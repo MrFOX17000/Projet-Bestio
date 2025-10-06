@@ -2855,6 +2855,91 @@ footer {
 
 /* Responsive */
 @media (max-width: 768px) {
+
+#wrapper-profil .d-flex 
+{
+        text-align: center;
+}
+
+#wrapper-profil .badge-unverified 
+{
+
+    margin-top: 40px;
+}
+
+#wrapper-profil .badge-verified 
+{
+
+    margin-top: 40px;
+}
+
+#wrapper-profil form {
+    width: 70%;
+}
+
+#wrapper-profil .fill {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+
+.espece-infos {
+        width: 80%;
+}
+
+.espece-infos a {
+    text-align: center;
+
+}
+
+.detail-classe-description {
+    width: 70%;
+}
+
+#wrapper-admin .d-flex {
+    text-align: center;
+}
+
+.admin-stats-grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.about-grid {
+    display: flex;
+    flex-direction: column;
+}
+
+#wrapper-classe .d-flex {
+    align-content: center;
+}
+
+#wrapper-classe a {
+    text-align: center;
+}
+
+.animal-card {
+    width: 80%;
+}
+
+.animal-card img {
+    width: 250px;
+    height: 250px;
+}
+.description-site {
+    width: 70%;
+}
+
+.lien-question {
+    width: 70%;
+}
+
+.d-flex {
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
     .newsletter-main {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -2862,6 +2947,8 @@ footer {
 
     .newsletter-hero {
         padding: 2rem 1rem;
+
+
     }
 
     .newsletter-hero h1 {
