@@ -98,7 +98,17 @@
                     <p>{{ user.email }}</p>
                 </div>
                 {% if user.banned == false %}
-                    <div class="ban-btn"><a href="{{ path('ban_admin', {'id': user.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir bannir cet utilisateur ?');">Bannir</a></div>
+                 {# Bannissement temporaire #}
+                    <form action="{{ path('ban_admin', { id: user.id }) }}" method="get" style="display:inline;">
+                        <select name="duration">
+                            <option value="1day">1 jour</option>
+                            <option value="3days">3 jours</option>
+                            <option value="7days">7 jours</option>
+                            <option value="1month">1 mois</option>
+                            <option value="permanent">Définitif</option>
+                        </select>
+                        <button type="submit" class="ban-btn">Bannir</button>
+                    </form>
                 {% else %}
                     <div class="unban-btn"><a href="{{ path('unban_admin', {'id': user.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir débannir cet utilisateur ?');">Débannir</a></div>
                 {% endif %}

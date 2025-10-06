@@ -29,9 +29,18 @@ final class SecurityController extends AbstractController
     #[Route('/connexion', name: 'connexion')]
     public function connexion(AuthenticationUtils $authenticationUtils): Response
     {
+        $user = $this->getUser();
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
         }
+
+        if ($user) {
+        
+        $banManager->checkAndUnban($user);
+
+        return $this->redirectToRoute('app_home');
+    }
+
 
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();

@@ -75,6 +75,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'redacteur', orphanRemoval: true)]
     private Collection $articles;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $bannedUntil = null;
+
 
 
     public function __construct()
@@ -310,6 +313,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $article->setRedacteur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBannedUntil(): ?\DateTime
+    {
+        return $this->bannedUntil;
+    }
+
+    public function setBannedUntil(?\DateTime $bannedUntil): static
+    {
+        $this->bannedUntil = $bannedUntil;
 
         return $this;
     }

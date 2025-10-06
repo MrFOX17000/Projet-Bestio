@@ -54,17 +54,19 @@ final class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/ban/{id}', name: 'ban_admin')]
-    public function ban(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
-    {
-        $userLogin = $this->getUser(); 
+   #[Route('/admin/ban/{id}', name: 'ban_admin')]
+    public function ban(
+        int $id,
+        Request $request,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $userLogin = $this->getUser();
 
         if (!$this->isGranted('ROLE_ADMIN')) {
             $this->addFlash('warning', 'Accès réservé aux administrateurs.');
             return $this->redirectToRoute('app_home');
         }
-
-        $roles = $userLogin->getRoles();
 
         $user = $userRepository->find($id);
 
@@ -73,12 +75,22 @@ final class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin');
         }
 
-        if (in_array("ROLE_ADMIN", $roles)) {
-            $user->setBanned(true);
-            $entityManager->flush();
+        $duration = $request->query->get('duration', 'permanent'); 
 
-            $this->addFlash('success', 'L\'utilisateur a bien été banni.');
+        if ($duration === 'permanent') {
+            $user->setBanned(true);
+            $user->setBannedUntil(null);
+            $this->addFlash('success', 'Utilisateur banni définitivement.');
+        } else {
+       
+            $interval = \DateInterval::createFromDateString($duration);
+            $banUntil = (new \DateTime())->add($interval);
+            $user->setBanned(true);
+            $user->setBannedUntil($banUntil);
+            $this->addFlash('success', "Utilisateur banni jusqu'au " . $banUntil->format('d/m/Y H:i'));
         }
+
+        $entityManager->flush();
 
         return $this->redirectToRoute('app_admin');
     }
