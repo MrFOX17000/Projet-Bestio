@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Service\AdminStats;
+use App\Repository\NewsletterSubscriptionRepository;
 
 
 final class AdminController extends AbstractController
@@ -127,6 +128,22 @@ final class AdminController extends AbstractController
             return $this->redirectToRoute('app_cat');
         }
 
+    }
+
+    #[Route('/admin/newsletter-stats', name: 'admin_newsletter_stats')]
+    public function newsletterStats(NewsletterSubscriptionRepository $subscriptionRepository): Response
+    {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('warning', 'Accès réservé aux administrateurs.');
+            return $this->redirectToRoute('app_home');
+        }
+
+        return $this->render('admin/newsletter_stats.html.twig', [
+            'stats' => $subscriptionRepository->getSubscriptionStats(),
+            'frequencyStats' => $subscriptionRepository->getFrequencyStats(),
+            'trend' => $subscriptionRepository->getSubscriptionTrend(),
+            'topDomains' => $subscriptionRepository->getTopEmailDomains(),
+        ]);
     }
 
     

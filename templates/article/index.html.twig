@@ -5,10 +5,13 @@
 {% block body %}
 <div class="app-content">
     <div class="content">
-        <!-- En-tête de la page blog -->
-        <div class="blog-header block p-20 mb-20">
-            <h1 class="d-flex justify-content-center mb-10">Blog Bestio</h1>
-            <p class="d-flex justify-content-center text-small gray-dark">Découvrez nos articles sur le monde fascinant des animaux</p>
+
+        <div class="newsletter-hero">
+            <div class="newsletter-hero-content gap-40 d-flex flex-column align-items-center">
+                <div class="hero-icon">🐾</div>
+                <h1>Blog Bestio</h1>
+                <p>Découvrez nos articles sur le monde fascinant des animaux</p>
+            </div>
         </div>
 
         <!-- Grille d'articles -->
@@ -64,7 +67,7 @@
                             </a>
                             <span class="reading-time text-small gray-dark">
                                 <i class="fas fa-clock mr-5"></i>
-                                ~{{ (article.contenuArticle|length / 200)|round }} min
+                                ~ {{ (article.contenuArticle|length / 700)|round }} min
                             </span>
                         </div>
                     </div>

@@ -41,7 +41,7 @@
 </div>
 
 <div class="admin-actions-section">
-    <h2 class="d-flex justify-content-center">Actions rapides</h2>
+    <h2 class="d-flex justify-content-center gray-dark">Actions rapides</h2>
     
     <div class="admin-actions-grid">
         <div class="action-group">
@@ -58,6 +58,21 @@
             <div class="action-buttons">
                 <a href="{{ path('add_espece') }}" class="btn btn-success">
                     <i class="fas fa-plus"></i> Ajouter une Espèce
+                </a>
+            </div>
+        </div>
+        
+        <div class="action-group">
+            <h3>Newsletter</h3>
+            <div class="action-buttons">
+                <a href="{{ path('admin_newsletter_stats') }}" class="btn btn-info">
+                    <i class="fas fa-chart-bar"></i> Statistiques Newsletter
+                </a>
+                <a href="{{ path('newsletter_subscribe') }}" class="btn btn-success">
+                    <i class="fa-regular fa-paper-plane"></i> Tester l'envoi
+                </a>
+                <a href="{{ path('newsletter_preview') }}" class="btn btn-primary-dark">
+                    <i class="fas fa-eye"></i> Voir l'aperçu
                 </a>
             </div>
         </div>

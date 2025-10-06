@@ -4,7 +4,6 @@
 
 {% block body %}
 	<div class="fill">
-		<div class="block">
 			<h2 class="d-flex pb-30 justify-content-center">Mon profil
 				{% if isVerified %}
 					<span class="badge-verified ml-10" title="Email vérifié">✔ Vérifié</span>
@@ -16,7 +15,6 @@
 			{{ form_rest(form) }}
 			<button aria-label="Mettre à jour" class="d-flex btn btn-primary-dark justify-content-center margin-auto">Mettre à jour</button>
 			{{ form_end(form)}}
-		</div>
 	</div>
 
 	<div class="profile-sections">

@@ -78,6 +78,37 @@
             / <a href="{{ path('app_user_show', {'id': user.id}) }}">Profil de {{ user.pseudo ?? user.email }}</a>
         {% endif %}
 
+        {# Newsletter #}
+        {% if route in ['newsletter_subscribe', 'newsletter_preview', 'newsletter_test_email'] %}
+            / <a href="{{ path('newsletter_subscribe') }}">Newsletter</a>
+        {% endif %}
+
+        {# Newsletter - Aperçu #}
+        {% if route == 'newsletter_preview' %}
+            / <span class="gray-dark bold">Aperçu</span>
+        {% endif %}
+
+        {# Newsletter - Test Email (Admin seulement) #}
+        {% if route == 'newsletter_test_email' and is_granted('ROLE_ADMIN') %}
+            / <a href="{{ path('newsletter_preview') }}">Aperçu</a>
+            / <span class="gray-dark bold">Test Email</span>
+        {% endif %}
+
+        {# Articles #}
+        {% if route in ['app_article', 'new_article', 'show_article'] %}
+            / <a href="{{ path('app_article') }}">Articles</a>
+        {% endif %}
+
+        {# Article - Nouvel article #}
+        {% if route == 'new_article' %}
+            / <span class="gray-dark bold">Nouvel article</span>
+        {% endif %}
+
+        {# Article - Affichage d'un article #}
+        {% if route == 'show_article' and article is defined %}
+            / <span class="gray-dark bold">{{ article.titreArticle|slice(0, 50) }}{% if article.titreArticle|length > 50 %}...{% endif %}</span>
+        {% endif %}
+
         {# Admin #}
         {% if route == 'app_admin' %}
             / <a href="{{ path('app_admin') }}">Admin</a>
