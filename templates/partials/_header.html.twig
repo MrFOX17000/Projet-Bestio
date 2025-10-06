@@ -1,24 +1,80 @@
 <header class="site-header">
     <div class="content header-inner">
+        <!-- Logo -->
         <a class="header-logo" href="{{ path('app_home') }}">
             <img src="{{ asset('images/logo.webp')}}" alt="Logo Bestio">
         </a>
 
-        <nav class="main-nav">
-            <a href="{{ path('app_home') }}" class="nav-link {{ app.current_route starts with 'app_home' ? 'active-nav' : '' }}">Accueil</a>
-            <a href="{{ path('app_about') }}" class="nav-link {{ app.current_route starts with 'app_about' ? 'active-nav' : '' }}">À propos</a>
-            <a href="{{ path('app_classe') }}" class="nav-link {{ app.current_route starts with 'app_classe' ? 'active-nav' : '' }}">Classes</a>
-            <a href="{{ path('app_forum') }}" class="nav-link {{ app.current_route starts with 'app_forum' ? 'active-nav' : '' }}">Forum</a>
-            <a href="{{ path('app_article') }}" class="nav-link {{ app.current_route starts with 'app_article' ? 'active-nav' : '' }}">Articles</a>
-            <a href="{{ path('newsletter_subscribe') }}" class="nav-link {{ app.current_route starts with 'newsletter_' ? 'active-nav' : '' }}">Newsletter</a>
-            {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('app_admin') }}" class="nav-link {{ app.current_route starts with 'app_admin' ? 'active-nav' : '' }}">Admin</a>
-            {% endif %}
+        <!-- Menu hamburger (mobile uniquement) -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <!-- Navigation principale -->
+        <nav class="main-nav" id="mainNav">
+            <div class="nav-links">
+                <a href="{{ path('app_home') }}" class="nav-link {{ app.current_route starts with 'app_home' ? 'active-nav' : '' }}">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+                <a href="{{ path('app_about') }}" class="nav-link {{ app.current_route starts with 'app_about' ? 'active-nav' : '' }}">
+                    <i class="fas fa-info-circle"></i>
+                    <span>À propos</span>
+                </a>
+                <a href="{{ path('app_classe') }}" class="nav-link {{ app.current_route starts with 'app_classe' ? 'active-nav' : '' }}">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Classes</span>
+                </a>
+                <a href="{{ path('app_forum') }}" class="nav-link {{ app.current_route starts with 'app_forum' ? 'active-nav' : '' }}">
+                    <i class="fas fa-comments"></i>
+                    <span>Forum</span>
+                </a>
+                <a href="{{ path('app_article') }}" class="nav-link {{ app.current_route starts with 'app_article' ? 'active-nav' : '' }}">
+                    <i class="fas fa-newspaper"></i>
+                    <span>Articles</span>
+                </a>
+                <a href="{{ path('newsletter_subscribe') }}" class="nav-link {{ app.current_route starts with 'newsletter_' ? 'active-nav' : '' }}">
+                    <i class="fas fa-envelope"></i>
+                    <span>Newsletter</span>
+                </a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_admin') }}" class="nav-link admin-link {{ app.current_route starts with 'app_admin' ? 'active-nav' : '' }}">
+                        <i class="fas fa-cog"></i>
+                        <span>Admin</span>
+                    </a>
+                {% endif %}
+            </div>
+
+            <!-- Actions utilisateur dans la nav mobile -->
+            <div class="nav-actions mobile-only">
+                {% if is_granted('ROLE_USER') %}
+                    <a class="nav-profile-link" href="{{ path('current_user') }}">
+                        <img src="{{ app.user.photo ?? '/images/profil.webp' }}" class="nav-avatar" alt="Profil">
+                        <span>Mon profil</span>
+                    </a>
+                    <a href="{{ path('deconnexion') }}" class="nav-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Déconnexion</span>
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_register') }}" class="nav-register">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Inscription</span>
+                    </a>
+                    <a href="{{ path('connexion') }}" class="nav-login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Connexion</span>
+                    </a>
+                {% endif %}
+            </div>
         </nav>
 
-        <div class="header-right">
+        <!-- Actions utilisateur (desktop) -->
+        <div class="header-right desktop-only">
             {% if is_granted('ROLE_USER') %}
-                <a class="avatar-link" href="{{ path('current_user') }}">
+                <a class="avatar-link" href="{{ path('current_user') }}" title="Mon profil">
                     <img src="{{ app.user.photo ?? '/images/profil.webp' }}" class="avatar-img" alt="Profil">
                 </a>
                 <a href="{{ path('deconnexion') }}" class="btn-ghost">Déconnexion</a>
@@ -28,4 +84,7 @@
             {% endif %}
         </div>
     </div>
+
+    <!-- Overlay pour fermer le menu mobile -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
 </header>
