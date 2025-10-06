@@ -2,17 +2,14 @@
 {% block title %}À propos de Bestio{% endblock %}
 
 {% block body %}
-<section class="about-hero">
-    <div class="about-hero-inner">
+<div class="newsletter-hero">
+    <div class="newsletter-hero-content gap-40 d-flex flex-column align-items-center">
+        <div class="hero-icon">🐾</div>
         <h1>Explorer. Comprendre. Préserver.</h1>
         <p>Bestio relie passionnés, curieux et défenseurs du vivant autour d’une même mission.</p>
         <a href="{{ path('app_classe') }}" class="cta-primary">Découvrir la faune</a>
     </div>
-    {# Image décorative future #}
-    <div class="about-hero-illu">
-        {# Placeholder : <img src="{{ asset('images/hero-faune.jpg') }}" alt=""> #}
-    </div>
-</section>
+</div>
 
 <section class="about-grid content-narrow">
     <div class="about-card">

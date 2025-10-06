@@ -3,7 +3,12 @@
 {% block title %}Forum - Question{% endblock %}
 
 {% block body %}
-<h1 class="d-flex justify-content-center mb-20">Discussion</h1>
+<div class="newsletter-hero">
+    <div class="newsletter-hero-content gap-40 d-flex flex-column align-items-center">
+        <div class="hero-icon">🐾</div>
+        <h1>Discussion</h1>
+    </div>
+</div>
 <div class="separator"></div>
 <div class="d-flex flex-column align-items-center" style="background:transparent;">
     {# Carte principale de la question #}
@@ -85,9 +90,7 @@
         <div class="separator"></div>
     </div>
     {# Formulaire d'ajout de commentaire #}
-   <div class="block">
-        <h2 class="d-flex pb-30 justify-content-center">Ajouter un commentaire</h2>
-
+   <div class="fill">
         {% if app.user %}
             {% if canComment %}
                 {% if question.locked == true %}
@@ -95,16 +98,26 @@
                 {% elseif app.user.banned %}
                     <p class="d-flex justify-content-center gray-dark">Vous ne pouvez pas ajouter de posts.</p>
                 {% else %}
-                    {{ form_start(formComm, {attr: {class: 'd-flex flex-column'}}) }}
-                        <div class="form-row">
-                            {{ form_label(formComm.contenu) }}
-                            {{ form_widget(formComm.contenu, {attr: {rows: 5}}) }}
-                            {{ form_errors(formComm.contenu) }}
+                    <!-- Section héros avec gradient -->
+                    <div class="form-hero">
+                        <div class="form-hero-content gap-40 d-flex flex-column align-items-center">
+                            <span class="form-icon">🐾</span>
+                            <h2>Votre réponse</h2>
+                            <p>Partagez vos connaissances avec la communauté</p>
                         </div>
-                        <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary-stroke">Publier</button>
-                        </div>
-                    {{ form_end(formComm) }}
+                    </div>
+
+                    <!-- Formulaire avec le nouveau style -->
+                    <div class="form-container">
+                        {{ form_start(formComm) }}
+                            <div class="form-row">
+                                {{ form_label(formComm.contenu) }}
+                                {{ form_widget(formComm.contenu, {attr: {rows: 8, placeholder: 'Écrivez votre commentaire ici...'}}) }}
+                                {{ form_errors(formComm.contenu) }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Publier ma réponse</button>
+                        {{ form_end(formComm) }}
+                    </div>
                 {% endif %}
             {% else %}
                 <p class="d-flex justify-content-center gray-dark">
@@ -112,8 +125,19 @@
                 </p>
             {% endif %}
         {% else %}
-            <p class="d-flex justify-content-center gray-dark">Vous devez être connecté pour répondre à cette question ! <small class="d-flex align-items-end ml-10"> <a href="{{ path('connexion') }}">Se connecter</a> </small></p>
-        {% endif %}
+        {# Utilisateur non connecté, message pour se connecter #}
+        <div class="newsletter-hero">
+            <div class="newsletter-hero-content gap-40 d-flex flex-column align-items-center">
+                <div class="hero-icon">🐾</div>
+                <h1>Répondre à cette question</h1>
+                <p>Connectez-vous pour partager vos idées</p>
+                <div class="d-flex gap-40">
+                    <a href="{{ path('connexion') }}" class="cta-primary">Se connecter</a>
+                    <a href="{{ path('app_register') }}" class="cta-primary">Créer un compte</a>
+                </div>
+            </div>
+        </div>        
+    {% endif %}
     </div>
 </div>
 {% endblock %}

@@ -4,23 +4,56 @@
 {% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+    <div class="fill">
+        {% for flash_error in app.flashes('verify_email_error') %}
+            <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+        {% endfor %}
 
-    <div class="block">
-        <h2 class="d-flex pb-30 justify-content-center">Inscription</h2>
+        <!-- Section héros avec gradient -->
+        <div class="form-hero mb-20">
+            <div class="form-hero-content">
+                <span class="form-icon">🐾</span>
+                <h1>Rejoignez Bestio</h1>
+                <p>Créez votre compte et découvrez le monde animal</p>
+            </div>
+        </div>
 
-    {{ form_errors(registrationForm) }}
+        <!-- Formulaire avec le nouveau style -->
+        <div class="form-container">
+            {% if form_errors(registrationForm) %}
+                <div class="form-errors">
+                    {{ form_errors(registrationForm) }}
+                </div>
+            {% endif %}
 
-    {{ form_start(registrationForm) }}
-    {{ form_row(registrationForm.pseudo) }}
-    {# {{ form_row(registrationForm.photo) }} #}
-    {{ form_row(registrationForm.email) }}
-    {{ form_row(registrationForm.plainPassword)}}
+            {{ form_start(registrationForm) }}
+            
+            <div class="form-row">
+                {{ form_label(registrationForm.pseudo) }}
+                {{ form_widget(registrationForm.pseudo) }}
+                {{ form_errors(registrationForm.pseudo) }}
+            </div>
+            
+            <div class="form-row">
+                {{ form_label(registrationForm.email) }}
+                {{ form_widget(registrationForm.email) }}
+                {{ form_errors(registrationForm.email) }}
+            </div>
+            
+            <div class="form-row">
+                {{ form_widget(registrationForm.plainPassword) }}
+                {{ form_errors(registrationForm.plainPassword) }}
+            </div>
 
-    <button aria-label="S'enregistrer" type="submit" class="d-flex btn btn-primary-dark justify-content-center margin-auto">S'enregistrer</button>
-    <small class="d-flex justify-content-center mt-10"><a href="{{ path('connexion') }}">Vous avez déjà un compte ?</a></small>
-    {{ form_end(registrationForm) }}
+            <button type="submit" class="btn btn-primary" aria-label="S'inscrire">
+                Créer mon compte
+            </button>
+            
+            {{ form_end(registrationForm) }}
+
+            <div class="form-links">
+                <div><a href="{{ path('connexion') }}">Vous avez déjà un compte ?</a></div>
+            </div>
+        </div>
     </div>
 {% endblock %}

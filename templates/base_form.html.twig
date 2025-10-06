@@ -6,14 +6,51 @@
 	{%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
 {%- endif -%}
 {%- set row_attr = row_attr|merge({class: row_attr.class|default('') ~ 'form-row'}) -%}
-<div{% with {attr: row_attr} %}{{ block('attributes')}}{% endwith %} >
+<div{% with {attr: row_attr} %}{{ block('attributes')}}{% endwith %}>
 	{{- form_label(form) -}}
 	{{- form_widget(form, widget_attr) -}}
 	{{- form_errors(form) -}}
 	{{- form_help(form) -}}
-</div>{%- endblock form_row -%}{%- block form_errors -%}{%- if errors|length > 0 -%}
-<ul class="form-errors">>
+</div>
+{%- endblock form_row -%}
+
+{%- block form_errors -%}
+{%- if errors|length > 0 -%}
+<div class="form-errors">
+	<ul>
 	{%- for error in errors -%}
 		<li>{{ error.message }}</li>
 	{%- endfor -%}
-</ul>{%- endif -%}{%- endblock form_errors -%}
+	</ul>
+</div>
+{%- endif -%}
+{%- endblock form_errors -%}
+
+{%- block form_label -%}
+{%- if label is not same as(false) -%}
+	{%- if not compound -%}
+		{% set label_attr = label_attr|merge({'for': id}) %}
+	{%- endif -%}
+	{%- if required -%}
+		{%- set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) -%}
+	{%- endif -%}
+	{%- if label is empty -%}
+		{%- if label_format is not empty -%}
+			{%- set label = label_format|replace({'%name%': name, '%id%': id}) -%}
+		{%- else -%}
+			{%- set label = name|humanize -%}
+		{%- endif -%}
+	{%- endif -%}
+	<label{% if label_attr %}{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}>{{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}</label>
+{%- endif -%}
+{%- endblock form_label -%}
+
+{%- block widget_attributes -%}
+{%- set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim}) -%}
+{{ parent() }}
+{%- endblock widget_attributes -%}
+
+{%- block button_widget -%}
+{%- set attr = attr|merge({'class': (attr.class|default('') ~ ' btn btn-primary')|trim}) -%}
+{{ parent() }}
+{%- endblock button_widget -%}

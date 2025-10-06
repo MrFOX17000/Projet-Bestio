@@ -3,14 +3,20 @@
 {% block title %}{{ classe.nom }}{% endblock %}
 
 {% block body %}
-<h1 class="d-flex justify-content-center">
-    {{ classe.nom }}
-    {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('edit_classe', {'id': classe.id}) }}" class="btn-edit-classe ml-20 gray-dark" title="Modifier">
-            <i class="fa-solid fa-pen-to-square"></i>
-        </a>
-    {% endif %}
-</h1>
+<div class="newsletter-hero">
+    <div class="newsletter-hero-content gap-40 d-flex flex-column align-items-center">
+        <div class="hero-icon">🐾</div>
+        <h1>
+            {{ classe.nom }}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('edit_classe', {'id': classe.id}) }}" class="btn-edit-classe ml-20 gray-dark" title="Modifier">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+            {% endif %}
+        </h1>
+        <p>Découvrez cette classe fascinante.</p>
+    </div>
+</div>
 <div class="separator"></div>
 
 {# Récupère toutes les sources (collection ou fallback) #}
