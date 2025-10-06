@@ -32,6 +32,32 @@ class CommentaireRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findForQuestionOrdered(int $questionId, string $mode = 'top'): array
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->leftJoin('c.votes', 'v')
+            ->addSelect('COALESCE(SUM(v.value),0) AS HIDDEN score')
+            ->where('c.question = :q')
+            ->setParameter('q', $questionId)
+            ->groupBy('c.id');
+
+        if ($mode === 'recent') {
+            $qb->orderBy('c.createdAtComm', 'DESC');
+        } else {
+            $qb->orderBy('score', 'DESC')->addOrderBy('c.createdAtComm', 'DESC');
+        }
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getScore(int $commentId): int
+    {
+        return (int)$this->createQueryBuilder('c')
+            ->leftJoin('c.votes', 'v')
+            ->select('COALESCE(SUM(v.value),0)')
+            ->where('c.id = :id')->setParameter('id', $commentId)
+            ->getQuery()->getSingleScalarResult();
+    }
+
     //    /**
     //     * @return Commentaire[] Returns an array of Commentaire objects
     //     */

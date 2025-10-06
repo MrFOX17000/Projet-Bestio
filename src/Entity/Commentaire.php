@@ -6,6 +6,9 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommentaireRepository;
+use App\Entity\CommentaireVote;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: CommentaireRepository::class)]
 class Commentaire
@@ -29,9 +32,13 @@ class Commentaire
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
+    #[ORM\OneToMany(mappedBy: 'commentaire', targetEntity: CommentaireVote::class, orphanRemoval: true, cascade: ['remove'])]
+    private Collection $votes;
+
     public function __construct()
     {
         $this->createdAtComm = new DateTimeImmutable();
+        $this->votes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,6 +91,27 @@ class Commentaire
     {
         $this->author = $author;
 
+        return $this;
+    }
+
+    /** @return Collection<int,CommentaireVote> */
+    public function getVotes(): Collection { return $this->votes; }
+
+    public function getScore(): int {
+        $s = 0; foreach ($this->votes as $v) { $s += $v->getValue(); }
+        return $s;
+    }
+
+    public function getUserVote(?User $user): ?int {
+        if(!$user) return null;
+        foreach ($this->votes as $v) {
+            if ($v->getUser() === $user) return $v->getValue();
+        }
+        return null;
+    }
+
+    public function removeVote(CommentaireVote $vote): self {
+        $this->votes->removeElement($vote);
         return $this;
     }
 }

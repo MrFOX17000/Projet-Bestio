@@ -1,143 +1,146 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Forum - Question{% endblock %}
+{% block title %}Question{% endblock %}
 
 {% block body %}
 <div class="newsletter-hero">
-    <div class="newsletter-hero-content gap-40 d-flex flex-column align-items-center">
-        <div class="hero-icon">🐾</div>
-        <h1>Discussion</h1>
-    </div>
+  <div class="newsletter-hero-content d-flex flex-column align-items-center gap-40">
+      <h1>{{ question.titreQuestion }}</h1>
+      <div class="sort-bar">
+          <span>Commentaires :</span>
+          <a class="{{ sortComments == 'top' ? 'active' : '' }}"
+             href="{{ path('app_forum_question_show',{nom_espece: nom_espece, id: question.id, sort:'top'}) }}">Pertinence</a>
+          <a class="{{ sortComments == 'recent' ? 'active' : '' }}"
+             href="{{ path('app_forum_question_show',{nom_espece: nom_espece, id: question.id, sort:'recent'}) }}">Récent</a>
+      </div>
+  </div>
 </div>
-<div class="separator"></div>
-<div class="d-flex flex-column align-items-center" style="background:transparent;">
-    {# Carte principale de la question #}
-    <div class="block mb-20 question-detail-card position-relative">
-        <div class="d-flex justify-content-between align-items-center mb-10">
-            <h2 class="d-flex">{{ question.titreQuestion }}</h2>
-            {% set photo = attribute(question.author, 'photo') ?? null %}
-            {% if photo %}
-                {% set avatarUrl = photo starts with('/') ? asset(photo) : asset('uploads/avatar/' ~ photo) %}
-            {% else %}
-                {% set avatarUrl = asset('images/profil.webp') %}
-            {% endif %}
-            <a href="{{ path('user', {'id': question.author.id}) }}" class="avatar-link" title="Voir le profil de {{ question.author.pseudo ?? question.author.email }}">
-                <img src="{{ avatarUrl }}" alt="Avatar de {{ question.author.pseudo ?? 'utilisateur' }}" class="avatar-img">
+
+<section class="forum-question-wrapper">
+    <article class="forum-item forum-item--question">
+        {% if question.author %}
+            <a class="author-chip" title="Voir le profil"
+               href="{{ path('user',{id: question.author.id}) }}">
+               <img src="{{ question.author.photo ?? asset('images/profil.webp') }}" alt="Avatar {{ question.author }}">
             </a>
-        </div>
-        <p class="question-text mb-20">{{ question.description }}</p>
-        <small>Posée par <strong>{{ question.author.pseudo }}</strong> le {{ question.createdAt|date('d/m/Y à H:i') }}</small>
-            {% if question.locked == true %}
-                <i class="fa-solid fa-lock"></i>
-            {% else %}
-                <i class="fa-solid fa-unlock"></i>
-            {% endif %}
-        {# Bouton de Verrouillage/Déverouillage #}
-            {% if app.user == question.author or is_granted('ROLE_ADMIN')  %}
-                <form class ="lock-question-form" method="post" action="{{ path(question.locked ? 'unlock_question' : 'lock_question', {id: question.id}) }}">  {# On vérifie le statut du champ "Locked" dans l'entité topic pour l'affichage du bouton #} 
-                    <button class="lock-question" type="submit">
-                        {{ question.locked ? 'Déverrouiller' : 'Verrouiller' }} 
-                    </button>
-                </form> 
-            {% endif %}
-    </div>
-
-    {# Liste des commentaires #}
-    <div class="commentaires-wrapper" style="width:100%; max-width:700px;">
-    <div class="separator"></div>
-        <h2 class="d-flex justify-content-center mb-20">Commentaires</h2>
-        {% if commentaires|length == 0 %}
-            <div class="lien-question">
-                <p>Aucun commentaire pour cette question.<br> Soyez le premier à en poster un !</p>
-            </div>
-        {% else %}
-            <div style="display:flex; flex-direction:column; gap:18px;">
-            {% for commentaire in commentaires %}
-                <div class="comment-card">
-                    <div class="comment-header">
-                        <div class="comment-user">
-                        {% set photo = attribute(commentaire.author, 'photo') ?? null %}
-                        {% if photo %}
-                            {% set avatarUrl = photo starts with('/') ? asset(photo) : asset('uploads/avatar/' ~ photo) %}
-                        {% else %}
-                            {% set avatarUrl = asset('images/profil.webp') %}
-                        {% endif %}
-                        <a href="{{ path('user', {'id': commentaire.author.id}) }}" class="avatar-link" title="Voir le profil de {{ commentaire.author.pseudo ?? commentaire.author.email }}">
-                            <img src="{{ avatarUrl }}" alt="Avatar de {{ commentaire.author.pseudo ?? 'utilisateur' }}" class="avatar-img">
-                        </a>
-                            <span class="font-weight-bold" style="color:var(--gray-dark);">{{ commentaire.author.pseudo }}</span>
-                        </div>
-                        <span class="comment-meta">{{ commentaire.createdAtComm|date('d/m/Y à H:i') }}</span>
-                    </div>
-                    <p class="comment-content">{{ commentaire.contenu }}</p>
-                     {% if app.user == commentaire.author or is_granted('ROLE_ADMIN')  %}
-                        <form class ="delete-commentaire" method="post" action="{{ path('delete_commentaire', {id: commentaire.id}) }}";
-                            <input type="hidden" name="_method" value="DELETE">
-                        <button class="btn-delete-commentaire" type="submit"> <i class="fa-solid fa-trash"></i> </button>
-                    </form>  
-                {% endif %}
-                </div>
-            {% endfor %}
-            </div>
         {% endif %}
-    </div>
 
-    <div class="pagination">
-        {{ knp_pagination_render(commentaires) }}
-    </div>
+        <div class="forum-votes vote-box"
+             data-type="question"
+             data-id="{{ question.id }}"
+             data-auth="{{ app.user ? '1':'0' }}"
+             data-owner="{{ app.user and question.author and app.user.id == question.author.id ? '1':'0' }}">
+            <button class="vote-btn up {{ question.getUserVote(app.user) == 1 ? 'active' : '' }}">▲</button>
+            <span class="vote-score">{{ question.getScore() }}</span>
+            <button class="vote-btn down {{ question.getUserVote(app.user) == -1 ? 'active' : '' }}">▼</button>
+        </div>
 
-    <div style="width:100%; max-width:700px;">
-        <div class="separator"></div>
-    </div>
-    {# Formulaire d'ajout de commentaire #}
-   <div class="fill">
-        {% if app.user %}
-            {% if canComment %}
-                {% if question.locked == true %}
-                    <p class="d-flex justify-content-center gray-dark">Ce sujet est verrouillé.</p>
-                {% elseif app.user.banned %}
-                    <p class="d-flex justify-content-center gray-dark">Vous ne pouvez pas ajouter de posts.</p>
-                {% else %}
-                    <!-- Section héros avec gradient -->
-                    <div class="form-hero">
-                        <div class="form-hero-content gap-40 d-flex flex-column align-items-center">
-                            <span class="form-icon">🐾</span>
-                            <h2>Votre réponse</h2>
-                            <p>Partagez vos connaissances avec la communauté</p>
-                        </div>
-                    </div>
-
-                    <!-- Formulaire avec le nouveau style -->
-                    <div class="form-container">
-                        {{ form_start(formComm) }}
-                            <div class="form-row">
-                                {{ form_label(formComm.contenu) }}
-                                {{ form_widget(formComm.contenu, {attr: {rows: 8, placeholder: 'Écrivez votre commentaire ici...'}}) }}
-                                {{ form_errors(formComm.contenu) }}
-                            </div>
-                            <button type="submit" class="btn btn-primary">Publier ma réponse</button>
-                        {{ form_end(formComm) }}
-                    </div>
+        <div class="forum-content">
+            {% set qtxt = '' %}
+            {% for prop in ['contenuQuestion','contenu','content','description','texte'] %}
+                {% if qtxt == '' and attribute(question,prop) is defined and attribute(question,prop) %}
+                    {% set qtxt = attribute(question,prop)|striptags %}
                 {% endif %}
-            {% else %}
-                <p class="d-flex justify-content-center gray-dark">
-                    Vous êtes l’auteur de cette question, vous ne pouvez pas y répondre.
-                </p>
+            {% endfor %}
+            {% if qtxt == '' and question.getExcerpt is defined %}
+                {% set qtxt = question.getExcerpt(500) %}
             {% endif %}
-        {% else %}
-        {# Utilisateur non connecté, message pour se connecter #}
-        <div class="newsletter-hero">
-            <div class="newsletter-hero-content gap-40 d-flex flex-column align-items-center">
-                <div class="hero-icon">🐾</div>
-                <h1>Répondre à cette question</h1>
-                <p>Connectez-vous pour partager vos idées</p>
-                <div class="d-flex gap-40">
-                    <a href="{{ path('connexion') }}" class="cta-primary">Se connecter</a>
-                    <a href="{{ path('app_register') }}" class="cta-primary">Créer un compte</a>
+
+            <div class="forum-body">{{ qtxt }}</div>
+            <div class="forum-meta">
+                <small>
+                    Posté le {% if question.createdAt is defined %}{{ question.createdAt|date('d/m/Y H:i') }}{% endif %}
+                    {% if question.author %} • par {{ question.author }}{% endif %}
+                    • Score {{ question.getScore() }}
+                </small>
+            </div>
+        </div>
+    </article>
+</section>
+
+<section class="comment-section">
+    <h2 class="comment-section-title">Commentaires</h2>
+
+    <div class="comment-list">
+        {% for c in commentaires %}
+            <div class="comment-item">
+                {% if c.author %}
+                    <a class="author-chip author-chip--comment" title="Voir le profil"
+                       href="{{ path('user',{id: c.author.id}) }}">
+                       <img src="{{ c.author.photo ?? asset('images/profil.webp') }}" alt="Avatar {{ c.author }}">
+                    </a>
+                {% endif %}
+
+                <div class="comment-votes vote-box small"
+                     data-type="commentaire"
+                     data-id="{{ c.id }}"
+                     data-auth="{{ app.user ? '1':'0' }}"
+                     data-owner="{{ app.user and c.author and app.user.id == c.author.id ? '1':'0' }}">
+                    <button class="vote-btn up {{ c.getUserVote(app.user) == 1 ? 'active' : '' }}">▲</button>
+                    <span class="vote-score">{{ c.getScore() }}</span>
+                    <button class="vote-btn down {{ c.getUserVote(app.user) == -1 ? 'active' : '' }}">▼</button>
+                </div>
+                <div class="comment-content-wrap">
+                    {% set ctxt = '' %}
+                    {% for prop in ['contenuCommentaire','contenu','content','texte','body'] %}
+                        {% if ctxt == '' and attribute(c,prop) is defined and attribute(c,prop) %}
+                            {% set ctxt = attribute(c,prop)|striptags %}
+                        {% endif %}
+                    {% endfor %}
+                    <div class="comment-text">{{ ctxt }}</div>
+                    <div class="comment-meta-line">
+                        <small>
+                            {{ c.createdAtComm is defined ? c.createdAtComm|date('d/m/Y H:i') : '' }}
+                            {% if c.author %} • par {{ c.author }}{% endif %}
+                            • Score {{ c.getScore() }}
+                        </small>
+                    </div>
                 </div>
             </div>
-        </div>        
-    {% endif %}
+        {% else %}
+            <div class="forum-empty">Aucun commentaire.</div>
+        {% endfor %}
     </div>
-</div>
+</section>
+
+{% if formComm is defined and formComm %}
+<section class="comment-add-wrapper">
+    <div class="forum-form-hero">
+        <div class="forum-form-hero-icon">🐾</div>
+        <h2 class="forum-form-hero-title">Ajouter un commentaire</h2>
+        <p class="forum-form-hero-sub">Partagez votre réponse ou précisions pour aider la discussion.</p>
+    </div>
+
+    <div class="forum-form-card">
+        {{ form_start(formComm, { attr:{ class:'forum-form'} }) }}
+
+            {# Détection du champ texte principal #}
+            {% set possibles = ['contenuCommentaire','contenu','content','texte','body','message','description'] %}
+            {% set fieldName = null %}
+            {% for name in possibles %}
+                {% if fieldName is null and formComm[name] is defined %}
+                    {% set fieldName = name %}
+                {% endif %}
+            {% endfor %}
+
+            {% if fieldName %}
+                <div class="form-row">
+                    {{ form_label(formComm[fieldName], 'Votre commentaire :', { label_attr:{ class:'ff-label'} }) }}
+                    {{ form_widget(formComm[fieldName], { attr:{ class:'ff-textarea'} }) }}
+                    {{ form_errors(formComm[fieldName]) }}
+                </div>
+            {% else %}
+                {% for child in formComm %}
+                    <div class="form-row">
+                        {{ form_row(child) }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="form-actions">
+                <button class="ff-submit-btn" type="submit">Publier mon commentaire</button>
+            </div>
+        {{ form_end(formComm) }}
+    </div>
+</section>
+{% endif %}
 {% endblock %}
