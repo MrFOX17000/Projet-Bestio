@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Entity\QuestionVote;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question
@@ -44,10 +45,14 @@ class Question
     #[ORM\Column]
     private ?bool $locked = false;
 
+    #[ORM\OneToMany(mappedBy: 'question', targetEntity: QuestionVote::class, orphanRemoval: true, cascade: ['remove'])]
+    private Collection $votes;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
         $this->posseder = new ArrayCollection();
+        $this->votes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -155,5 +160,39 @@ class Question
         $this->locked = $locked;
 
         return $this;
+    }
+
+    /** @return Collection<int,QuestionVote> */
+    public function getVotes(): Collection { return $this->votes; }
+
+    public function getScore(): int {
+        $s = 0;
+        foreach ($this->votes as $v) { $s += $v->getValue(); }
+        return $s;
+    }
+
+    public function getUserVote(?User $user): ?int {
+        if (!$user) return null;
+        foreach ($this->votes as $v) {
+            if ($v->getUser() === $user) return $v->getValue();
+        }
+        return null;
+    }
+
+    public function removeVote(QuestionVote $vote): self {
+        if ($this->votes->removeElement($vote)) {}
+        return $this;
+    }
+
+    public function getExcerpt(int $length = 220): string
+    {
+        // Essaie plusieurs noms possibles de champ contenu
+        foreach (['contenuQuestion','contenu','content','description','texte'] as $prop) {
+            if (property_exists($this, $prop) && !empty($this->$prop)) {
+                $text = strip_tags((string)$this->$prop);
+                return mb_strlen($text) > $length ? mb_substr($text,0,$length).'…' : $text;
+            }
+        }
+        return '';
     }
 }

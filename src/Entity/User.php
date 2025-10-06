@@ -329,6 +329,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function __toString(): string
+    {
+        // Affichage prioritaire : pseudo, sinon email, sinon l'ID technique
+        if (!empty($this->pseudo)) {
+            return $this->pseudo;
+        }
+
+        if (!empty($this->email)) {
+            return $this->email;
+        }
+
+        // getUserIdentifier() existe toujours (Symfony >= 5.3)
+        if (method_exists($this, 'getUserIdentifier')) {
+            return (string) $this->getUserIdentifier();
+        }
+
+        return 'Utilisateur';
+    }
+
 
 
   

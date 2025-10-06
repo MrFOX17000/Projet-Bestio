@@ -1,73 +1,68 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Questions sur {{ nom_espece }}{% endblock %}
+{% block title %}Questions - {{ nom_espece }}{% endblock %}
 
 {% block body %}
 <div class="newsletter-hero">
-    <div class="newsletter-hero-content gap-40 d-flex flex-column align-items-center">
-        <div class="hero-icon">🐾</div>
-        <h1>Forum : {{ nom_espece }}</h1>
-    </div>
-</div>
-<div class="separator"></div>
-
-<div class="d-flex flex-column align-items-center">
-    {% if questions is not defined or questions|length == 0 %}
-        <div class="lien-question mb-20">
-            <p>Aucune question n'a encore été posée sur cette espèce.</p>
-        </div>
-        <div class="d-flex justify-content-center">
-            <a href="{{ path('app_show_espece', {'nom': nom, 'nom_espece': nom_espece}) ~ '#form-question' }}" class="btn btn-primary-dark">
-                Poser une question
-            </a>
-        </div>
-    {% else %}
-        <div class="d-flex flex-row-wrap justify-content-center gap-40">
-            {% for question in questions %}
-                <div class="block question-card">
-                    <div class="d-flex align-items-center justify-content-between mb-10">
-                        <div class="d-flex align-items-center">
-                            <h2 class="m-0">{{ question.titreQuestion ?? question.titre ?? 'Question' }}</h2>
-                            {# Nouveauté de ton duo: affichage du lock/unlock à côté du titre #}
-                            {% if question.locked is defined %}
-                                <i class="fa-solid {{ question.locked ? 'fa-lock' : 'fa-unlock' }} ml-10" aria-label="{{ question.locked ? 'Discussion verrouillée' : 'Discussion ouverte' }}"></i>
-                            {% endif %}
-                        </div>
-
-                        {# Avatar auteur cliquable vers le profil #}
-                        {% set photo = attribute(question.author, 'photo') ?? null %}
-                        {% if photo %}
-                            {% set avatarUrl = photo starts with('/') ? asset(photo) : asset('uploads/avatar/' ~ photo) %}
-                        {% else %}
-                            {% set avatarUrl = asset('images/profil.webp') %}
-                        {% endif %}
-                        <a href="{{ path('user', {'id': question.author.id}) }}" class="avatar-link" title="Voir le profil de {{ question.author.pseudo ?? question.author.email }}">
-                            <img src="{{ avatarUrl }}" alt="Avatar de {{ question.author.pseudo ?? 'utilisateur' }}" class="avatar-img">
-                        </a>
-                    </div>
-
-                    {% if question.description is defined and question.description %}
-                        <p class="question-text">{{ question.description }}</p>
-                    {% endif %}
-
-                    <small>
-                        Posée par
-                        <strong>{{ question.author.pseudo ?? question.author.email }}</strong>
-                        le {{ question.createdAt|date('d/m/Y à H:i') }}
-                    </small>
-
-                    <div class="d-flex justify-content-end mt-10">
-                        <a class="btn btn-primary-dark" href="{{ path('app_forum_question_show', {'id': question.id, 'nom_espece': nom_espece}) }}">
-                            Voir la discussion
-                        </a>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+  <div class="newsletter-hero-content d-flex flex-column align-items-center gap-40">
+      <h1>Questions sur {{ nom_espece }}</h1>
+      <div class="sort-bar">
+          <span>Trier :</span>
+          <a class="{{ sort == 'top' ? 'active' : '' }}" href="{{ path('app_forum_show',{nom_espece: nom_espece, sort:'top'}) }}">Pertinence</a>
+          <a class="{{ sort == 'recent' ? 'active' : '' }}" href="{{ path('app_forum_show',{nom_espece: nom_espece, sort:'recent'}) }}">Récent</a>
+      </div>
+  </div>
 </div>
 
-<div class="pagination">
-        {{ knp_pagination_render(questions) }}
-    </div>
+<div class="forum-list">
+  {% for q in questions %}
+      <article class="forum-item">
+          {# Avatar auteur question #}
+          {% if q.author %}
+              <a class="author-chip" title="Voir le profil"
+                 href="{{ path('user',{id: q.author.id}) }}">
+                 <img src="{{ q.author.photo ?? asset('images/profil.webp') }}" alt="Avatar {{ q.author }}">
+              </a>
+          {% endif %}
+
+          <div class="forum-votes vote-box"
+               data-type="question"
+               data-id="{{ q.id }}"
+               data-auth="{{ app.user ? '1':'0' }}"
+               data-owner="{{ app.user and q.author and app.user.id == q.author.id ? '1':'0' }}">
+              <button class="vote-btn up {{ q.getUserVote(app.user) == 1 ? 'active' : '' }}" aria-label="Vote positif">▲</button>
+              <span class="vote-score">{{ q.getScore() }}</span>
+              <button class="vote-btn down {{ q.getUserVote(app.user) == -1 ? 'active' : '' }}" aria-label="Vote négatif">▼</button>
+          </div>
+
+          <div class="forum-content">
+              <h2 class="forum-title">
+                  <a href="{{ path('app_forum_question_show',{nom_espece: nom_espece, id: q.id, sort: sort}) }}">{{ q.titreQuestion }}</a>
+              </h2>
+
+              {% set txt = '' %}
+              {% for prop in ['contenuQuestion','contenu','content','description','texte'] %}
+                  {% if txt == '' and attribute(q,prop) is defined and attribute(q,prop) %}
+                      {% set txt = attribute(q,prop)|striptags %}
+                  {% endif %}
+              {% endfor %}
+              {% if txt == '' and q.getExcerpt is defined %}
+                  {% set txt = q.getExcerpt() %}
+              {% endif %}
+              <p class="forum-excerpt">
+                  {% if txt|length > 230 %}{{ txt|slice(0,230) ~ '…' }}{% else %}{{ txt }}{% endif %}
+              </p>
+
+              <div class="forum-meta">
+                  <small>
+                      Posté le {% if q.createdAt is defined %}{{ q.createdAt|date('d/m/Y H:i') }}{% endif %}
+                      {% if q.author %} • par {{ q.author }}{% endif %}
+                      • Score {{ q.getScore() }}
+                  </small>
+              </div>
+          </div>
+      </article>
+  {% else %}
+      <div class="forum-empty">Aucune question.</div>
+  {% endfor %}
+</div>
 {% endblock %}

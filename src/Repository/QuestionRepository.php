@@ -84,6 +84,52 @@ class QuestionRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    /**
+     * Retourne les questions paginées et triées selon le mode
+     */
+    public function findPaginatedOrdered(string $mode = 'recent', ?int $userId = null)
+    {
+        $qb = $this->createQueryBuilder('q')
+            ->leftJoin('q.votes','v')->addSelect('v');
+
+        if ($mode === 'top') {
+            $qb->addSelect('COALESCE(SUM(v.value),0) AS HIDDEN score')
+               ->groupBy('q.id')
+               ->orderBy('score','DESC')
+               ->addOrderBy('q.createdAt','DESC');
+        } else {
+            $qb->orderBy('q.createdAt','DESC');
+        }
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findForEspeceOrdered(int $especeId, string $mode = 'top'): array
+    {
+        $qb = $this->createQueryBuilder('q')
+            ->leftJoin('q.votes','v')
+            ->addSelect('COALESCE(SUM(v.value),0) AS HIDDEN score')
+            ->where('q.espece = :e')
+            ->setParameter('e',$especeId)
+            ->groupBy('q.id');
+
+        if ($mode === 'recent') {
+            $qb->orderBy('q.createdAt','DESC');
+        } else {
+            $qb->orderBy('score','DESC')->addOrderBy('q.createdAt','DESC');
+        }
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findOneWithComments(int $id): ?object
+    {
+        return $this->createQueryBuilder('q')
+            ->leftJoin('q.votes','vq')->addSelect('vq')
+            ->leftJoin('q.commentaires','c')->addSelect('c')
+            ->leftJoin('c.votes','vc')->addSelect('vc')
+            ->where('q.id = :id')->setParameter('id',$id)
+            ->getQuery()->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return Question[] Returns an array of Question objects
     //     */
