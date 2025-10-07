@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+{% block title %}Page introuvable (404){% endblock %}
+
+{% block body %}
+<main class="error404-wrapper">
+  <section class="error-card">
+      <div class="bunny-scene">
+          <div class="bunny">
+              <div class="ear ear-l"></div>
+              <div class="ear ear-r"></div>
+              <div class="face">
+                  <div class="eye eye-l"></div>
+                  <div class="eye eye-r"></div>
+                  <div class="nose"></div>
+                  <div class="tooth"></div>
+              </div>
+              <div class="body">
+                  <div class="paw paw-l"></div>
+                  <div class="paw paw-r"></div>
+              </div>
+              <div class="shadow"></div>
+          </div>
+      </div>
+
+      <h1 class="err-title">404</h1>
+      <h2 class="err-sub">Le terrier est vide...</h2>
+      <p class="err-text">
+          Le contenu que vous cherchez a peut‑être bondi ailleurs.<br>
+          Vérifiez l’URL ou retournez à la page d’accueil.
+      </p>
+      <div class="err-actions">
+          <a href="{{ path('app_home') }}" class="err-btn">Retour à l’accueil</a>
+          <a href="javascript:history.back()" class="err-btn alt">Page précédente</a>
+      </div>
+  </section>
+</main>
+{% endblock %}
