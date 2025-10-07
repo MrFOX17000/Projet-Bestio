@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Form\UserType;
 use DateTimeImmutable;
-use App\Service\BanManager;
 use App\Entity\ResetPassword;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,33 +26,26 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 final class SecurityController extends AbstractController
 {
 
-    #[Route('/connexion', name: 'connexion')]
-    public function connexion(AuthenticationUtils $authenticationUtils, BanManager $banManager): Response
-    {
-        $user = $this->getUser();
-        if ($this->getUser()) {
-            return $this->redirectToRoute('app_home');
-        }
-
-        if ($user) {
-        
-        $banManager->checkAndUnban($user);
-
+ #[Route('/connexion', name: 'connexion')]
+public function connexion(AuthenticationUtils $authenticationUtils): Response
+{
+    // Redirection si l'utilisateur est déjà connecté
+    if ($this->getUser()) {
         return $this->redirectToRoute('app_home');
     }
 
+    $error = $authenticationUtils->getLastAuthenticationError();
+    $lastUsername = $authenticationUtils->getLastUsername();
 
-        $error = $authenticationUtils->getLastAuthenticationError();
-        $lastUsername = $authenticationUtils->getLastUsername();
+    $form = $this->createForm(UserType::class);
 
-        $form = $this->createForm(UserType::class);
+    return $this->render('security/connexion.html.twig', [
+        'last_username' => $lastUsername,
+        'error' => $error,
+        'form' => $form,
+    ]);
+}
 
-        return $this->render('security/connexion.html.twig', [
-            'last_username' => $lastUsername,
-            'error' => $error,
-            'form' => $form,
-        ]);
-    }
 
     #[Route('/deconnexion', name: 'deconnexion')]
     public function deconnexion(): void
