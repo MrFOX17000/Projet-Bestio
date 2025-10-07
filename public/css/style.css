@@ -4014,17 +4014,20 @@ footer {
 }
 
 /* Passer en mode mobile plus tôt si encore serré */
-@media (max-width: 1090px) {
-    .nav-links {
-        display: none;
-    }
+/* @media (max-width: 1090px) {
+
     .mobile-menu-toggle {
         display: flex !important;
     }
     .main-nav {
         justify-content: flex-end;
     }
-}
+
+    .main-nav.active {
+        display: flex;
+        justify-content: center;
+    }
+} */
 
 /* FORUM : largeur et structure cartes */
 .question-card,
