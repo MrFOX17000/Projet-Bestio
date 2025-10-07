@@ -93,6 +93,16 @@
                             {% if c.author %} • par {{ c.author }}{% endif %}
                             • Score {{ c.getScore() }}
                         </small>
+
+                        {% if app.user and (app.user.id == c.author.id or 'ROLE_ADMIN' in app.user.roles) %}
+                            <a href="{{ path('delete_commentaire', { id: c.id }) }}"
+                            class="delete-comment"
+                            title="Supprimer le commentaire"
+                            onclick="return confirm('Voulez-vous vraiment supprimer ce commentaire ?');">
+                                🗑️
+                            </a>
+                        {% endif %}
+
                     </div>
                 </div>
             </div>
@@ -110,37 +120,50 @@
         <p class="forum-form-hero-sub">Partagez votre réponse ou précisions pour aider la discussion.</p>
     </div>
 
-    <div class="forum-form-card">
-        {{ form_start(formComm, { attr:{ class:'forum-form'} }) }}
-
-            {# Détection du champ texte principal #}
-            {% set possibles = ['contenuCommentaire','contenu','content','texte','body','message','description'] %}
-            {% set fieldName = null %}
-            {% for name in possibles %}
-                {% if fieldName is null and formComm[name] is defined %}
-                    {% set fieldName = name %}
-                {% endif %}
-            {% endfor %}
-
-            {% if fieldName %}
-                <div class="form-row">
-                    {{ form_label(formComm[fieldName], 'Votre commentaire :', { label_attr:{ class:'ff-label'} }) }}
-                    {{ form_widget(formComm[fieldName], { attr:{ class:'ff-textarea'} }) }}
-                    {{ form_errors(formComm[fieldName]) }}
-                </div>
-            {% else %}
-                {% for child in formComm %}
-                    <div class="form-row">
-                        {{ form_row(child) }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-
-            <div class="form-actions">
-                <button class="ff-submit-btn" type="submit">Publier mon commentaire</button>
+    {% if app.user and app.user.banned %}
+        {% if app.user.bannedUntil %}
+            <div class="ban-message">
+                🚫 Vous êtes temporairement banni jusqu’au {{ app.user.bannedUntil|date('d/m/Y H:i') }}.
+                Vous ne pouvez pas publier de commentaires pour le moment.
             </div>
-        {{ form_end(formComm) }}
-    </div>
+        {% else %}
+            <div class="ban-message">
+                🚫 Vous êtes banni définitivement. Vous ne pouvez plus poster de commentaires.
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="forum-form-card">
+            {{ form_start(formComm, { attr:{ class:'forum-form'} }) }}
+
+                {# Détection du champ texte principal #}
+                {% set possibles = ['contenuCommentaire','contenu','content','texte','body','message','description'] %}
+                {% set fieldName = null %}
+                {% for name in possibles %}
+                    {% if fieldName is null and formComm[name] is defined %}
+                        {% set fieldName = name %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if fieldName %}
+                    <div class="form-row">
+                        {{ form_label(formComm[fieldName], 'Votre commentaire :', { label_attr:{ class:'ff-label'} }) }}
+                        {{ form_widget(formComm[fieldName], { attr:{ class:'ff-textarea'} }) }}
+                        {{ form_errors(formComm[fieldName]) }}
+                    </div>
+                {% else %}
+                    {% for child in formComm %}
+                        <div class="form-row">
+                            {{ form_row(child) }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="form-actions">
+                    <button class="ff-submit-btn" type="submit">Publier mon commentaire</button>
+                </div>
+            {{ form_end(formComm) }}
+        </div>
+    {% endif %}
 </section>
 {% endif %}
 {% endblock %}
