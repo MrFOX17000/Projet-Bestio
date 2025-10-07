@@ -4643,6 +4643,7 @@ header {
     box-shadow: 0 18px 50px -12px rgba(112, 66, 74, 0.35);
     text-align: center;
     position: relative;
+    --hop-max: 480px;
 }
 .err-title {
     font-size: 5rem;
@@ -4699,9 +4700,9 @@ header {
 /* Bunny animation */
 .bunny-scene {
     position: absolute;
-    top: -70px;
+    top: -50px;
     left: 50%;
-    width: 260px;
+    width: calc(var(--hop-max) + 140px);
     height: 140px;
     transform: translateX(-50%);
     pointer-events: none;
@@ -4713,30 +4714,38 @@ header {
     left: 0;
     animation: hop 5s linear infinite;
 }
+.bunny img {
+    width: 120px;
+    height: auto;
+    display: block;
+}
 @keyframes hop {
     0% {
         transform: translate(0, 0);
     }
     12% {
-        transform: translate(55px, -36px);
+        transform: translate(calc(var(--hop-max) * 0.25), -42px);
     }
     24% {
-        transform: translate(110px, 0);
+        transform: translate(calc(var(--hop-max) * 0.5), 0);
     }
     36% {
-        transform: translate(165px, -34px);
+        transform: translate(calc(var(--hop-max) * 0.75), -40px);
     }
     48% {
-        transform: translate(220px, 0);
+        transform: translate(var(--hop-max), 0);
     }
     60% {
-        transform: translate(165px, -32px) scaleX(-1);
+        transform: translate(calc(var(--hop-max) * 0.75), -38px) scaleX(-1);
     }
     72% {
-        transform: translate(110px, 0) scaleX(-1);
+        transform: translate(calc(var(--hop-max) * 0.5), 0) scaleX(-1);
     }
     84% {
-        transform: translate(55px, -34px) scaleX(-1);
+        transform: translate(calc(var(--hop-max) * 0.25), -36px) scaleX(-1);
+    }
+    96% {
+        transform: translate(0, 0) scaleX(-1);
     }
     100% {
         transform: translate(0, 0);
